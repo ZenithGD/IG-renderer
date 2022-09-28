@@ -47,6 +47,21 @@ public:
      */
     Mat4 operator*(const Mat4 that) const;
 
+    /**
+     * @brief Return the matrix multiplied by the scalar f
+     * 
+     * @param f the scalar value
+     * @return Mat4 The scaled-up matrix
+     */
+    Mat4 operator*(const float f) const;
+
+    /**
+     * @brief Return the matrix divided by the scalar f
+     * 
+     * @param f the scalar value
+     * @return Mat4 The scaled-down matrix
+     */
+    Mat4 operator/(const float f) const;
 
     /**
      * @brief Return the determinant of this matrix.
@@ -61,6 +76,13 @@ public:
      * @return Mat4 
      */
     Mat4 inverse() const;
+
+    /**
+     * @brief Return the transpose of this matrix.
+     * 
+     * @return Mat4 The transposed matrix
+     */
+    Mat4 transpose() const;
 
     /**
      * @brief Return a matrix row by index

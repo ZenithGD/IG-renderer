@@ -1,7 +1,10 @@
 #include <iostream>
 
+#include <cmath>
+
 #include <math/vector3.hpp>
 #include <math/mat4.hpp>
+#include <math/coordinate.hpp>
 
 using namespace std;
 
@@ -33,8 +36,25 @@ int main() {
 
     m2 = m1;
 
-    cout << m1 * m1 << endl;
+    cout << m1.transpose() << endl;
 
-    cout << (m1 * m1).det() << endl;
+    cout << m1.det() << endl;
+
+    cout << m1.inverse() << endl;
+
+    cout << m1 * m1.inverse() << endl;
+
+    Coordinate c = translation(Vector3(1, 2, -1));
+    cout << c << endl;
+
+    c = rotationX(2 * 3.14159265);
+    cout << c << endl;
+
+    c = scale(Vector3(49, 2, 3));
+    cout << c << endl;
+
+    c = inverseTransformation(c);
+    cout << c << endl;
+
     return 0;
 }
