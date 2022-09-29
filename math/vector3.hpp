@@ -15,10 +15,16 @@ struct Vector3 {
 
     /**
      * @brief Construct a new Vector 3 object
+     * Default constructor initializes to zero vector
+     */
+    inline Vector3() : x(0), y(0), z(0) {}
+
+    /**
+     * @brief Construct a new Vector 3 object
      * 
-     * @param _x 
-     * @param _y 
-     * @param _z 
+     * @param _x The x coord
+     * @param _y The y coord
+     * @param _z The z coord
      */
     inline Vector3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
 
@@ -67,6 +73,14 @@ struct Vector3 {
      * @return Vector3 
      */
     Vector3 normalized() const;
+
+    /**
+     * @brief Return the projection of this vector over v
+     * 
+     * @param v The projection direction vector
+     * @return Vector3 
+     */
+    Vector3 projection(const Vector3 v) const;
 
     friend ostream& operator<<(const Vector3& v, ostream& os);
 };
