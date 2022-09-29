@@ -17,6 +17,10 @@ Vector3 Vector3::normalized() const {
     return *this / modulus();
 }
 
+Vector3 Vector3::projection(const Vector3 v) const {
+    return v * (dot(v, *this) / dot(v, v));
+}
+
 ostream& operator<<(ostream& os, const Vector3& v) {
     os << v.x << ", " << v.y << ", " << v.z;
     return os;
