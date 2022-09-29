@@ -8,53 +8,77 @@
 
 using namespace std;
 
+class Planet {
+
+public:
+    Planet(const Vector3 c, const Vector3 ax, const Vector3 ref)
+        : center(c), yAxis(ax), refCity(ref)
+    {
+        Vector3 refVec = refCity - center;
+        if ( abs(radius() - refVec.modulus()) > 10E-6 ) {
+            throw logic_error("City is not on the surface of the planet");
+        }
+
+        // Compute planet axes
+        xAxis = refVec - refVec.projection(yAxis);
+        zAxis = cross(xAxis, yAxis);
+
+        if ( abs(dot(xAxis, yAxis)) < 10E-6 ) {
+            cout << "ok X,Y" << endl;
+        }
+
+        if ( abs(dot(xAxis, zAxis)) < 10E-6 ) {
+            cout << "ok X,Z" << endl;
+        }
+
+        if ( abs(dot(zAxis, yAxis)) < 10E-6 ) {
+            cout << "ok Z,Y" << endl;
+        }
+    }
+
+    inline float radius() const { return yAxis.modulus() / 2; }
+
+    Coordinate planetCoordinates() const {
+
+        return Coordinate(xAxis, yAxis, zAxis, center);
+
+    }
+
+    Coordinate stationCoordinates(float inclination, float azimuth) const {
+        Vector3 planetPos(
+            radius()*sin(inclination)*cos(azimuth),
+            radius()*sin(inclination)*sin(azimuth),
+            radius()*cos(inclination));
+
+        Coordinate c;
+        Coordinate pc = planetCoordinates();
+        Coordinate UCSPlanetPos = pc(c);
+        
+    }
+
+    
+    
+private:
+    // UCS coordinates of the planet
+    Vector3 center;
+    
+    // Direction that conects the South Pole with the North Pole
+    Vector3 xAxis, yAxis, zAxis;
+
+    // Reference city position
+    Vector3 refCity;
+};
+
+
 int main() {
-    cout << "Hello" << endl;
 
-    Vector3 v1(1, 1, 1), v2(2, 2, 2), v3(0, -1, 4);
-
-    cout << v1 << "; " << v2 << endl;
-    
-    cout << "cross: " << cross(v1, v2) << endl;
-    cout << "dot: " << dot(v1, v2) << endl;;
-    
-    cout << "suma: " << v1 + v2 << endl;
-    cout << "resta: " << v1 - v2 << endl;
-    cout << "multiplicacion: " << v1 * 5 << endl;
-    cout << "division: "<< v2 / 2 << endl;
-
-    cout << "modulo: " << v2.modulus() << endl;
-    cout << "normalizar: " << v2.normalized() << endl;
-
-    cout << "0 = " << dot(cross(v1, v3), v2) << endl;
-
-    Mat4 m1, m2;
-
-    m1[0][0] = 3;
-    m1[1][1] = 2;
-    m1[0][1] = 1;
-
-    m2 = m1;
-
-    cout << m1.transpose() << endl;
-
-    cout << m1.det() << endl;
-
-    cout << m1.inverse() << endl;
-
-    cout << m1 * m1.inverse() << endl;
-
-    Coordinate c = translation(Vector3(1, 2, -1));
-    cout << c << endl;
-
-    c = rotationX(2 * 3.14159265);
-    cout << c << endl;
-
-    c = scale(Vector3(49, 2, 3));
-    cout << c << endl;
-
-    c = inverseTransformation(c);
-    cout << c << endl;
+    Planet p(
+        Vector3(0,0,0),
+        Vector3(0,1000,0),
+        Vector3(-500, 0, 0),
+        M_PI / 4,
+        M_PI / 4
+    );
 
     return 0;
 }
