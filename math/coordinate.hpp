@@ -36,20 +36,22 @@ public:
 
     inline Coordinate(const Mat4 mat) : matriz(mat) {}
 
+    Coordinate operator()(const Coordinate transform) { return Coordinate(matriz * transform.matriz); }
+
     friend ostream& operator<<(ostream& os, Coordinate coor);
 };
 ostream& operator<<(ostream& os, Coordinate coor);
 
-Coordinate translation(const Vector3 v);
+Coordinate translation(const Coordinate coord, const Vector3 v);
 
-Coordinate rotationX(float theta);
+Coordinate rotationX(const Coordinate coord, float theta);
 
-Coordinate rotationY(float theta);
+Coordinate rotationY(const Coordinate coord, float theta);
 
-Coordinate rotationZ(float theta);
+Coordinate rotationZ(const Coordinate coord, float theta);
 
-Coordinate scale(const Vector3 v);
+Coordinate scale(const Coordinate coord, const Vector3 v);
 
-Coordinate changeBasis(const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o);
+Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o);
 
 Coordinate inverseTransformation(Coordinate coor);

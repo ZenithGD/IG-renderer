@@ -44,13 +44,14 @@ int main() {
 
     cout << m1 * m1.inverse() << endl;
 
-    Coordinate c = translation(Vector3(1, 2, -1));
+    Coordinate c;
+    c = translation(c, Vector3(1, 2, -1));
     cout << c << endl;
 
-    c = rotationX(2 * 3.14159265);
+    c = rotationX(c, 2 * 3.14159265);
     cout << c << endl;
 
-    c = scale(Vector3(49, 2, 3));
+    c = scale(c, Vector3(49, 2, 3));
     cout << c << endl;
 
     c = inverseTransformation(c);

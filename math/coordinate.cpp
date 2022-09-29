@@ -7,94 +7,94 @@ ostream& operator<< (ostream& os, Coordinate coor){
     return os;
 }
 
-Coordinate translation(const Vector3 v){
+Coordinate translation(const Coordinate coord, const Vector3 v){
 
-    Coordinate coor;
+    Coordinate transform;
 
-    coor.matriz[0][3] = v.x;
-    coor.matriz[1][3] = v.y;
-    coor.matriz[2][3] = v.z;
+    transform.matriz[0][3] = v.x;
+    transform.matriz[1][3] = v.y;
+    transform.matriz[2][3] = v.z;
 
-    return coor;
+    return transform(coord);
 }
 
-Coordinate rotationX(float theta) {
+Coordinate rotationX(const Coordinate coord, float theta) {
 
-    Coordinate coor;
+    Coordinate transform;
 
     float coseno = cos(theta);
     float seno = sin(theta);
 
-    coor.matriz[1][1] = coseno;
-    coor.matriz[2][1] = seno;
-    coor.matriz[1][2] = -seno;
-    coor.matriz[2][2] = coseno;
+    transform.matriz[1][1] = coseno;
+    transform.matriz[2][1] = seno;
+    transform.matriz[1][2] = -seno;
+    transform.matriz[2][2] = coseno;
 
-    return coor;
+    return transform(coord);
 }
 
-Coordinate rotationY( float theta){
+Coordinate rotationY(const Coordinate coord,  float theta){
 
-    Coordinate coor;
+    Coordinate transform;
 
     float coseno = cos(theta);
     float seno = sin(theta);
 
-    coor.matriz[0][0] = coseno;
-    coor.matriz[2][0] = -seno;
-    coor.matriz[0][2] = seno;
-    coor.matriz[2][2] = coseno;
+    transform.matriz[0][0] = coseno;
+    transform.matriz[2][0] = -seno;
+    transform.matriz[0][2] = seno;
+    transform.matriz[2][2] = coseno;
 
-    return coor;
+    return transform(coord);
 }
 
-Coordinate rotationZ(float theta){
+Coordinate rotationZ(const Coordinate coord, float theta){
 
-    Coordinate coor;
+    Coordinate transform;
 
     float coseno = cos(theta);
     float seno = sin(theta);
     
-    coor.matriz[0][0] = coseno;
-    coor.matriz[1][0] = seno;
-    coor.matriz[0][1] = -seno;
-    coor.matriz[1][1] = coseno;
+    transform.matriz[0][0] = coseno;
+    transform.matriz[1][0] = seno;
+    transform.matriz[0][1] = -seno;
+    transform.matriz[1][1] = coseno;
 
-    return coor;
+    return transform(coord);
 }
 
-Coordinate scale(const Vector3 v){
+Coordinate scale(const Coordinate coord, const Vector3 v){
 
-    Coordinate coor;
+    Coordinate transform;
 
-    coor.matriz[0][0] = v.x;
-    coor.matriz[1][1] = v.y;
-    coor.matriz[2][2] = v.z;
+    transform.matriz[0][0] = v.x;
+    transform.matriz[1][1] = v.y;
+    transform.matriz[2][2] = v.z;
 
-    return coor;
+    return transform(coord);
 }
 
-Coordinate changeBasis(const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o){
+Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o){
 
-    Coordinate coor;
+    Coordinate transform;
 
-    coor.matriz[0][0] = u.x;
-    coor.matriz[1][0] = u.y;
-    coor.matriz[2][0] = u.z;
+    transform.matriz[0][0] = u.x;
+    transform.matriz[1][0] = u.y;
+    transform.matriz[2][0] = u.z;
 
-    coor.matriz[0][1] = v.x;
-    coor.matriz[1][1] = v.y;
-    coor.matriz[2][1] = v.z;
+    transform.matriz[0][1] = v.x;
+    transform.matriz[1][1] = v.y;
+    transform.matriz[2][1] = v.z;
 
-    coor.matriz[0][2] = w.x;
-    coor.matriz[1][2] = w.y;
-    coor.matriz[2][2] = w.z;
+    transform.matriz[0][2] = w.x;
+    transform.matriz[1][2] = w.y;
+    transform.matriz[2][2] = w.z;
 
-    coor.matriz[0][3] = o.x;
-    coor.matriz[1][3] = o.y;
-    coor.matriz[2][3] = o.z;
+    transform.matriz[0][3] = o.x;
+    transform.matriz[1][3] = o.y;
+    transform.matriz[2][3] = o.z;
 
-    return coor;
+    return transform(coord);
 }
 
 Coordinate inverseTransformation(Coordinate coor) {
