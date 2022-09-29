@@ -12,12 +12,8 @@ public:
 
     Coordinate() : matriz() {}
 
-    Coordinate(Vector3 u, Vector3 v, Vector3 w) {
+    Coordinate(Vector3 u, Vector3 v, Vector3 w, Vector3 o) {
 
-        for (int i = 0; i < 4; i++){
-            matriz[i][3] = 0;
-            matriz[3][i] = 0;
-        }
         matriz[0][0] = u.x;
         matriz[1][0] = u.y;
         matriz[2][0] = u.z;
@@ -29,6 +25,10 @@ public:
         matriz[0][2] = w.x;
         matriz[1][2] = w.y;
         matriz[2][2] = w.z;
+
+        matriz[0][3] = o.x;
+        matriz[1][3] = o.y;
+        matriz[2][3] = o.z;
 
         matriz[3][3] = 1;
         
