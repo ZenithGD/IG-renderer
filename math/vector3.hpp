@@ -97,3 +97,11 @@ float dot(const Vector3 u, const Vector3 v);
  * @return Vector3 
  */
 Vector3 cross(const Vector3 u, const Vector3 v);
+
+/**
+ * @brief Return v as a normalized vector 
+ * 
+ * @param v 
+ * @return Vector3 
+ */
+inline Vector3 normalize(const Vector3 v) { return v.normalized(); }
