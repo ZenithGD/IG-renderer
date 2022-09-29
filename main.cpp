@@ -75,9 +75,7 @@ int main() {
     Planet p(
         Vector3(0,0,0),
         Vector3(0,1000,0),
-        Vector3(-500, 0, 0),
-        M_PI / 4,
-        M_PI / 4
+        Vector3(-500, 0, 0)
     );
 
     return 0;
