@@ -36,6 +36,8 @@ public:
 
     inline Coordinate(const Mat4 mat) : matriz(mat) {}
 
+    inline Vector3 getPosition() const { return Vector3(matriz[0][3], matriz[1][3], matriz[2][3]); }
+
     Coordinate operator()(const Coordinate transform) { return Coordinate(matriz * transform.matriz); }
 
     friend ostream& operator<<(ostream& os, Coordinate coor);
