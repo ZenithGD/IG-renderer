@@ -4,9 +4,9 @@ BUILD    := ./build
 BIN		 := ./bin
 OBJ_DIR  := $(BUILD)
 APP_DIR  := $(BIN)
-TARGET  := main
-INCLUDE  := -I. -Iinclude/math
-SRC      := $(wildcard ./**/*.cpp) main.cpp
+TARGET  := tonemapper
+INCLUDE  := -I. -Imath -Icolor -Iimage
+SRC      := $(wildcard ./**/*.cpp) tonemapper.cpp
 
 OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 DEPS := $(OBJECTS:.o=.d)
