@@ -74,8 +74,8 @@ void Image::writeToPPM(const string path, float res) const {
 
         for ( unsigned int i = 0; i < height; i++ ) {
             for ( unsigned int j = 0; j < width; j++ ) {
-                out << imageData[i][j].red   * << " " 
-                    << imageData[i][j].green * << " " 
+                out << imageData[i][j].red   << " " 
+                    << imageData[i][j].green << " " 
                     << imageData[i][j].blue  << "\t"; 
             }
         }
