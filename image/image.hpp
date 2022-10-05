@@ -31,7 +31,7 @@ public:
     Image(unsigned int w, unsigned int h, vector<vector<RGB>> data) 
         :  width(w), height(h), imageData(data) {}
 
-    void writeToPPM(string path, float res = 255.0) const;
+    void writeToPPM(const string path, float max, unsigned int res = 255) const;
     static Image readPPM(string path);
 
 private:

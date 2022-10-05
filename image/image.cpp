@@ -62,21 +62,23 @@ Image Image::readPPM(string path){
 }
 
 
-void Image::writeToPPM(const string path, float res) const {
+void Image::writeToPPM(const string path, float max, unsigned int res) const {
     ofstream out(path);
 
     if ( out.is_open() ) {
         
         out << "P3" << endl;
-        out << "#MAX=" << res << endl;
+        out << "#MAX=" << max << endl;
         out << "# " << path << endl;
         out << width << " " << height << endl;
-
+        out << res << endl;
         for ( unsigned int i = 0; i < height; i++ ) {
             for ( unsigned int j = 0; j < width; j++ ) {
-                out << imageData[i][j].red   << " " 
-                    << imageData[i][j].green << " " 
-                    << imageData[i][j].blue  << "\t"; 
+
+                int r = imageData[i][j].red * (float)res / max;
+                int g = imageData[i][j].green * (float)res / max;
+                int b = imageData[i][j].blue * (float)res / max;
+                out << r << " " << g << " " << b << "\t"; 
             }
         }
     } else { 

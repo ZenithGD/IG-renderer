@@ -23,6 +23,8 @@ struct Color {
     friend ostream& operator<<(ostream& os, const Color& c);
 };
 
+ostream& operator<<(ostream& os, const Color& c);
+
 struct RGB : public Color {
     float red;
     float green;
