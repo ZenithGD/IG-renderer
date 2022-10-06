@@ -1,9 +1,9 @@
 #include "misc.hpp"
 
-float clampHigh(float val, float bound) {
+double clampHigh(double val, double bound) {
     return val > bound ? bound : val;
 }
 
-float clampLow(float val, float bound) {
+double clampLow(double val, double bound) {
     return val < bound ? bound : val;
 }

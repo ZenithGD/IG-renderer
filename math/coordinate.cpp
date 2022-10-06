@@ -18,12 +18,12 @@ Coordinate translation(const Coordinate coord, const Vector3 v){
     return transform(coord);
 }
 
-Coordinate rotationX(const Coordinate coord, float theta) {
+Coordinate rotationX(const Coordinate coord, double theta) {
 
     Coordinate transform;
 
-    float coseno = cos(theta);
-    float seno = sin(theta);
+    double coseno = cos(theta);
+    double seno = sin(theta);
 
     transform.matrix[1][1] = coseno;
     transform.matrix[2][1] = seno;
@@ -33,12 +33,12 @@ Coordinate rotationX(const Coordinate coord, float theta) {
     return transform(coord);
 }
 
-Coordinate rotationY(const Coordinate coord,  float theta){
+Coordinate rotationY(const Coordinate coord,  double theta){
 
     Coordinate transform;
 
-    float coseno = cos(theta);
-    float seno = sin(theta);
+    double coseno = cos(theta);
+    double seno = sin(theta);
 
     transform.matrix[0][0] = coseno;
     transform.matrix[2][0] = -seno;
@@ -48,12 +48,12 @@ Coordinate rotationY(const Coordinate coord,  float theta){
     return transform(coord);
 }
 
-Coordinate rotationZ(const Coordinate coord, float theta){
+Coordinate rotationZ(const Coordinate coord, double theta){
 
     Coordinate transform;
 
-    float coseno = cos(theta);
-    float seno = sin(theta);
+    double coseno = cos(theta);
+    double seno = sin(theta);
     
     transform.matrix[0][0] = coseno;
     transform.matrix[1][0] = seno;

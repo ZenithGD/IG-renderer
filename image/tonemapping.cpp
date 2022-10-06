@@ -30,7 +30,7 @@ namespace tonemapping {
         
     }
 
-    Image gamma(const Image& image, float gamma){
+    Image gamma(const Image& image, double gamma){
 
         Image result = image;
         result.maxNumber = 1;
@@ -43,7 +43,7 @@ namespace tonemapping {
         return result;
     }
 
-    Image equalizeClamp(const Image& image, float v) {
+    Image equalizeClamp(const Image& image, double v) {
         Image result = image;
         result.maxNumber = 1;
         for ( unsigned int i = 0; i < image.height; i++ ) {
@@ -56,7 +56,7 @@ namespace tonemapping {
 
     }
 
-    Image gammaClamp(const Image& image, float k, float gamma) {
+    Image gammaClamp(const Image& image, double k, double gamma) {
 
         Image result = image;
         result.maxNumber = 1;

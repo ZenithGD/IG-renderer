@@ -9,9 +9,9 @@ using namespace std;
  */
 struct Vector3 {
     // Vector components
-    float x;
-    float y;
-    float z;
+    double x;
+    double y;
+    double z;
 
     /**
      * @brief Construct a new Vector 3 object
@@ -26,7 +26,7 @@ struct Vector3 {
      * @param _y The y coord
      * @param _z The z coord
      */
-    inline Vector3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
+    inline Vector3(double _x, double _y, double _z) : x(_x), y(_y), z(_z) {}
 
     /**
      * @brief Return the sum of two 3d vectors.
@@ -50,7 +50,7 @@ struct Vector3 {
      * @param that 
      * @return Vector3 
      */
-    inline Vector3 operator*(const float that) const { return Vector3( x * that, y * that, z * that); }
+    inline Vector3 operator*(const double that) const { return Vector3( x * that, y * that, z * that); }
 
     /**
      * @brief Return a vector dividde by a scalar factor
@@ -58,14 +58,14 @@ struct Vector3 {
      * @param that 
      * @return Vector3 
      */
-    inline Vector3 operator/(const float that) const { return Vector3( x / that, y / that, z / that); }
+    inline Vector3 operator/(const double that) const { return Vector3( x / that, y / that, z / that); }
 
     /**
      * @brief Return the modulus of the Vector
      * 
-     * @return float 
+     * @return double 
      */
-    float modulus() const;
+    double modulus() const;
 
     /**
      * @brief Return the vector normalized
@@ -99,9 +99,9 @@ ostream& operator<<(ostream& os, const Vector3& v);
  * 
  * @param u One vector
  * @param v Another vector
- * @return float The dot product
+ * @return double The dot product
  */
-float dot(const Vector3 u, const Vector3 v);
+double dot(const Vector3 u, const Vector3 v);
 
 /**
  * @brief Return the cross product of u and v

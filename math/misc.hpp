@@ -1,3 +1,3 @@
-float clampHigh(float val, float bound);
+double clampHigh(double val, double bound);
 
-float clampLow(float val, float bound);
+double clampLow(double val, double bound);

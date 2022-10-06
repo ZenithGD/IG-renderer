@@ -17,7 +17,7 @@ int main(int argc, char** argv){
     
     Image im = Image::readPPM(string(argv[1]));
 
-    Image imclamp = tonemapping::gammaClamp(im, 35, 0.6);
+    Image imclamp = tonemapping::gammaClamp(im, 36, 0.7);
     //Image imclamp = clamping(im);
     imclamp.writeToPPM(string(argv[1]) + "reduced.ppm", imclamp.maxNumber, 255);
 }

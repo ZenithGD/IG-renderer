@@ -5,7 +5,7 @@
 using namespace std;
 
 /**
- * @brief Class for representing 4x4 float matrices
+ * @brief Class for representing 4x4 double matrices
  * 
  */
 class Mat4 {
@@ -21,7 +21,7 @@ public:
      * @brief Construct a new Mat 4 object with values 
      * @param m The value 2d array
      */
-    Mat4(float m[4][4]);
+    Mat4(double m[4][4]);
 
     /**
      * @brief Return the sum of two matrices
@@ -53,7 +53,7 @@ public:
      * @param f the scalar value
      * @return Mat4 The scaled-up matrix
      */
-    Mat4 operator*(const float f) const;
+    Mat4 operator*(const double f) const;
 
     /**
      * @brief Return the matrix divided by the scalar f
@@ -61,14 +61,14 @@ public:
      * @param f the scalar value
      * @return Mat4 The scaled-down matrix
      */
-    Mat4 operator/(const float f) const;
+    Mat4 operator/(const double f) const;
 
     /**
      * @brief Return the determinant of this matrix.
      * 
-     * @return float The determinant
+     * @return double The determinant
      */
-    float det() const;
+    double det() const;
 
     /**
      * @brief Return the inverse of this matrix.
@@ -105,7 +105,7 @@ private:
     /**
      * @brief The inner representation of the 4x4 matrix.
      */
-    float _mat[4][4];
+    double _mat[4][4];
 };
 
 ostream& operator<<(ostream& os, const Mat4& mat);

@@ -21,7 +21,7 @@ Image Image::readPPM(string path){
         readHeader(f);
         string line;
         getline(f, line);
-        float maxNumber;
+        double maxNumber;
 
         while ( line[0] == '#' ){
             
@@ -39,12 +39,12 @@ Image Image::readPPM(string path){
         is >> width >> height;
         
 
-        float resolution;
+        double resolution;
 
         f >> resolution;
 
         vector<vector<RGB>> data(height, vector<RGB>(width));
-        float red,green,blue;
+        double red,green,blue;
 
         for ( unsigned int i = 0; i < height; i++ ) {
             for ( unsigned int j = 0; j < width; j++ ) {
@@ -69,7 +69,7 @@ Image Image::readPPM(string path){
 }
 
 
-void Image::writeToPPM(const string path, float max, unsigned int res) const {
+void Image::writeToPPM(const string path, double max, unsigned int res) const {
     ofstream out(path);
 
     if ( out.is_open() ) {
@@ -82,9 +82,9 @@ void Image::writeToPPM(const string path, float max, unsigned int res) const {
         for ( unsigned int i = 0; i < height; i++ ) {
             for ( unsigned int j = 0; j < width; j++ ) {
 
-                int r = imageData[i][j].red * (float)res / max;
-                int g = imageData[i][j].green * (float)res / max;
-                int b = imageData[i][j].blue * (float)res / max;
+                int r = imageData[i][j].red * (double)res / max;
+                int g = imageData[i][j].green * (double)res / max;
+                int b = imageData[i][j].blue * (double)res / max;
                 out << r << " " << g << " " << b << "  "; 
             }
             out << endl;

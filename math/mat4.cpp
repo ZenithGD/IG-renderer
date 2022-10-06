@@ -1,6 +1,6 @@
 #include "mat4.hpp"
 
-Mat4::Mat4(float m[4][4]) { 
+Mat4::Mat4(double m[4][4]) { 
     for(int i = 0; i < 4; i++) {
         for(int j = 0; j < 4; j++){
             _mat[i][j] = m[i][j];
@@ -46,7 +46,7 @@ Mat4 Mat4::operator*(const Mat4 that) const{
     return result;
 }
 
-Mat4 Mat4::operator*(const float f) const {
+Mat4 Mat4::operator*(const double f) const {
     Mat4 result;
     
     for ( int i = 0; i < 4; i++ ) {
@@ -58,7 +58,7 @@ Mat4 Mat4::operator*(const float f) const {
     return result;
 }
 
-Mat4 Mat4::operator/(const float f) const {
+Mat4 Mat4::operator/(const double f) const {
     Mat4 result;
     
     for ( int i = 0; i < 4; i++ ) {
@@ -70,7 +70,7 @@ Mat4 Mat4::operator/(const float f) const {
     return result;
 }
 
-float Mat4::det() const {
+double Mat4::det() const {
     // Adapted from https://stackoverflow.com/questions/2937702/i-want-to-find-determinant-of-4x4-matrix-in-c-sharp
     return
          _mat[0][3] * _mat[1][2] * _mat[2][1] * _mat[3][0] - _mat[0][2] * _mat[1][3] * _mat[2][1] * _mat[3][0] -
@@ -99,9 +99,9 @@ Mat4 Mat4::transpose() const {
     return tr;
 }
 
-float adjDet3(const Mat4& mat, unsigned int r, unsigned int c) {
+double adjDet3(const Mat4& mat, unsigned int r, unsigned int c) {
 
-    float temp[3][3];
+    double temp[3][3];
 
     unsigned int ti = 0, tj = 0;
     for ( unsigned int i = 0; i < 4; i++ ) {

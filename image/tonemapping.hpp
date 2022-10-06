@@ -12,10 +12,10 @@ namespace tonemapping {
 
     Image equalize(const Image& image);
 
-    Image gamma(const Image& image, float gamma);
+    Image gamma(const Image& image, double gamma);
 
-    Image equalizeClamp(const Image& image, float v);
+    Image equalizeClamp(const Image& image, double v);
 
-    Image gammaClamp(const Image& image, float v, float gamma);
+    Image gammaClamp(const Image& image, double v, double gamma);
 
 }

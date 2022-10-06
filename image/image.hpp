@@ -10,7 +10,7 @@ using namespace std;
 struct Image {
 
     unsigned int width, height;
-    float maxNumber;
+    double maxNumber;
 
     /**
      * @brief Construct a new Image object
@@ -28,10 +28,10 @@ struct Image {
      * @param h 
      * @param data 
      */
-    Image(unsigned int w, unsigned int h, vector<vector<RGB>> data, float max) 
+    Image(unsigned int w, unsigned int h, vector<vector<RGB>> data, double max) 
         :  width(w), height(h), imageData(data), maxNumber(max) {}
 
-    void writeToPPM(const string path, float max, unsigned int res = 255) const;
+    void writeToPPM(const string path, double max, unsigned int res = 255) const;
     static Image readPPM(string path);
 
     friend ostream& operator<<(ostream& os, const Image& image);
