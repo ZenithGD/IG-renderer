@@ -63,3 +63,4 @@ inline RGB clamp(const RGB& c, float v) { return RGB(clampHigh(c.red, v), clampH
 inline RGB equalize(const RGB& c, float v) { return RGB(c.red / v, c.green / v, c.blue / v); };
 RGB equalizeClamp(const RGB& c, float v);
 RGB gammaCorrection(const RGB& c, float k, float gamma);
+RGB gammaClamp(const RGB& c, float k, float gamma);

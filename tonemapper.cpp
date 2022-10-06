@@ -17,6 +17,7 @@ int main(int argc, char** argv){
     
     Image im = Image::readPPM(string(argv[1]));
 
-    Image imclamp = gamma(im, 1, 1.0 / 3.0);
+    Image imclamp = gammaClamp(im, 300, 1 / 2.2);
+    //Image imclamp = clamping(im);
     imclamp.writeToPPM(string(argv[1]) + "reduced.ppm", imclamp.maxNumber, 255);
 }
