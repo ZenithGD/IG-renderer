@@ -85,7 +85,7 @@ void Image::writeToPPM(const string path, float max, unsigned int res) const {
                 int r = imageData[i][j].red * (float)res / max;
                 int g = imageData[i][j].green * (float)res / max;
                 int b = imageData[i][j].blue * (float)res / max;
-                out << r << " " << g << " " << b << "\t"; 
+                out << r << " " << g << " " << b << "  "; 
             }
             out << endl;
         }
