@@ -67,8 +67,10 @@ endif
 OBJECTS := \
 	$(OBJDIR)/color.o \
 	$(OBJDIR)/image.o \
+	$(OBJDIR)/tonemapping.o \
 	$(OBJDIR)/coordinate.o \
 	$(OBJDIR)/mat4.o \
+	$(OBJDIR)/misc.o \
 	$(OBJDIR)/vector3.o \
 	$(OBJDIR)/tonemapper.o \
 
@@ -135,10 +137,16 @@ $(OBJDIR)/color.o: color/color.cpp
 $(OBJDIR)/image.o: image/image.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/tonemapping.o: image/tonemapping.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/coordinate.o: math/coordinate.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/mat4.o: math/mat4.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/misc.o: math/misc.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/vector3.o: math/vector3.cpp

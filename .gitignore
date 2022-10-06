@@ -33,5 +33,12 @@
 
 .vscode
 
+# ignore object and binary files
 /bin
 /obj
+
+# ignore assets contents
+/assets
+
+# don't upload ppm tests
+*.ppm

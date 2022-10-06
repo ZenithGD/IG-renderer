@@ -3,26 +3,20 @@
 
 #include <image/image.hpp>
 #include <color/color.hpp>
+#include <image/tonemapping.hpp>
 
 using namespace std;
 
 const unsigned int N = 100;
 
-int main(){
+int main(int argc, char** argv){
 
-    std::vector<std::vector<RGB>> imageData(N, std::vector<RGB>(N));
-
-    for(unsigned int i = 0; i < N; i++) {
-        for(unsigned int j = 0; j < N; j++) {
-            float r = (float)i / N;
-            float g = (float)j / N;
-            float b = (float)(i+j) / (float)(2 * N);
-            imageData[i][j] = RGB(r,g,b);
-        }
+    if (argc < 2) {
+        throw runtime_error("The path must be included!");
     }
+    
+    Image im = Image::readPPM(string(argv[1]));
 
-    Image img(N, N, imageData);
-
-    // real max 1, dynamic range 1E8
-    img.writeToPPM("test.ppm", 1, 10000000);
+    Image imclamp = gamma(im, 1, 1.0 / 3.0);
+    imclamp.writeToPPM(string(argv[1]) + "reduced.ppm", imclamp.maxNumber, 255);
 }

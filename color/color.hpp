@@ -2,7 +2,10 @@
 
 #include <iostream>
 #include <sstream>
+#include <cmath>
 using namespace std;
+
+#include <math/misc.hpp>
 
 struct Color {
 
@@ -55,3 +58,8 @@ struct RGB : public Color {
         return ss.str();
     }
 };
+
+inline RGB clamp(const RGB& c, float v) { return RGB(clampHigh(c.red, v), clampHigh(c.green, v), clampHigh(c.blue, v)); };
+inline RGB equalize(const RGB& c, float v) { return RGB(c.red / v, c.green / v, c.blue / v); };
+RGB equalizeClamp(const RGB& c, float v);
+RGB gammaCorrection(const RGB& c, float k, float gamma);

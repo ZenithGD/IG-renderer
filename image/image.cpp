@@ -5,8 +5,9 @@
 
 void readHeader(ifstream& f) {
     string header;
+    
+    getline(f, header);
 
-    f >> header;
     if ( header != "P3"){
         throw runtime_error("Different format !!");
     }
@@ -14,45 +15,51 @@ void readHeader(ifstream& f) {
 
 Image Image::readPPM(string path){
     ifstream f(path);
+
     if(f.is_open()){
+        
         readHeader(f);
         string line;
         getline(f, line);
         float maxNumber;
 
-        smatch res;
-        regex coment("#*");
-        regex max("#MAX=[0-9,\.]+");
-
-        while ( regex_match(line,res,coment) ){
+        while ( line[0] == '#' ){
             
-            if(regex_match(line,res,max)){
-                maxNumber = stoi(res[5].str());
+            if ( line.substr(0, 5) == "#MAX=" ) {
+                maxNumber = atof(line.substr(5, string::npos).c_str());
             }
             
             getline(f, line);
+
         }
+
         unsigned int width, height;
 
-        f >> width >> height;
+        istringstream is(line);
+        is >> width >> height;
         
-        float maximunValue;
 
-        f >> maximunValue;
+        float resolution;
 
-        vector<vector<RGB>> data;
+        f >> resolution;
+
+        vector<vector<RGB>> data(height, vector<RGB>(width));
         float red,green,blue;
 
         for ( unsigned int i = 0; i < height; i++ ) {
             for ( unsigned int j = 0; j < width; j++ ) {
                 f >> red >> green >> blue;
-                RGB color(red,green,blue);
 
+                red *= maxNumber / resolution;
+                green *= maxNumber / resolution;
+                blue *= maxNumber / resolution;
+
+                RGB color(red,green,blue);
                 data[i][j] = color;
             }
         }
 
-        Image im(width, height, data);
+        Image im(width, height, data, maxNumber);
 
         return im;
         
@@ -85,3 +92,8 @@ void Image::writeToPPM(const string path, float max, unsigned int res) const {
         throw runtime_error("Can't write to " + path);
     }
 };
+
+ostream& operator<<(ostream& os, const Image& image){
+    os << "Image { "<< image.width << ", " << image.height << " }" << endl;
+    return os;
+}
