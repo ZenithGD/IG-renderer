@@ -6,12 +6,16 @@
 
 using namespace std;
 
-Image clamping(const Image& image);
+namespace tonemapping {
 
-Image equalization(const Image& image);
+    Image clamp(const Image& image);
 
-Image gamma(const Image& image, float gamma);
+    Image equalize(const Image& image);
 
-Image equalizeClamp(const Image& image, float v);
+    Image gamma(const Image& image, float gamma);
 
-Image gammaClamp(const Image& image, float v, float gamma);
+    Image equalizeClamp(const Image& image, float v);
+
+    Image gammaClamp(const Image& image, float v, float gamma);
+
+}
