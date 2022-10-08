@@ -69,4 +69,7 @@ namespace tonemapping {
         return result;
     }
 
+    Image gaussianKernel(const Image& image, unsigned int kernelSize, double sigma) {
+        
+    }
 }

@@ -1,5 +1,7 @@
 #include "mat4.hpp"
 
+#include <iomanip>
+
 Mat4::Mat4(double m[4][4]) { 
     for(int i = 0; i < 4; i++) {
         for(int j = 0; j < 4; j++){
@@ -99,6 +101,7 @@ Mat4 Mat4::transpose() const {
     return tr;
 }
 
+/*
 double adjDet3(const Mat4& mat, unsigned int r, unsigned int c) {
 
     double temp[3][3];
@@ -139,13 +142,144 @@ Mat4 Mat4::inverse() const {
 
     return adjMatrixT.transpose() / det();
 }
+*/
+Mat4 Mat4::inverse() const {
+    double inv[4][4], det;
+    Mat4 invOut;
+
+    inv[0][0] = _mat[1][1]  * _mat[2][2] * _mat[3][3] - 
+             _mat[1][1]  * _mat[2][3] * _mat[3][2] - 
+             _mat[2][1]  * _mat[1][2]  * _mat[3][3] + 
+             _mat[2][1]  * _mat[1][3]  * _mat[3][2] +
+             _mat[3][1] * _mat[1][2]  * _mat[2][3] - 
+             _mat[3][1] * _mat[1][3]  * _mat[2][2];
+
+    inv[1][0] = -_mat[1][0]  * _mat[2][2] * _mat[3][3] + 
+              _mat[1][0]  * _mat[2][3] * _mat[3][2] + 
+              _mat[2][0]  * _mat[1][2]  * _mat[3][3] - 
+              _mat[2][0]  * _mat[1][3]  * _mat[3][2] - 
+              _mat[3][0] * _mat[1][2]  * _mat[2][3] + 
+              _mat[3][0] * _mat[1][3]  * _mat[2][2];
+
+    inv[2][0] = _mat[1][0]  * _mat[2][1] * _mat[3][3] - 
+             _mat[1][0]  * _mat[2][3] * _mat[3][1] - 
+             _mat[2][0]  * _mat[1][1] * _mat[3][3] + 
+             _mat[2][0]  * _mat[1][3] * _mat[3][1] + 
+             _mat[3][0] * _mat[1][1] * _mat[2][3] - 
+             _mat[3][0] * _mat[1][3] * _mat[2][1];
+
+    inv[3][0] = -_mat[1][0]  * _mat[2][1] * _mat[3][2] + 
+               _mat[1][0]  * _mat[2][2] * _mat[3][1] +
+               _mat[2][0]  * _mat[1][1] * _mat[3][2] - 
+               _mat[2][0]  * _mat[1][2] * _mat[3][1] - 
+               _mat[3][0] * _mat[1][1] * _mat[2][2] + 
+               _mat[3][0] * _mat[1][2] * _mat[2][1];
+
+    inv[0][1] = -_mat[0][1]  * _mat[2][2] * _mat[3][3] + 
+              _mat[0][1]  * _mat[2][3] * _mat[3][2] + 
+              _mat[2][1]  * _mat[0][2] * _mat[3][3] - 
+              _mat[2][1]  * _mat[0][3] * _mat[3][2] - 
+              _mat[3][1] * _mat[0][2] * _mat[2][3] + 
+              _mat[3][1] * _mat[0][3] * _mat[2][2];
+
+    inv[1][1] = _mat[0][0]  * _mat[2][2] * _mat[3][3] - 
+             _mat[0][0]  * _mat[2][3] * _mat[3][2] - 
+             _mat[2][0]  * _mat[0][2] * _mat[3][3] + 
+             _mat[2][0]  * _mat[0][3] * _mat[3][2] + 
+             _mat[3][0] * _mat[0][2] * _mat[2][3] - 
+             _mat[3][0] * _mat[0][3] * _mat[2][2];
+
+    inv[2][1] = -_mat[0][0]  * _mat[2][1] * _mat[3][3] + 
+              _mat[0][0]  * _mat[2][3] * _mat[3][1] + 
+              _mat[2][0]  * _mat[0][1] * _mat[3][3] - 
+              _mat[2][0]  * _mat[0][3] * _mat[3][1] - 
+              _mat[3][0] * _mat[0][1] * _mat[2][3] + 
+              _mat[3][0] * _mat[0][3] * _mat[2][1];
+
+    inv[3][1] = _mat[0][0]  * _mat[2][1] * _mat[3][2] - 
+              _mat[0][0]  * _mat[2][2] * _mat[3][1] - 
+              _mat[2][0]  * _mat[0][1] * _mat[3][2] + 
+              _mat[2][0]  * _mat[0][2] * _mat[3][1] + 
+              _mat[3][0] * _mat[0][1] * _mat[2][2] - 
+              _mat[3][0] * _mat[0][2] * _mat[2][1];
+
+    inv[0][2] = _mat[0][1]  * _mat[1][2] * _mat[3][3] - 
+             _mat[0][1]  * _mat[1][3] * _mat[3][2] - 
+             _mat[1][1]  * _mat[0][2] * _mat[3][3] + 
+             _mat[1][1]  * _mat[0][3] * _mat[3][2] + 
+             _mat[3][1] * _mat[0][2] * _mat[1][3] - 
+             _mat[3][1] * _mat[0][3] * _mat[1][2];
+
+    inv[1][2] = -_mat[0][0]  * _mat[1][2] * _mat[3][3] + 
+              _mat[0][0]  * _mat[1][3] * _mat[3][2] + 
+              _mat[1][0]  * _mat[0][2] * _mat[3][3] - 
+              _mat[1][0]  * _mat[0][3] * _mat[3][2] - 
+              _mat[3][0] * _mat[0][2] * _mat[1][3] + 
+              _mat[3][0] * _mat[0][3] * _mat[1][2];
+
+    inv[2][2] = _mat[0][0]  * _mat[1][1] * _mat[3][3] - 
+              _mat[0][0]  * _mat[1][3] * _mat[3][1] - 
+              _mat[1][0]  * _mat[0][1] * _mat[3][3] + 
+              _mat[1][0]  * _mat[0][3] * _mat[3][1] + 
+              _mat[3][0] * _mat[0][1] * _mat[1][3] - 
+              _mat[3][0] * _mat[0][3] * _mat[1][1];
+
+    inv[3][2] = -_mat[0][0]  * _mat[1][1] * _mat[3][2] + 
+               _mat[0][0]  * _mat[1][2] * _mat[3][1] + 
+               _mat[1][0]  * _mat[0][1] * _mat[3][2] - 
+               _mat[1][0]  * _mat[0][2] * _mat[3][1] - 
+               _mat[3][0] * _mat[0][1] * _mat[1][2] + 
+               _mat[3][0] * _mat[0][2] * _mat[1][1];
+
+    inv[0][3] = -_mat[0][1] * _mat[1][2] * _mat[2][3] + 
+              _mat[0][1] * _mat[1][3] * _mat[2][2] + 
+              _mat[1][1] * _mat[0][2] * _mat[2][3] - 
+              _mat[1][1] * _mat[0][3] * _mat[2][2] - 
+              _mat[2][1] * _mat[0][2] * _mat[1][3] + 
+              _mat[2][1] * _mat[0][3] * _mat[1][2];
+
+    inv[1][3] = _mat[0][0] * _mat[1][2] * _mat[2][3] - 
+             _mat[0][0] * _mat[1][3] * _mat[2][2] - 
+             _mat[1][0] * _mat[0][2] * _mat[2][3] + 
+             _mat[1][0] * _mat[0][3] * _mat[2][2] + 
+             _mat[2][0] * _mat[0][2] * _mat[1][3] - 
+             _mat[2][0] * _mat[0][3] * _mat[1][2];
+
+    inv[2][3] = -_mat[0][0] * _mat[1][1] * _mat[2][3] + 
+               _mat[0][0] * _mat[1][3] * _mat[2][1] + 
+               _mat[1][0] * _mat[0][1] * _mat[2][3] - 
+               _mat[1][0] * _mat[0][3] * _mat[2][1] - 
+               _mat[2][0] * _mat[0][1] * _mat[1][3] + 
+               _mat[2][0] * _mat[0][3] * _mat[1][1];
+
+    inv[3][3] = _mat[0][0] * _mat[1][1] * _mat[2][2] - 
+              _mat[0][0] * _mat[1][2] * _mat[2][1] - 
+              _mat[1][0] * _mat[0][1] * _mat[2][2] + 
+              _mat[1][0] * _mat[0][2] * _mat[2][1] + 
+              _mat[2][0] * _mat[0][1] * _mat[1][2] - 
+              _mat[2][0] * _mat[0][2] * _mat[1][1];
+
+    det = _mat[0][0] * inv[0][0] + _mat[0][1] * inv[1][0] + _mat[0][2] * inv[2][0] + _mat[0][3] * inv[3][0];
+
+    if (det == 0)
+        throw logic_error("not invertible matrix (det = 0)");
+
+    det = 1.0 / det;
+
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++)
+            invOut[i][j] = inv[i][j] * det;
+
+    return invOut;
+}
 
 ostream& operator<<(ostream& os, const Mat4& mat) {
+    os << setprecision(3) << endl;
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 3; j++) {
-            os << mat[i][j] << ", ";
+            os << setw(10) << mat[i][j] << ", ";
         }
-        os << mat[i][3] << endl;
+        os << setw(10) << mat[i][3] << endl;
     }
     return os;
 }

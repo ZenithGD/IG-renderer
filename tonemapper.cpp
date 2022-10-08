@@ -15,9 +15,15 @@ int main(int argc, char** argv){
         throw runtime_error("The path must be included!");
     }
     
+    cout << "reading file '" << argv[1] << "'..." << flush;
     Image im = Image::readPPM(string(argv[1]));
+    cout << " done." << endl;
 
-    Image imclamp = tonemapping::gammaClamp(im, 36, 0.7);
+    cout << "tonemapping image..." << flush;
+    Image imclamp = tonemapping::clamp(im);
     //Image imclamp = clamping(im);
-    imclamp.writeToPPM(string(argv[1]) + "reduced.ppm", imclamp.maxNumber, 255);
+    cout << " done." << endl;
+    
+    cout << "saving image to '" << argv[1] << "reduced.ppm" << "'..." << endl;
+    imclamp.writeToPPM(string(argv[1]) + "reduced.ppm", imclamp.maxNumber, 10000);
 }

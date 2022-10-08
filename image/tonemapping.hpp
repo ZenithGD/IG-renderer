@@ -18,4 +18,5 @@ namespace tonemapping {
 
     Image gammaClamp(const Image& image, double v, double gamma);
 
+    Image gaussianKernel(const Image& image, unsigned int kernelSize, double sigma);
 }
