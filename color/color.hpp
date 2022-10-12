@@ -48,7 +48,68 @@ struct RGB : public Color {
      */
     inline RGB() : red(0), green(0), blue(0) {}
 
+    /**
+     * @brief Get the RGB colour's approximate luminance value
+     * 
+     * @return double The luminance value
+     */
     inline double getLuminance() const override { return 0.27 * red + 0.67 * green + 0.06 * blue; } 
+
+    /**
+     * @brief Add two RGB colours together
+     * The operation is done channel-wise
+     * @param col The other colour
+     * @return RGB 
+     */
+    inline RGB operator+(const RGB col) const { return RGB(red + col.red, green + col.green, blue + col.blue); }
+
+    /**
+     * @brief Subtract two RGB colours together
+     * The operation is done channel-wise
+     * @param col The other colour
+     * @return RGB 
+     */
+    inline RGB operator-(const RGB col) const { return RGB(red - col.red, green - col.green, blue - col.blue); }
+
+    /**
+     * @brief Multiply two RGB colours together
+     * The operation is done channel-wise
+     * @param col The other colour
+     * @return RGB 
+     */
+    inline RGB operator*(const RGB col) const { return RGB(red * col.red, green * col.green, blue * col.blue); }
+
+    /**
+     * @brief Divide two RGB colours together
+     * The operation is done channel-wise
+     * @param col The other colour
+     * @return RGB 
+     */
+    inline RGB operator/(const RGB col) const { return RGB(red / col.red, green / col.green, blue / col.blue); }
+
+    /**
+     * @brief Add a scalar factor to an RGB color
+     * The operation is done channel-wise
+     * @param col The scale-down factor
+     * @return RGB 
+     */
+    inline RGB operator+(double f) const { return RGB(red + f, green + f, blue + f); }
+
+     /**
+     * @brief Scale up a colour by a scalar factor
+     * 
+     * @param col The scale-up factor
+     * @return RGB 
+     */
+    inline RGB operator*(double f) const { return RGB(red * f, green * f, blue * f); }
+
+    /**
+     * @brief Scale down a colour by a scalar factor
+     * 
+     * @param col The scale-down factor
+     * @return RGB 
+     */
+    inline RGB operator/(double f) const { return RGB(red / f, green / f, blue / f); }
 
     string toString() const override {
         ostringstream ss;
@@ -59,8 +120,12 @@ struct RGB : public Color {
     }
 };
 
+inline RGB changeLuminance(const RGB& c, double outLuminance) { return c * ( outLuminance / c.getLuminance() ); }
+
 inline RGB clamp(const RGB& c, double v) { return RGB(clampHigh(c.red, v), clampHigh(c.green, v), clampHigh(c.blue, v)); };
 inline RGB equalize(const RGB& c, double v) { return RGB(c.red / v, c.green / v, c.blue / v); };
 RGB equalizeClamp(const RGB& c, double v);
 RGB gammaCorrection(const RGB& c, double k, double gamma);
 RGB gammaClamp(const RGB& c, double k, double gamma);
+inline RGB simpleReinhard(const RGB& col) { return col / ( col + 1 ); }
+RGB extendedReinhard(const RGB& col, double maxWhite);

@@ -22,10 +22,12 @@ Image Image::readPPM(string path){
         string line;
         getline(f, line);
         double maxNumber;
+        bool maxCommentFound = false;
 
         while ( line[0] == '#' ){
             
             if ( line.substr(0, 5) == "#MAX=" ) {
+                maxCommentFound = true;
                 maxNumber = atof(line.substr(5, string::npos).c_str());
             }
             
@@ -42,6 +44,8 @@ Image Image::readPPM(string path){
         double resolution;
 
         f >> resolution;
+
+        if ( !maxCommentFound ) maxNumber = resolution;
 
         vector<vector<RGB>> data(height, vector<RGB>(width));
         double red,green,blue;

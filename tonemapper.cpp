@@ -12,7 +12,7 @@ const unsigned int N = 100;
 int main(int argc, char** argv){
 
     if (argc < 2) {
-        throw runtime_error("The path must be included!");
+        throw runtime_error("Please include a file to tonemap!");
     }
     
     cout << "reading file '" << argv[1] << "'..." << flush;
@@ -20,10 +20,11 @@ int main(int argc, char** argv){
     cout << " done." << endl;
 
     cout << "tonemapping image..." << flush;
-    Image imclamp = tonemapping::clamp(im);
+    Image imclamp = tonemapping::extendedReinhard(im, 40000);
     //Image imclamp = clamping(im);
     cout << " done." << endl;
     
     cout << "saving image to '" << argv[1] << "reduced.ppm" << "'..." << endl;
-    imclamp.writeToPPM(string(argv[1]) + "reduced.ppm", imclamp.maxNumber, 10000);
+    im.writeToPPM(string(argv[1]) + "raw.ppm", im.maxNumber, 65535);
+    imclamp.writeToPPM(string(argv[1]) + "reduced.ppm", imclamp.maxNumber, 65535);
 }
