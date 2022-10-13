@@ -19,4 +19,6 @@ premake5 gmake
 premake5 vs2022
 ```
 
-Please refer to the [Premake Docs] if you need another action for your custom environment.
+Please refer to the [Premake Docs](https://premake.github.io/docs/Using-Premake/) if you need another action for your custom environment.
+
+## Usage
