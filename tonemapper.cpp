@@ -14,6 +14,10 @@ int main(int argc, char** argv){
     if (argc < 2) {
         throw runtime_error("Please include a file to tonemap!");
     }
+
+    if (argc < 3) {
+        throw runtime_error("Please enter a file format to save {--bmp | --ppm}");
+    }
     
     cout << "reading file '" << argv[1] << "'..." << flush;
     Image im = Image::readPPM(string(argv[1]));
@@ -21,7 +25,6 @@ int main(int argc, char** argv){
 
     cout << "tonemapping image..." << flush;
     Image imclamp = tonemapping::extendedReinhard(im, 40000);
-    //Image imclamp = clamping(im);
     cout << " done." << endl;
     
     cout << "saving image to '" << argv[1] << "reduced.ppm" << "'..." << endl;

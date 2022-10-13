@@ -31,8 +31,13 @@ struct Image {
     Image(unsigned int w, unsigned int h, vector<vector<RGB>> data, double max) 
         :  width(w), height(h), imageData(data), maxNumber(max) {}
 
+    // PPM version P3 read-write
     void writeToPPM(const string path, double max, unsigned int res = 255) const;
-    static Image readPPM(string path);
+    static Image readPPM(const string path);
+
+    // BMP (LDR) read-write
+    void writeToBMP(const string path) const;
+    static Image readBMP(const string path);
 
     friend ostream& operator<<(ostream& os, const Image& image);
 
