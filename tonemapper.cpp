@@ -33,7 +33,7 @@ void bmp(const string path) {
     cout << im << endl;
 
     cout << "tonemapping image..." << flush;
-    Image imclamp = tonemapping::extendedReinhard(im, 40000);
+    Image imclamp = tonemapping::filmicUncharted(im);
     cout << " done." << endl;
     
     cout << "saving image to '" << path << "reduced.ppm" << "'... ";

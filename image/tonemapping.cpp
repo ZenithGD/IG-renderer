@@ -93,6 +93,18 @@ namespace tonemapping {
         return result;
     }
 
+    Image filmicUncharted(const Image& image) {
+        Image result = image;
+        result.maxNumber = 1;
+        for ( unsigned int i = 0; i < image.height; i++ ) {
+            for ( unsigned int j = 0; j < image.width; j++ ) {
+                RGB color = image.imageData[i][j];
+                result.imageData[i][j] = filmicUncharted(color);
+            }
+        }
+        return result;
+    }
+
     Image gaussianKernel(const Image& image, unsigned int kernelSize, double sigma) {
         
     }

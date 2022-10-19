@@ -66,6 +66,7 @@ endif
 
 OBJECTS := \
 	$(OBJDIR)/color.o \
+	$(OBJDIR)/ray.o \
 	$(OBJDIR)/image.o \
 	$(OBJDIR)/tonemapping.o \
 	$(OBJDIR)/coordinate.o \
@@ -132,6 +133,9 @@ $(OBJECTS): | $(OBJDIR)
 endif
 
 $(OBJDIR)/color.o: color/color.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/ray.o: geometry/ray.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/image.o: image/image.cpp

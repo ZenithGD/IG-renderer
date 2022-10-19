@@ -24,6 +24,8 @@ namespace tonemapping {
 
     Image extendedReinhard(const Image& image, double maxWhite);
 
+    Image filmicUncharted(const Image& image);
+
     /* Local tone mapping operators */
 
     Image gaussianKernel(const Image& image, unsigned int kernelSize, double sigma);

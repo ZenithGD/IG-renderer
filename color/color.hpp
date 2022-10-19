@@ -90,10 +90,19 @@ struct RGB : public Color {
     /**
      * @brief Add a scalar factor to an RGB color
      * The operation is done channel-wise
-     * @param col The scale-down factor
+     * @param col The sum value
      * @return RGB 
      */
     inline RGB operator+(double f) const { return RGB(red + f, green + f, blue + f); }
+
+    /**
+     * @brief Subtract a scalar factor to an RGB color
+     * The operation is done channel-wise
+     * @param col The subtraction value
+     * @return RGB 
+     */
+    inline RGB operator-(double f) const { return RGB(red - f, green - f, blue - f); }
+
 
      /**
      * @brief Scale up a colour by a scalar factor
@@ -129,3 +138,4 @@ RGB gammaCorrection(const RGB& c, double k, double gamma);
 RGB gammaClamp(const RGB& c, double k, double gamma);
 inline RGB simpleReinhard(const RGB& col) { return col / ( col + 1 ); }
 RGB extendedReinhard(const RGB& col, double maxWhite);
+RGB filmicUncharted(RGB v);
