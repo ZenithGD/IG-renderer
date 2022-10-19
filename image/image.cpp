@@ -95,8 +95,42 @@ void Image::writeToPPM(const string path, double max, unsigned int res) const {
         out << endl;
     }
 };
-
+ 
 void Image::writeToBMP(const string path) const {
+    ofstream out(path, ios::binary);
+
+    if ( !out.is_open() ) {
+        throw runtime_error("Can't write to '" + path + "'.");
+    }
+
+    /* Write header: 15*/
+
+    // write signature
+    out.write("BM", 2);
+
+    // write file size (should be 54 + 3 * width * height since its color depth
+    // is 24 bits.
+    uint32_t fileSize = 54 + 3 * width * height;
+    out.write((char *) &fileSize, sizeof(fileSize));
+
+    uint32_t zero = 0;
+    out.write((char *) &zero, sizeof(zero));
+
+    /* Write info header: 40 bytes */
+    uint32_t dataOffset = 54;
+    out.write((char *) &dataOffset, sizeof(dataOffset));
+
+    // Write header size
+    uint32_t infoHeaderSize = 40;
+    out.write((char *) &infoHeaderSize, sizeof(infoHeaderSize));
+
+    // Write width and height
+    out.write((char *) &width, sizeof(uint32_t));
+    out.write((char *) &height, sizeof(uint32_t));
+
+    // Write default plane value
+    uint16_t planes = 1;
+    out.write((char *) &planes, sizeof(planes));
 
 }
 
@@ -119,38 +153,38 @@ Image Image::readBMP(const string path) {
 
     // read file size
     uint32_t fileSize;
-    in.read((char*) &fileSize, 4);
+    in.read((char*) &fileSize, sizeof(fileSize));
 
     // Ignore 4 reserved bytes
     in.ignore(4);
 
     uint32_t dataOffset;
-    in.read((char *) &dataOffset, 4);
+    in.read((char *) &dataOffset, sizeof(dataOffset));
 
     /* Read info header: 40 bytes by default, read header size just in case */
 
     // Read header size
     uint32_t infoHeaderSize;
-    in.read((char *) &infoHeaderSize, 4);
+    in.read((char *) &infoHeaderSize, sizeof(infoHeaderSize));
 
     // read width and height
     uint32_t width, height;
-    in.read((char *) &width, 4);
-    in.read((char *) &height, 4);
+    in.read((char *) &width, sizeof(width));
+    in.read((char *) &height, sizeof(height));
 
     // Ignore planes
     in.ignore(2);
 
     // Read bit count (log2 of color depth)
     uint16_t bitCount;
-    in.read((char *) &bitCount, 2);
+    in.read((char *) &bitCount, sizeof(bitCount));
 
     // Ignore compression data ( assume it's type 0 - no compression )
     in.ignore(4);
 
     // Read raster data size
     uint32_t rasterSize;
-    in.read((char *) &rasterSize, 4);
+    in.read((char *) &rasterSize, sizeof(rasterSize));
 
     // Ignore 16 bytes (x,y resolutions; )
     in.ignore(16);
@@ -178,7 +212,6 @@ Image Image::readBMP(const string path) {
 
     unsigned int readIndex = 0;
 
-    cout << "padding : " << (4 - (width * 3) % 4) % 4 << endl;
     unsigned int padding = (4 - (width * 3) % 4) % 4; 
     // assume bits per pixel is 24 for now
     for ( int i = height - 1; i >= 0; i-- ) {
