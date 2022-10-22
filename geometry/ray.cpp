@@ -5,16 +5,16 @@ PlaneIntersection Ray::intersection(Plane p) {
     PlaneIntersection inter;
 
     //Solve for t
-    inter.t = -((p.c + dot(origin, p.normal)) / dot(direction, p.normal));
+    double t = -((p.c + dot(origin, p.normal)) / dot(direction, p.normal));
  
     // Compute intersection point
-    inter.point = origin + direction * inter.t; 
+    inter.point = origin + direction * t; 
 
     // Get normal
     inter.normal = p.normal;
 
     // Verify if the plane not intersect behind of the origin
-    if (inter.t < 0) {
+    if (t < 0) {
         inter.intersect = false;
     }
     else {
@@ -31,7 +31,8 @@ SphereIntersection Ray::intersection(Sphere s) {
 
     // Solve for t
     double a = dot(direction, direction);
-    double b = dot(direction, dif ) * 2;
+    double b = dot(direction, dif) * 2;
+
     double c = dot(dif, dif) - s.radius * s.radius;
 
     // Get discriminant
@@ -40,13 +41,13 @@ SphereIntersection Ray::intersection(Sphere s) {
     if ( discr < 0 ) {
 
         // No intersection
-        return SphereIntersection{0, 0};
+        return SphereIntersection{0};
     } else if ( discr == 0 ) {
 
         double sol = -b / (2 * a);
 
         // Tangent ray
-        return SphereIntersection{1, sol};
+        return SphereIntersection{1, eval(sol)};
     } else { 
 
         // Intersection
@@ -56,19 +57,14 @@ SphereIntersection Ray::intersection(Sphere s) {
         double sol2 = (-b + sqrt(discr)) / (2 * a);
 
         if ( sol1 * sol2 < 0 ) {
-            return SphereIntersection{1, sol1};
-        }
-
-        // enforce sol1 < sol2
-        if ( sol1 > sol2 ) {
-            swap(sol1, sol2);
+            return SphereIntersection{1, eval(sol2)};
         }
 
         // Check if solution lies behind the ray 
         if ( sol1 < 0 ) {
-            return SphereIntersection{0, sol1};
+            return SphereIntersection{0, eval(sol1)};
         } else {
-            return SphereIntersection{2, sol1, normalize(s.center - origin)};
+            return SphereIntersection{2, eval(sol1), normalize(s.center - origin)};
         }
     }
 }

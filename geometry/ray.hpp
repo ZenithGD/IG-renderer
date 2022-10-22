@@ -11,7 +11,6 @@
 struct PlaneIntersection {
     Vector3 normal;
     Vector3 point;
-    double t;
     bool intersect;
 };
 
@@ -22,7 +21,7 @@ struct PlaneIntersection {
  */
 struct SphereIntersection {
     int intersections;
-    double intersectionPoint;
+    Vector3 point;
     Vector3 normalVector;
 };
 
@@ -35,10 +34,11 @@ public:
 
     /**
      * @brief Construct a new Ray with values
+     * The direction stored in the ray object will be normalized.
      * @param o The value of the origin of the ray
      * @param d The value of the direction of the ray
      */
-    Ray(Vector3 o, Vector3 d) : origin(o), direction(d) {}
+    Ray(Vector3 o, Vector3 d) : origin(o), direction(normalize(d)) {}
     Vector3 origin, direction;
 
     /**
@@ -54,5 +54,7 @@ public:
     */
     SphereIntersection intersection(Sphere p);
 
-    inline Vector3 operator()(double t) const { return origin + direction * t; }
+    inline Vector3 eval(double t) const { return origin + direction * t; }
+
+    inline Vector3 operator()(double t) const { return eval(t); }
 };
