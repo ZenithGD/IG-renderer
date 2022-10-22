@@ -34,11 +34,10 @@ public:
 
     /**
      * @brief Construct a new Ray with values
-     * The direction stored in the ray object will be normalized.
      * @param o The value of the origin of the ray
      * @param d The value of the direction of the ray
      */
-    Ray(Vector3 o, Vector3 d) : origin(o), direction(normalize(d)) {}
+    Ray(Vector3 o, Vector3 d) : origin(o), direction(d) {}
     Vector3 origin, direction;
 
     /**
