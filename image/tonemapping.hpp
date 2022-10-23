@@ -28,5 +28,6 @@ namespace tonemapping {
 
     /* Local tone mapping operators */
 
-    Image gaussianKernel(const Image& image, unsigned int kernelSize, double sigma);
+    Image localReinhard(const Image& image,
+        double key, double sharp, double center, double surround, double threshold);
 }

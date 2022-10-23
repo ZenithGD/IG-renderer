@@ -16,7 +16,7 @@ void ppm(const string path) {
     cout << " done." << endl;
 
     cout << "tonemapping image..." << flush;
-    Image imclamp = tonemapping::extendedReinhard(im, 40000);
+    Image imclamp = tonemapping::localReinhard(im, 0.18, 8, 0.35, 0.35 * 1.6, 0.05);
     cout << " done." << endl;
     
     cout << "saving image to '" << path << "reduced.ppm" << "'... ";
@@ -27,7 +27,7 @@ void ppm(const string path) {
 
 void bmp(const string path) {
     cout << "reading file '" << path << "'..." << flush;
-    Image im = Image::readBMP(path);
+    Image im = Image::readPPM(path);
     cout << " done." << endl;
 
     cout << im << endl;
@@ -37,8 +37,8 @@ void bmp(const string path) {
     cout << " done." << endl;
     
     cout << "saving image to '" << path << "reduced.ppm" << "'... ";
-    im.writeToPPM(path + "raw.ppm", im.maxNumber, 65535);
-    imclamp.writeToPPM(path + "reduced.ppm", imclamp.maxNumber, 65535);
+    im.writeToBMP(path + "raw.bmp");
+    imclamp.writeToBMP(path + "reduced.bmp");
     cout << "done." << endl;
 }
 

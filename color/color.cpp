@@ -48,5 +48,5 @@ RGB filmicUncharted(RGB v)
 
     RGB W = RGB(11.2, 11.2, 11.2);
     RGB white_scale = RGB(1.0, 1.0, 1.0) / uncharted2_tonemap_partial(W);
-    return curr * white_scale;
+    return clamp(curr * white_scale, 1);
 }

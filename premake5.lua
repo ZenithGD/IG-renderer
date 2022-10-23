@@ -10,6 +10,8 @@ function setupProject(name, mainFile)
         -- add project include dirs here
         includedirs { "." }
 
+        cppdialect "C++17"
+
         -- files here
         files { "*/**.cpp", "*/**.hpp", mainFile }
 
