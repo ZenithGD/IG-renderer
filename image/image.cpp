@@ -132,6 +132,39 @@ void Image::writeToBMP(const string path) const {
     uint16_t planes = 1;
     out.write((char *) &planes, sizeof(planes));
 
+    uint16_t depth = 24;
+    out.write((char *) &depth, sizeof(depth));
+
+    // No compression by default
+    uint32_t compression = 0;
+    out.write((char *) &compression, sizeof(compression));
+
+    // Image size : 3 * (width + padding) * height
+    
+    unsigned int padding = (4 - (width * 3) % 4) % 4; 
+    uint32_t rasterSize = 3 * (width + padding) * height;
+    out.write((char *) &rasterSize, sizeof(rasterSize));
+
+    // write zeros
+    uint32_t additionalInfo[] = {70, 70, 1 << 24, 0};
+    out.write((char *) additionalInfo, sizeof(additionalInfo));
+
+    uint8_t* dataPtr = (uint8_t*)calloc((size_t)rasterSize, sizeof(uint8_t));
+
+    unsigned int readIndex = 0;
+
+    // assume bits per pixel is 24 for now
+    for ( int i = height - 1; i >= 0; i-- ) {
+        for ( int j = 0; j < width; j++ ) {
+            dataPtr[readIndex++] = (uint8_t)(imageData[i][j].blue * 255 / maxNumber);
+            dataPtr[readIndex++] = (uint8_t)(imageData[i][j].green * 255 / maxNumber);
+            dataPtr[readIndex++] = (uint8_t)(imageData[i][j].red * 255 / maxNumber);
+        }
+        // skip padding
+        readIndex += padding;
+    }
+
+    out.write((char *) dataPtr, rasterSize);
 }
 
 Image Image::readBMP(const string path) {
