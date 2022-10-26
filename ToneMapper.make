@@ -13,7 +13,7 @@ endif
 ifeq ($(config),debug)
   RESCOMP = windres
   TARGETDIR = bin/${cfg.buildcfg}
-  TARGET = $(TARGETDIR)/ToneMapper
+  TARGET = $(TARGETDIR)/ToneMapper.exe
   OBJDIR = obj/Debug/ToneMapper
   DEFINES += -DDEBUG
   INCLUDES += -I.
@@ -40,7 +40,7 @@ endif
 ifeq ($(config),release)
   RESCOMP = windres
   TARGETDIR = bin/${cfg.buildcfg}
-  TARGET = $(TARGETDIR)/ToneMapper
+  TARGET = $(TARGETDIR)/ToneMapper.exe
   OBJDIR = obj/Release/ToneMapper
   DEFINES +=
   INCLUDES += -I.

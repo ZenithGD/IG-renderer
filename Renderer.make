@@ -13,7 +13,7 @@ endif
 ifeq ($(config),debug)
   RESCOMP = windres
   TARGETDIR = bin/${cfg.buildcfg}
-  TARGET = $(TARGETDIR)/Renderer
+  TARGET = $(TARGETDIR)/Renderer.exe
   OBJDIR = obj/Debug/Renderer
   DEFINES += -DDEBUG
   INCLUDES += -I.
@@ -40,7 +40,7 @@ endif
 ifeq ($(config),release)
   RESCOMP = windres
   TARGETDIR = bin/${cfg.buildcfg}
-  TARGET = $(TARGETDIR)/Renderer
+  TARGET = $(TARGETDIR)/Renderer.exe
   OBJDIR = obj/Release/Renderer
   DEFINES +=
   INCLUDES += -I.

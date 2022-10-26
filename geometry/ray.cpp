@@ -68,3 +68,41 @@ SphereIntersection Ray::intersection(Sphere s) {
         }
     }
 }
+
+PlaneIntersection Ray::intersection(Triangle p) {
+    PlaneIntersection inter;
+
+    //Solve for t
+    double t = -((p.c + dot(origin, p.normal)) / dot(direction, p.normal));
+ 
+    // Compute intersection point
+    inter.point = origin + direction * t; 
+
+    // Get normal
+    inter.normal = p.normal;
+
+    // Verify if the triangle not intersect behind of the origin
+    if (t < 0) {
+        inter.intersect = false;
+    }
+    else {
+        inter.intersect = true;
+    }
+
+    // Verify if the point of intersect is on the limits of the triangle
+    double w1, w2, w3, area;
+
+    area = cross((p.pointB - p.pointA), (p.pointC - p.pointA)).modulus() / 2;
+
+    w1 = cross((inter.point - p.pointB), (inter.point - p.pointC)).modulus() / area;
+  
+    w2 = cross((inter.point - p.pointC), (inter.point - p.pointA)).modulus() / area;
+    
+    w3 = 1 - w1 - w2;
+
+    if(w1 < 0 || w1 > 1 || w2 < 0 || w2 > 1 ||  w3 < 0 || w3 > 1 || (w1 + w2 + w3) != 1) {
+        inter.intersect = false;
+    }
+
+    return inter;
+}
