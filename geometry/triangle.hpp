@@ -5,14 +5,9 @@
 #include <math/vector3.hpp>
 #include <geometry/ray.hpp>
 #include <geometry/primitive.hpp>
+#include <geometry/plane.hpp>
 
 using namespace std;
-
-/**
- * @brief Struct for representing values of the intersection with a plane
- * 
- */
-struct PlaneIntersection : public Intersection {};
 
 /**
  * @brief Class for representing Triangle
@@ -20,21 +15,18 @@ struct PlaneIntersection : public Intersection {};
  */
 class Triangle : public Primitive {
 public:
-    double c;
-    Vector3 normal;
     Vector3 pointA, pointB, pointC;
 
     /**
      * @brief Construct a new Triangle object
      * 
-     * @param _c The value of c
-     * @param _normal The value of the normal of the trianlge
-     * @param _pointA The value of one point of the triangle
-     * @param _pointB The value of one point of the triangle
-     * @param _pointC The value of one point of the triangle
+     * @param _pointA Triangle's first vertex
+     * @param _pointB Triangle's second vertex
+     * @param _pointC Triangle's third vertex
      */
-    Triangle(double _c, Vector3 _normal, Vector3 _pointA, Vector3 _pointB, Vector3 _pointC, RGB emission)
-        : Primitive(emission), c(_c), normal(_normal), pointA(_pointA), pointB(_pointB), pointC(_pointC) {}
+    Triangle(Vector3 _pointA, Vector3 _pointB, Vector3 _pointC, RGB emission)
+        : Primitive(emission), pointA(_pointA), pointB(_pointB), pointC(_pointC), 
+          _normal(cross(pointB - pointA, pointC - pointA)), _c(-dot(pointA, _normal)) {}
 
     /**
      * @brief Function of intersection with a Ray
@@ -43,4 +35,9 @@ public:
      * @return PlaneIntersection 
      */
     Intersection intersection(const Ray& r) override;
+
+private:
+    double _c;
+    Vector3 _normal;
+    bool insideOutsideTest(Vector3 point);
 };

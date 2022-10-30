@@ -2,6 +2,7 @@
 
 #include <geometry/plane.hpp>
 #include <geometry/sphere.hpp>
+#include <geometry/triangle.hpp>
 #include <scene/scene.hpp>
 
 using namespace std;
@@ -37,13 +38,9 @@ int main() {
     auto sL = make_shared<Sphere>(Vector3(-0.5,-0.7,0.25), 0.3, RGB(0.5, 0, 0));
     auto sR = make_shared<Sphere>(Vector3(0.5, -0.7, 0.25), 0.3, RGB(0, 0, 0.5));
 
-    sc.addPrimitive(pL);
-    sc.addPrimitive(pR);
-    sc.addPrimitive(pF);
-    sc.addPrimitive(pC);
-    sc.addPrimitive(pB);
-    sc.addPrimitive(sL);
-    sc.addPrimitive(sR);
+    auto sTri = make_shared<Triangle>(Vector3(0, 0, 0.5), Vector3(0, 1, 0.5), Vector3(1, 0, 0.5), RGB(0.72, 0.57, 0.62));
+
+    sc.addPrimitive(sTri);
 
     Image img = sc.drawScene();
 
