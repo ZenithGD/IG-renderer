@@ -19,7 +19,7 @@ struct Image {
      * @param h 
      */
     Image(unsigned int w, unsigned int h) 
-        :  width(w), height(h), imageData(h, vector<RGB>(w)) {}
+        :  width(w), height(h), imageData(h, vector<RGB>(w)), maxNumber(1) {}
 
     /**
      * @brief Construct a new Image object

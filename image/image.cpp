@@ -153,12 +153,24 @@ void Image::writeToBMP(const string path) const {
 
     unsigned int readIndex = 0;
 
+    #ifdef DEBUG
+        cout << "file size (B): " << fileSize << endl;
+        cout << "data offset (B): " << dataOffset << endl;
+        cout << "info header size (B): " << infoHeaderSize << endl;
+        cout << "width, height (px): (" << width << ", " << height << ")" << endl;
+        cout << "max value: " << maxNumber << endl;
+    #endif
+
     // assume bits per pixel is 24 for now
     for ( int i = height - 1; i >= 0; i-- ) {
         for ( int j = 0; j < width; j++ ) {
-            dataPtr[readIndex++] = (uint8_t)(imageData[i][j].blue * 255 / maxNumber);
-            dataPtr[readIndex++] = (uint8_t)(imageData[i][j].green * 255 / maxNumber);
-            dataPtr[readIndex++] = (uint8_t)(imageData[i][j].red * 255 / maxNumber);
+            uint8_t b = (uint8_t)(imageData[i][j].blue * 255.0 / maxNumber);
+            uint8_t g = (uint8_t)(imageData[i][j].green * 255.0 / maxNumber);
+            uint8_t r = (uint8_t)(imageData[i][j].red * 255.0 / maxNumber);
+
+            dataPtr[readIndex++] = b;
+            dataPtr[readIndex++] = g;
+            dataPtr[readIndex++] = r;
         }
         // skip padding
         readIndex += padding;
@@ -227,12 +239,14 @@ Image Image::readBMP(const string path) {
         in.ignore(4 * (1 << bitCount));
     }
 
-    cout << "signature: " << string(signature) << endl;
-    cout << "file size (B): " << fileSize << endl;
-    cout << "data offset (B): " << dataOffset << endl;
-    cout << "info header size (B): " << infoHeaderSize << endl;
-    cout << "width, height (px): (" << width << ", " << height << ")" << endl;
-    cout << "bits per pixel: " << bitCount << endl;
+    #ifdef DEBUG
+        cout << "signature: " << string(signature) << endl;
+        cout << "file size (B): " << fileSize << endl;
+        cout << "data offset (B): " << dataOffset << endl;
+        cout << "info header size (B): " << infoHeaderSize << endl;
+        cout << "width, height (px): (" << width << ", " << height << ")" << endl;
+        cout << "bits per pixel: " << bitCount << endl;
+    #endif
 
     // Ignore additional info header file (palettes and such) for now
     in.ignore(dataOffset - 54);
