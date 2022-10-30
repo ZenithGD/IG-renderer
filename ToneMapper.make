@@ -13,7 +13,7 @@ endif
 ifeq ($(config),debug)
   RESCOMP = windres
   TARGETDIR = bin/${cfg.buildcfg}
-  TARGET = $(TARGETDIR)/ToneMapper.exe
+  TARGET = $(TARGETDIR)/ToneMapper
   OBJDIR = obj/Debug/ToneMapper
   DEFINES += -DDEBUG
   INCLUDES += -I.
@@ -40,7 +40,7 @@ endif
 ifeq ($(config),release)
   RESCOMP = windres
   TARGETDIR = bin/${cfg.buildcfg}
-  TARGET = $(TARGETDIR)/ToneMapper.exe
+  TARGET = $(TARGETDIR)/ToneMapper
   OBJDIR = obj/Release/ToneMapper
   DEFINES +=
   INCLUDES += -I.
@@ -66,13 +66,18 @@ endif
 
 OBJECTS := \
 	$(OBJDIR)/color.o \
+	$(OBJDIR)/plane.o \
 	$(OBJDIR)/ray.o \
+	$(OBJDIR)/sphere.o \
+	$(OBJDIR)/triangle.o \
 	$(OBJDIR)/image.o \
 	$(OBJDIR)/tonemapping.o \
 	$(OBJDIR)/coordinate.o \
 	$(OBJDIR)/mat4.o \
 	$(OBJDIR)/misc.o \
 	$(OBJDIR)/vector3.o \
+	$(OBJDIR)/camera.o \
+	$(OBJDIR)/scene.o \
 	$(OBJDIR)/tonemapper.o \
 
 RESOURCES := \
@@ -135,7 +140,16 @@ endif
 $(OBJDIR)/color.o: color/color.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/plane.o: geometry/plane.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/ray.o: geometry/ray.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/sphere.o: geometry/sphere.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/triangle.o: geometry/triangle.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/image.o: image/image.cpp
@@ -154,6 +168,12 @@ $(OBJDIR)/misc.o: math/misc.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/vector3.o: math/vector3.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/camera.o: scene/camera.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/scene.o: scene/scene.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/tonemapper.o: tonemapper.cpp

@@ -17,7 +17,15 @@ public:
      * @brief Construct a new empty Coordinate object
      * This will create an identity matrix
      */
+
     Coordinate() : matrix() {}
+
+    /**
+     * @brief Construct a new empty Coordinate object
+     * @param wCord Value of w
+     * This will create an identity matrix
+     */
+    Coordinate(double wCoord) : matrix() { matrix[3][3] = wCoord; }
 
     /**
      * @brief Construct a new Coordinate object
