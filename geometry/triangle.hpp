@@ -39,5 +39,5 @@ public:
 private:
     double _c;
     Vector3 _normal;
-    bool insideOutsideTest(Vector3 point);
+    bool insideOutsideTest(Vector3 point) const;
 };

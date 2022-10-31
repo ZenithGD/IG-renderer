@@ -6,12 +6,11 @@ void Scene::addPrimitive(const shared_ptr<Primitive> p){
 
 Image Scene::drawScene(){
     
-    //TODO: scene should carry all the info 
-    //(camera frustum size, antialiasing factor and stuff)
-    Image img(256, 256);
+    Image img(_scprops.viewportWidth, _scprops.viewportHeight);
+
     for ( int i = 0; i < img.height; i++) {
         for ( int j = 0; j < img.width; j++ ) {
-            auto rays = cam.perPixel(i, j, 64);
+            auto rays = cam.perPixel(i, j, _scprops.antialiasingFactor);
 
             RGB contrib;
             for ( Ray r : rays ) {

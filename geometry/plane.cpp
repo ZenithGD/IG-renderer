@@ -1,7 +1,7 @@
 #include <geometry/plane.hpp>
 
 Intersection Plane::intersection(const Ray& r) {
-    PlaneIntersection inter;
+    Intersection inter;
 
     //Solve for t
     inter.t = -((c + dot(r.origin, normal)) / dot(r.direction, normal));

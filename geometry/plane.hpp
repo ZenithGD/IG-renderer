@@ -2,17 +2,12 @@
 
 #include <iostream>
 
-#include <math/vector3.hpp>
 #include <geometry/ray.hpp>
 #include <geometry/primitive.hpp>
+#include <math/vector3.hpp>
+#include <geometry/intersection.hpp>
 
 using namespace std;
-
-/**
- * @brief Struct for representing values of the intersection with a plane
- * 
- */
-struct PlaneIntersection : public Intersection {};
 
 /**
  * @brief Class for representing Planes

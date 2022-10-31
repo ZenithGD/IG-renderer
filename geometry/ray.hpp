@@ -20,7 +20,6 @@ public:
     Ray(Vector3 o, Vector3 d) : origin(o), direction(d) {}
     Vector3 origin, direction;
 
-
     inline Vector3 eval(double t) const { return origin + direction * t; }
 
     inline Vector3 operator()(double t) const { return eval(t); }

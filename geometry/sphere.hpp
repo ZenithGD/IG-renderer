@@ -9,14 +9,6 @@
 using namespace std;
 
 /**
- * @brief Struct for representing values of the intersection with a shpere
- * 
- */
-struct SphereIntersection : public Intersection{
-    int intersections;
-};
-
-/**
  * @brief Class for representing Spheres
  * 
  */

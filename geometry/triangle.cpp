@@ -1,13 +1,13 @@
 #include <geometry/triangle.hpp>
 
-bool Triangle::insideOutsideTest(Vector3 point) {
+bool Triangle::insideOutsideTest(Vector3 point) const {
 
     // TODO
     return true;
 }
 
-Intersection Triangle::intersection(const Ray& r){
-    PlaneIntersection inter;
+Intersection Triangle::intersection(const Ray& r) {
+    Intersection inter;
 
     //Solve for t
     inter.t = -(( _c + dot(r.origin, _normal)) / dot(r.direction, _normal));
