@@ -69,11 +69,11 @@ Here are some funny rendering mistakes that we found during development:
 
 <div style="display: grid; gap:2em; grid-template-columns: repeat(3, 1fr);">
     <div style="display: flex; flex-direction:column; align-items: center;" >
-        <img src="./assets/funnymistakes/apoc.png" alt="apocalypse windows" height=150 />
+        <img src="./resources/funnymistakes/apoc.png" alt="apocalypse windows" height=150 />
         <p style="text-align: center;" >Some spooky errors while doing local tonemapping</p>
     </div>
     <div style="display: flex; flex-direction:column; align-items: center;" >
-        <img src="./assets/funnymistakes/invertedmickey.bmp" alt="mickey mouse shaped thingy" height=150 />
+        <img src="./resources/funnymistakes/invertedmickey.bmp" alt="mickey mouse shaped thingy" height=150 />
         <p style="text-align: center;" >A loosely familiar shape...</p>
     </div>
 </div>
