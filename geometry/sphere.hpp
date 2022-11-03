@@ -31,6 +31,6 @@ public:
     * @return SphereIntersection
     * 
     */
-    Intersection intersection(const Ray& r) override;
+    Intersection intersection(const Ray& r, double minT, double maxT) override;
 };
 

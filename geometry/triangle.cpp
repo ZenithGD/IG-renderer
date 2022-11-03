@@ -6,7 +6,7 @@ bool Triangle::insideOutsideTest(Vector3 point) const {
     return true;
 }
 
-Intersection Triangle::intersection(const Ray& r) {
+Intersection Triangle::intersection(const Ray& r, double minT, double maxT) {
     Intersection inter;
 
     //Solve for t
@@ -19,7 +19,7 @@ Intersection Triangle::intersection(const Ray& r) {
     inter.normal = _normal;
 
     // Verify if the triangle doesn't intersect behind of the ray's origin
-    if (inter.t < 0) {
+    if (inter.t < minT || inter.t > maxT) {
         inter.intersects = false;
     }
     else {

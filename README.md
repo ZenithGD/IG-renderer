@@ -45,7 +45,6 @@ premake5 vs2022
 ## Other 
 Please refer to the [Premake Docs](https://premake.github.io/docs/Using-Premake/) if you need another action for your custom environment.
 
-
 ---
 
 ## Usage
@@ -54,6 +53,30 @@ Please refer to the [Premake Docs](https://premake.github.io/docs/Using-Premake/
 ./bin/ToneMapper <in_file{bmp|ppm}> <out_file.{bmp|ppm}>
 ```
 
+```bash
+./bin/Renderer
+```
+
+## Extensions
+
+### Parallel rendering
+This renderer allows parallel rendering on the CPU, deferring tasks on a queue so threads can process them and return the result back.
+The number of threads can be chosed by hand but it is recommended to allow the maximum number of threads for peak performance.
+
+## Funny mistakes
+
+Here are some funny rendering mistakes that we found during development:
+
+<div style="display: grid; gap:2em; grid-template-columns: repeat(3, 1fr);">
+    <div style="display: flex; flex-direction:column; align-items: center;" >
+        <img src="./assets/funnymistakes/apoc.png" alt="apocalypse windows" height=150 />
+        <p style="text-align: center;" >Some spooky errors while doing local tonemapping</p>
+    </div>
+    <div style="display: flex; flex-direction:column; align-items: center;" >
+        <img src="./assets/funnymistakes/invertedmickey.bmp" alt="mickey mouse shaped thingy" height=150 />
+        <p style="text-align: center;" >A loosely familiar shape...</p>
+    </div>
+</div>
 ---
 
 ## Debugging

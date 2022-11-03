@@ -34,7 +34,7 @@ public:
      * @param p The value of the Ray that we want to prove if it intersect with the triangle
      * @return PlaneIntersection 
      */
-    Intersection intersection(const Ray& r) override;
+    Intersection intersection(const Ray& r, double minT, double maxT) override;
 
 private:
     double _c;

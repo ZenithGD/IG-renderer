@@ -1,6 +1,6 @@
 #include <geometry/sphere.hpp>
 
-Intersection Sphere::intersection(const Ray& r) {
+Intersection Sphere::intersection(const Ray& r, double minT, double maxT) {
 
     Vector3 dif = r.origin - center;
     Intersection inter;
@@ -8,49 +8,31 @@ Intersection Sphere::intersection(const Ray& r) {
 
     // Solve for t
     double a = dot(r.direction, r.direction);
-    double b = dot(r.direction, dif) * 2;
+    double halfb = dot(r.direction, dif);
 
     double c = dot(dif, dif) - radius * radius;
 
     // Get discriminant
-    double discr = b * b - 4 * a * c;
+    double discr = halfb * halfb - a * c;
+
+    if (discr < 0) return inter;
+
+    double sq = sqrt(discr);
+    // closest root
+    double root = (-halfb - sq) / a;
     
-    if ( discr < 0 ) {
-
-        // No intersection
-    } else if ( discr == 0 ) {
-
-        double sol = -b / (2 * a);
-
-        // Tangent ray
-        inter.point = r.eval(sol);
-        inter.t = sol;
-    } else { 
-
-        // Intersection
-
-        // Check if ray's r.origin is inside the sphere
-        double sol1 = (-b - sqrt(discr)) / (2 * a);
-        double sol2 = (-b + sqrt(discr)) / (2 * a);
-
-        if ( sol1 * sol2 < 0 ) {
-            inter.point = r.eval(sol2);
-            inter.t = sol2;
-        } else {
-            inter.t = sol1;
-            // Check if solution lies behind the ray 
-            if ( sol1 < 0 ) {
-                inter.point = r.eval(sol1);
-            } else {
-                inter.intersects = true;
-                inter.point = r.eval(sol1);
-                inter.normal = normalize(center - inter.point);
-            }
-        }
+    if ( root < minT || maxT < root ) {
+        // farthest root, ray origin inside of sphere
+        root = (-halfb + sq) / a;
+        if ( root < minT || maxT < root )
+            return inter;
     }
 
-    if ( inter.intersects ) {
-        inter.emission = emission;
-    }
+    inter.intersects = true;
+    inter.emission = emission;
+    inter.t = root;
+    inter.point = r(inter.t);
+    inter.normal = normalize(inter.point - center);
+
     return inter;
 }

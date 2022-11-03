@@ -176,6 +176,9 @@ void Image::writeToBMP(const string path) const {
         readIndex += padding;
     }
 
+    // free memory after loading image into object
+    free(dataPtr);
+
     out.write((char *) dataPtr, rasterSize);
 }
 

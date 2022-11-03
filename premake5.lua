@@ -15,6 +15,9 @@ function setupProject(name, mainFile)
         -- files here
         files { "*/**.cpp", "*/**.hpp", mainFile }
 
+        -- link libraries
+        links { "pthread" }
+
         filter "configurations:Debug"
                 defines { "DEBUG" }
                 symbols "On"

@@ -26,5 +26,5 @@ public:
      * @param r The ray
      * @return Intersection 
      */
-    virtual Intersection intersection(const Ray& r) = 0; 
+    virtual Intersection intersection(const Ray& r, double minT, double maxT = INFINITY) = 0; 
 };

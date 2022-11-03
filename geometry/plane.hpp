@@ -30,7 +30,7 @@ public:
     * @param r The value of the Ray that we want to prove if it intersect with the plane
     * @return PlaneIntersection 
     */
-    Intersection intersection(const Ray& r) override;
+    Intersection intersection(const Ray& r, double minT, double maxT) override;
 
 };
 
