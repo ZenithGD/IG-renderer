@@ -40,6 +40,5 @@
 # ignore assets contents
 /assets
 
-# don't upload image files
-*.ppm
-*.bmp
+# ignore test files
+test.*
