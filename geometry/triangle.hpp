@@ -24,9 +24,9 @@ public:
      * @param _pointB Triangle's second vertex
      * @param _pointC Triangle's third vertex
      */
-    Triangle(Vector3 _pointA, Vector3 _pointB, Vector3 _pointC, RGB emission)
+    Triangle(Vector3 _pointA, Vector3 _pointB, Vector3 _pointC, RGB emission = RGB())
         : Primitive(emission), pointA(_pointA), pointB(_pointB), pointC(_pointC), 
-          _normal(cross(pointB - pointA, pointC - pointA)), _c(-dot(pointA, _normal)) {}
+          normal(cross(pointB - pointA, pointC - pointA)), c(-dot(pointA, normal)) {}
 
     /**
      * @brief Function of intersection with a Ray
@@ -37,7 +37,7 @@ public:
     Intersection intersection(const Ray& r, double minT, double maxT) override;
 
 private:
-    double _c;
-    Vector3 _normal;
+    double c;
+    Vector3 normal;
     bool insideOutsideTest(Vector3 point) const;
 };

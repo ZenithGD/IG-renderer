@@ -10,21 +10,19 @@ Intersection Triangle::intersection(const Ray& r, double minT, double maxT) {
     Intersection inter;
 
     //Solve for t
-    inter.t = -(( _c + dot(r.origin, _normal)) / dot(r.direction, _normal));
- 
-    // Compute intersection point
-    inter.point = r.eval(inter.t); 
-
-    // Get normal
-    inter.normal = _normal;
+    double t = -(( c + dot(r.origin, normal)) / dot(r.direction, normal));
 
     // Verify if the triangle doesn't intersect behind of the ray's origin
-    if (inter.t < minT || inter.t > maxT) {
+    if (t < minT || t > maxT) {
         inter.intersects = false;
     }
     else {
-        inter.intersects = insideOutsideTest(inter.point);
+        inter.intersects = insideOutsideTest(r(t));
+    }
+
+    if ( inter.intersects ) {
         inter.emission = emission;
+        inter.intersections.emplace(t, normal);
     }
 
     return inter;

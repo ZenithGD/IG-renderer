@@ -76,6 +76,10 @@ Here are some funny rendering mistakes that we found during development:
         <img src="./resources/funnymistakes/invertedmickey.bmp" alt="mickey mouse shaped thingy" height=150 />
         <p style="text-align: center;" >A loosely familiar shape...</p>
     </div>
+    <div style="display: flex; flex-direction:column; align-items: center;" >
+        <img src="./resources/funnymistakes/ufoencounter.bmp" alt="ufo shaped fail" height=150 />
+        <p style="text-align: center;" >UFO encounter!</p>
+    </div>
 </div>
 ---
 

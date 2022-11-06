@@ -18,7 +18,7 @@ public:
      * 
      * @param _e The emission value
      */
-    Primitive(RGB _e) : emission(_e) {}; 
+    Primitive(RGB _e = RGB()) : emission(_e) {}; 
 
     /**
      * @brief Find an intersection with a ray.
@@ -27,4 +27,6 @@ public:
      * @return Intersection 
      */
     virtual Intersection intersection(const Ray& r, double minT, double maxT = INFINITY) = 0; 
+
+    virtual ~Primitive() { }
 };

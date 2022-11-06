@@ -67,6 +67,7 @@ endif
 OBJECTS := \
 	$(OBJDIR)/color.o \
 	$(OBJDIR)/core.o \
+	$(OBJDIR)/CSG.o \
 	$(OBJDIR)/plane.o \
 	$(OBJDIR)/ray.o \
 	$(OBJDIR)/sphere.o \
@@ -142,6 +143,9 @@ $(OBJDIR)/color.o: color/color.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/core.o: core/core.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/CSG.o: geometry/CSG.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/plane.o: geometry/plane.cpp

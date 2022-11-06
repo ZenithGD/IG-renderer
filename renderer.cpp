@@ -2,11 +2,12 @@
 
 #include <thread>
 
+
+#include <geometry/CSG.hpp>
 #include <geometry/plane.hpp>
 #include <geometry/sphere.hpp>
 #include <geometry/triangle.hpp>
 #include <scene/scene.hpp>
-
 #include <core/core.hpp>
 
 #include <image/tonemapping.hpp>
@@ -38,7 +39,11 @@ int main() {
     auto sL = make_shared<Sphere>(Vector3(-0.5,-0.7,0.5), 0.2, RGB(1, 1, 0));
     auto sR = make_shared<Sphere>(Vector3(0.5, -0.7, 0.25), 0.4, RGB(0, 1, 1));
 
-    auto light = make_shared<Light>(Vector3(0,0.5,0), RGB(1,1,1));
+    auto s1 = make_shared<Sphere>(Vector3(0, 1, 0.4), 0.4);
+    auto s2 = make_shared<Sphere>(Vector3(0, 0.5, 0.3), 0.4);
+
+    auto sCSG = make_shared<CSG>(s1, s2, CSGOperation::Intersection, RGB(1, 0, 0.5));
+    auto light = make_shared<Light>(Vector3(0,0,0), RGB(1,1,1));
 
     // auto sTri = make_shared<Triangle>(Vector3(0, 0, 0.5), Vector3(0, 1, 0.5), Vector3(1, 0, 0.5), RGB(0.72, 0.57, 0.62));
 
@@ -49,6 +54,8 @@ int main() {
     sc.addPrimitive(pB);
     sc.addPrimitive(sL);
     sc.addPrimitive(sR);
+
+    sc.addPrimitive(sCSG);
 
     sc.addLight(light);
     //sc.addPrimitive(sTri);

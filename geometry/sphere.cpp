@@ -19,20 +19,24 @@ Intersection Sphere::intersection(const Ray& r, double minT, double maxT) {
 
     double sq = sqrt(discr);
     // closest root
-    double root = (-halfb - sq) / a;
+    double root1 = (-halfb - sq) / a;
+    double root2 = (-halfb + sq) / a;
     
-    if ( root < minT || maxT < root ) {
+    if ( root1 < minT || maxT < root1 ) {
         // farthest root, ray origin inside of sphere
-        root = (-halfb + sq) / a;
-        if ( root < minT || maxT < root )
+        if ( root2 < minT || maxT < root2 )
+            // no intersections
             return inter;
+        else {
+            inter.intersections.emplace(root2, normalize(r(root2) - center));
+        }
+    } else {
+        inter.intersections.emplace(root1, normalize(r(root1) - center));
+        inter.intersections.emplace(root2, normalize(r(root2) - center));
     }
 
     inter.intersects = true;
     inter.emission = emission;
-    inter.t = root;
-    inter.point = r(inter.t);
-    inter.normal = normalize(inter.point - center);
 
     return inter;
 }

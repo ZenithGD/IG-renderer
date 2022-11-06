@@ -23,7 +23,7 @@ public:
      * @param c The value of the center of the sphere
      * @param r The value of the radius of the sphere
      */
-    Sphere(Vector3 c, double r, RGB emission) : Primitive(emission), center(c), radius(r) {}
+    Sphere(Vector3 c, double r, RGB emission = RGB()) : Primitive(emission), center(c), radius(r) {}
 
     /**
     * @brief Function of intersection with a Sphere

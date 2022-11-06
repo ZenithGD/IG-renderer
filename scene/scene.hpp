@@ -34,6 +34,6 @@ public:
 
 private:
 
-    RGB directLight(const Intersection it, const Vector3 obsDirection) const;
+    RGB directLight(const Vector3 origin, const Vector3 obsDirection, const Intersection it) const;
     SceneProps _scprops;
 };

@@ -14,31 +14,33 @@ void Scene::addLight(const shared_ptr<Light> l)
     _lights.push_back(l);
 }
 
-RGB Scene::directLight(const Intersection it, const Vector3 obsDirection) const
+RGB Scene::directLight(const Vector3 origin, const Vector3 obsDirection, const Intersection it) const
 {
     RGB totalContrib;
     for (auto l : _lights)
     {
-        Vector3 directRayDir = l->center - it.point;
+        Vector3 directRayDir = l->center - origin;
 
-        Ray r(it.point, directRayDir.normalized());
+        Ray r(origin, directRayDir.normalized());
 
         Intersection closest {
-            .intersects = false,
-            .t = INFINITY
+            .intersects = false
         };
+
+        double closestT = INFINITY;
 
         for (auto p : _primitives)
         {
 
             Intersection inter = p->intersection(r, 0.001, directRayDir.modulus());
-            if (inter.intersects && inter.t < closest.t)
+            if (inter.intersects && inter.closest() < closestT)
             {
                 closest = inter;
+                closestT = inter.closest();
             }
         }
 
-        double geometryContrib = abs(dot(it.normal, directRayDir.normalized()));
+        double geometryContrib = abs(dot(it.closestNormal(), directRayDir.normalized()));
         // TODO: more general BSDF object
         RGB materialContrib = it.emission / M_PI;
 
@@ -83,19 +85,20 @@ Image Scene::drawScene()
                 for ( const Ray& r : rays ) {
                     Intersection closest {
                         .intersects = false,
-                        .t = INFINITY
                     };
+                    double closestT = INFINITY;
                     for ( auto p : _primitives ) {
 
                         Intersection inter = p->intersection(r, 0.001);
-                        if ( inter.intersects && inter.t < closest.t ){
+                        if ( inter.intersects && inter.closest() < closestT ){
                             closest = inter;
+                            closestT = inter.closest();
                         }
                     }
                     
                     // trace direct light ray
                     if( closest.intersects ) {
-                        contrib = contrib + directLight(closest, r.direction);
+                        contrib = contrib + directLight(r(closest.closest()), r.direction, closest);
                     }
                 }
                 return PixelResult{ .x = j, .y = i, .contribution = contrib / (double)rays.size() }; 
@@ -104,11 +107,18 @@ Image Scene::drawScene()
     }
 
     double maxValue = 0;
+    double nextval = 0;
 
     for (unsigned int i = 0; i < img.height; i++)
     {
         for (unsigned int j = 0; j < img.width; j++)
         {
+            double progress = double( i * img.width + j ) / double(img.height * img.width);
+            if ( progress >= nextval ) {
+                nextval += 0.001;
+                cout << progress << " %" << endl;
+            }
+
             PixelResult res = tp.getResult();
 
             img.imageData[res.y][res.x] = res.contribution;
@@ -117,33 +127,4 @@ Image Scene::drawScene()
         }
     }
     return img;
-    /*
-        RGB contrib;
-
-        auto rays = cam.perPixel(j, i, _scprops.antialiasingFactor);
-
-        for (const Ray r : rays)
-        {
-            Intersection closest;
-            closest.t = INFINITY;
-            for (auto p : _primitives)
-            {
-
-                Intersection inter = p->intersection(r);
-                if (inter.intersects && inter.t < closest.t)
-                {
-                    closest = inter;
-                }
-            }
-            // cout << "intersection " << closest.emission << endl;
-            //  contrib = contrib + closest.emission * abs(dot(normalize(r.direction), normalize(normal)));
-
-            // trazar rayo luz directa
-
-            if ( closest.intersects ) {
-                contrib = contrib + directLight(closest, r.direction);
-            }
-        }
-        img.imageData[i][j] = contrib;
-        */
 }
