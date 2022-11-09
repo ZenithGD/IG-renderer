@@ -36,14 +36,17 @@ int main() {
     auto pC = make_shared<Plane> (1, Vector3(0, -1, 0), RGB(0.5, 0.5, 0.5));
     auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), RGB(0.5, 0.5, 0.5));
 
-    auto sL = make_shared<Sphere>(Vector3(-0.5,-0.7,0.5), 0.2, RGB(1, 1, 0));
-    auto sR = make_shared<Sphere>(Vector3(0.5, -0.7, 0.25), 0.4, RGB(0, 1, 1));
+    auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.5), 0.3, RGB(1, 1, 0));
+    auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, 0.25), 0.4, RGB(0, 1, 1));
 
-    auto s1 = make_shared<Sphere>(Vector3(0, 1, 0.4), 0.4);
-    auto s2 = make_shared<Sphere>(Vector3(0, 0.5, 0.3), 0.4);
+    auto s1 = make_shared<Sphere>(Vector3(0.0, 0.3, 0.5), 0.4, RGB(1, 0, 0.5));
+    auto s2 = make_shared<Sphere>(Vector3(0.0, 0.3, 0.5), 0.35, RGB(1, 0, 0.5));
+    auto s3 = make_shared<Sphere>(Vector3(0.2, 0.3, 0.4), 0.3, RGB(1, 0, 0.5));
 
-    auto sCSG = make_shared<CSG>(s1, s2, CSGOperation::Intersection, RGB(1, 0, 0.5));
-    auto light = make_shared<Light>(Vector3(0,0,0), RGB(1,1,1));
+    auto sCSG1 = make_shared<CSG>(s1, s2, CSGOperation::Difference, RGB(1, 0, 0.5));
+    auto sCSG2 = make_shared<CSG>(sCSG1, s3, CSGOperation::Difference, RGB(1, 0, 0.5));
+    auto light  = make_shared<PointLight>(Vector3(0.0, 0.25, -0.5), RGB(1,1,1));
+    auto light2 = make_shared<PointLight>(Vector3(0.0, -0.8,  -1.5), RGB(1,1,1));
 
     // auto sTri = make_shared<Triangle>(Vector3(0, 0, 0.5), Vector3(0, 1, 0.5), Vector3(1, 0, 0.5), RGB(0.72, 0.57, 0.62));
 
@@ -55,9 +58,11 @@ int main() {
     sc.addPrimitive(sL);
     sc.addPrimitive(sR);
 
-    sc.addPrimitive(sCSG);
+    //sc.addPrimitive(s1);
+    //sc.addPrimitive(sCSG2);
 
     sc.addLight(light);
+    sc.addLight(light2);
     //sc.addPrimitive(sTri);
 
     Image img(props.viewportWidth, props.viewportHeight);

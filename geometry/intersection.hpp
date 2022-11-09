@@ -4,6 +4,7 @@
 
 #include <math/vector3.hpp>
 #include <color/color.hpp>
+#include <scene/BSDF.hpp>
 
 /**
  * @brief Struct that carries general intersection info.
@@ -19,11 +20,26 @@ struct Intersection {
      * entry assumes the intersection is from outside the solid shape, while the
      * second is from the inside, and so on.
      */
-    std::map<double, Vector3, std::less<double>> intersections;
+    std::multimap<double, Vector3, std::less<double>> intersections;
 
-    // emission at intersected object
-    RGB emission;
+    // BSDF of closest object
+    BSDF bsdf;
 
+    /**
+     * @brief Return closest value of intersection
+     * 
+     * @return double 
+     */
     inline double closest() const { return intersections.begin()->first; }
+
+    /**
+     * @brief Return normal at the closest intersection
+     * 
+     * @return Vector3 
+     */
     inline Vector3 closestNormal() const { return intersections.begin()->second; }
+
+    friend ostream& operator<<(ostream& os, const Intersection& it);
 };
+
+ostream& operator<<(ostream& os, const Intersection& it);

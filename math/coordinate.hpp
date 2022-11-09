@@ -36,7 +36,7 @@ public:
      * @param o The origin of the coordinate system
      * @param wCoord The homogeneous coordinate
      */
-    Coordinate(Vector3 u, Vector3 v, Vector3 w, Vector3 o, double wCoord) {
+    Coordinate(Vector3 u, Vector3 v, Vector3 w, Vector3 o = Vector3(), double wCoord = 1) {
 
         matrix[0][0] = u.x;
         matrix[1][0] = u.y;

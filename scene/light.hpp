@@ -6,9 +6,21 @@ using namespace std;
 
 class Light {
 public:
-    Vector3 center;
     RGB power;
 
-    Light(Vector3 c, RGB p) : center(c), power(p) {}
+    Light(RGB p) : power(p) {}
 
+    virtual ~Light() = default;
+};
+
+class PointLight : public Light {
+public:
+    Vector3 center;
+
+    PointLight(Vector3 c, RGB p) : Light(p), center(c) {}
+};
+
+class AreaLight : public Light {
+public:
+    
 };

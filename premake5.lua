@@ -28,3 +28,4 @@ end
 
 setupProject("Renderer", "renderer.cpp")
 setupProject("ToneMapper", "tonemapper.cpp")
+setupProject("Tests", "tests.cpp")

@@ -13,8 +13,8 @@ endif
 ifeq ($(config),debug)
   RESCOMP = windres
   TARGETDIR = bin/${cfg.buildcfg}
-  TARGET = $(TARGETDIR)/ToneMapper
-  OBJDIR = obj/Debug/ToneMapper
+  TARGET = $(TARGETDIR)/Tests
+  OBJDIR = obj/Debug/Tests
   DEFINES += -DDEBUG
   INCLUDES += -I.
   FORCE_INCLUDE +=
@@ -40,8 +40,8 @@ endif
 ifeq ($(config),release)
   RESCOMP = windres
   TARGETDIR = bin/${cfg.buildcfg}
-  TARGET = $(TARGETDIR)/ToneMapper
-  OBJDIR = obj/Release/ToneMapper
+  TARGET = $(TARGETDIR)/Tests
+  OBJDIR = obj/Release/Tests
   DEFINES +=
   INCLUDES += -I.
   FORCE_INCLUDE +=
@@ -84,7 +84,7 @@ OBJECTS := \
 	$(OBJDIR)/camera.o \
 	$(OBJDIR)/scene.o \
 	$(OBJDIR)/testsuite.o \
-	$(OBJDIR)/tonemapper.o \
+	$(OBJDIR)/tests.o \
 
 RESOURCES := \
 
@@ -96,7 +96,7 @@ ifeq (.exe,$(findstring .exe,$(ComSpec)))
 endif
 
 $(TARGET): $(GCH) ${CUSTOMFILES} $(OBJECTS) $(LDDEPS) $(RESOURCES) | $(TARGETDIR)
-	@echo Linking ToneMapper
+	@echo Linking Tests
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
 
@@ -119,7 +119,7 @@ else
 endif
 
 clean:
-	@echo Cleaning ToneMapper
+	@echo Cleaning Tests
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(OBJDIR)
@@ -200,7 +200,7 @@ $(OBJDIR)/scene.o: scene/scene.cpp
 $(OBJDIR)/testsuite.o: tests/testsuite.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/tonemapper.o: tonemapper.cpp
+$(OBJDIR)/tests.o: tests.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

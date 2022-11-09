@@ -53,12 +53,19 @@ struct Vector3 {
     inline Vector3 operator*(const double that) const { return Vector3( x * that, y * that, z * that); }
 
     /**
-     * @brief Return a vector dividde by a scalar factor
+     * @brief Return a vector divided by a scalar factor
      * 
      * @param that 
      * @return Vector3 
      */
     inline Vector3 operator/(const double that) const { return Vector3( x / that, y / that, z / that); }
+
+    /**
+     * @brief Get a vector with the same direction and modulus and opposite direction
+     * 
+     * @return Vector3 
+     */
+    inline Vector3 operator-() const { return Vector3( -x, -y, -z ); }
 
     /**
      * @brief Return the modulus of the Vector
@@ -119,3 +126,11 @@ Vector3 cross(const Vector3 u, const Vector3 v);
  * @return Vector3 
  */
 inline Vector3 normalize(const Vector3 v) { return v.normalized(); }
+
+/**
+ * @brief Find any perpendicular vector to v
+ * 
+ * @param v The vector
+ * @return Vector3 The perpendicular vector
+ */
+Vector3 perpendicular(const Vector3 v);

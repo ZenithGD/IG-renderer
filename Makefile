@@ -11,13 +11,15 @@ endif
 ifeq ($(config),debug)
   Renderer_config = debug
   ToneMapper_config = debug
+  Tests_config = debug
 endif
 ifeq ($(config),release)
   Renderer_config = release
   ToneMapper_config = release
+  Tests_config = release
 endif
 
-PROJECTS := Renderer ToneMapper
+PROJECTS := Renderer ToneMapper Tests
 
 .PHONY: all clean help $(PROJECTS) 
 
@@ -35,9 +37,16 @@ ifneq (,$(ToneMapper_config))
 	@${MAKE} --no-print-directory -C . -f ToneMapper.make config=$(ToneMapper_config)
 endif
 
+Tests:
+ifneq (,$(Tests_config))
+	@echo "==== Building Tests ($(Tests_config)) ===="
+	@${MAKE} --no-print-directory -C . -f Tests.make config=$(Tests_config)
+endif
+
 clean:
 	@${MAKE} --no-print-directory -C . -f Renderer.make clean
 	@${MAKE} --no-print-directory -C . -f ToneMapper.make clean
+	@${MAKE} --no-print-directory -C . -f Tests.make clean
 
 help:
 	@echo "Usage: make [config=name] [target]"
@@ -51,5 +60,6 @@ help:
 	@echo "   clean"
 	@echo "   Renderer"
 	@echo "   ToneMapper"
+	@echo "   Tests"
 	@echo ""
 	@echo "For more information, see https://github.com/premake/premake-core/wiki"

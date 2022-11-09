@@ -68,6 +68,8 @@ OBJECTS := \
 	$(OBJDIR)/color.o \
 	$(OBJDIR)/core.o \
 	$(OBJDIR)/CSG.o \
+	$(OBJDIR)/cylinder.o \
+	$(OBJDIR)/intersection.o \
 	$(OBJDIR)/plane.o \
 	$(OBJDIR)/ray.o \
 	$(OBJDIR)/sphere.o \
@@ -79,8 +81,10 @@ OBJECTS := \
 	$(OBJDIR)/misc.o \
 	$(OBJDIR)/vector3.o \
 	$(OBJDIR)/renderer.o \
+	$(OBJDIR)/BSDF.o \
 	$(OBJDIR)/camera.o \
 	$(OBJDIR)/scene.o \
+	$(OBJDIR)/testsuite.o \
 
 RESOURCES := \
 
@@ -148,6 +152,12 @@ $(OBJDIR)/core.o: core/core.cpp
 $(OBJDIR)/CSG.o: geometry/CSG.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/cylinder.o: geometry/cylinder.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/intersection.o: geometry/intersection.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/plane.o: geometry/plane.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -181,10 +191,16 @@ $(OBJDIR)/vector3.o: math/vector3.cpp
 $(OBJDIR)/renderer.o: renderer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/BSDF.o: scene/BSDF.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/camera.o: scene/camera.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/scene.o: scene/scene.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/testsuite.o: tests/testsuite.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

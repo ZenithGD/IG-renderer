@@ -14,12 +14,17 @@ void Scene::addLight(const shared_ptr<Light> l)
     _lights.push_back(l);
 }
 
-RGB Scene::directLight(const Vector3 origin, const Vector3 obsDirection, const Intersection it) const
+RGB Scene::nextEventEstimation(const Vector3 origin, const Vector3 obsDirection, const Intersection it) const
 {
     RGB totalContrib;
     for (auto l : _lights)
     {
-        Vector3 directRayDir = l->center - origin;
+        auto lp = dynamic_pointer_cast<PointLight>(l);
+        if ( lp == nullptr ) {
+            continue;
+        }
+        
+        Vector3 directRayDir = lp->center - origin;
 
         Ray r(origin, directRayDir.normalized());
 
@@ -32,7 +37,7 @@ RGB Scene::directLight(const Vector3 origin, const Vector3 obsDirection, const I
         for (auto p : _primitives)
         {
 
-            Intersection inter = p->intersection(r, 0.001, directRayDir.modulus());
+            Intersection inter = p->intersection(r, 0.00001, directRayDir.modulus());
             if (inter.intersects && inter.closest() < closestT)
             {
                 closest = inter;
@@ -54,6 +59,38 @@ RGB Scene::directLight(const Vector3 origin, const Vector3 obsDirection, const I
     }
 
     return totalContrib;
+}
+
+RGB Scene::pathTracing(const Ray& r, unsigned int n) const{
+    
+    if( n > _scprops.bounces ) {
+        return RGB();
+    }
+    
+    RGB contrib;
+    Intersection closest {
+        .intersects = false,
+    };
+    double closestT = INFINITY;
+    for ( auto p : _primitives ) {
+
+        Intersection inter = p->intersection(r, 0.001);
+        if ( inter.intersects && inter.closest() < closestT ){
+            closest = inter;
+            closestT = inter.closest();
+        }
+    }
+    
+    // trace direct light ray
+    if( closest.intersects ) {
+        contrib = contrib + nextEventEstimation(r(closest.closest()), r.direction, closest);
+    }
+
+    double theta = M_PI/2, phi = M_PI/2;
+    auto [ omega, li ] = closest.bsdf.sample(theta, phi, r.direction, r(closest.closest()), closest.closestNormal());
+    
+    contrib = contrib + pathTracing(r(closest.closest()),n++)
+    
 }
 
 struct PixelResult
@@ -83,23 +120,7 @@ Image Scene::drawScene()
                 auto rays = cam.perPixel(j, i, _scprops.antialiasingFactor);
 
                 for ( const Ray& r : rays ) {
-                    Intersection closest {
-                        .intersects = false,
-                    };
-                    double closestT = INFINITY;
-                    for ( auto p : _primitives ) {
-
-                        Intersection inter = p->intersection(r, 0.001);
-                        if ( inter.intersects && inter.closest() < closestT ){
-                            closest = inter;
-                            closestT = inter.closest();
-                        }
-                    }
-                    
-                    // trace direct light ray
-                    if( closest.intersects ) {
-                        contrib = contrib + directLight(r(closest.closest()), r.direction, closest);
-                    }
+                    contrib = contrib + pathTracing(r,0);
                 }
                 return PixelResult{ .x = j, .y = i, .contribution = contrib / (double)rays.size() }; 
             });
@@ -115,7 +136,7 @@ Image Scene::drawScene()
         {
             double progress = double( i * img.width + j ) / double(img.height * img.width);
             if ( progress >= nextval ) {
-                nextval += 0.001;
+                nextval += 0.05;
                 cout << progress << " %" << endl;
             }
 

@@ -14,6 +14,8 @@ struct SceneProps {
     uint32_t viewportWidth, viewportHeight;
     uint32_t antialiasingFactor;
     uint32_t threads;
+    
+    unsigned int bounces = 5;
 };
 
 class Scene {
@@ -34,6 +36,7 @@ public:
 
 private:
 
-    RGB directLight(const Vector3 origin, const Vector3 obsDirection, const Intersection it) const;
+    RGB nextEventEstimation(const Vector3 origin, const Vector3 obsDirection, const Intersection it) const;
+    RGB pathTracing(const Ray& r, unsigned int n) const;
     SceneProps _scprops;
 };

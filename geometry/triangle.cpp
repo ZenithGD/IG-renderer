@@ -22,7 +22,7 @@ Intersection Triangle::intersection(const Ray& r, double minT, double maxT) {
 
     if ( inter.intersects ) {
         inter.emission = emission;
-        inter.intersections.emplace(t, normal);
+        inter.intersections.emplace(t, normalize(normal));
     }
 
     return inter;
