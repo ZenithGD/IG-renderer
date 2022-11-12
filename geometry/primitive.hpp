@@ -11,14 +11,14 @@
 class Primitive {
 public:
     // TODO change to a material structure 
-    RGB emission;
+    BSDF bsdf;
 
     /**
      * @brief Construct a new Primitive object
      * 
      * @param _e The emission value
      */
-    Primitive(RGB _e = RGB()) : emission(_e) {}; 
+    Primitive(BSDF _b = BSDF()) : bsdf(_b) {}; 
 
     /**
      * @brief Find an intersection with a ray.

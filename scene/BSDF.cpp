@@ -1,6 +1,6 @@
 #include <scene/BSDF.hpp>
 
-RGB BSDF::eval(const Vector3 x, const Vector3 dir1, const Vector3 omega) {
+RGB BSDF::eval(const Vector3 x, const Vector3 dir1, const Vector3 omega) const {
     return diffuse / M_PI;
 }
 

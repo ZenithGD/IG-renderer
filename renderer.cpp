@@ -20,7 +20,8 @@ int main() {
         .viewportWidth = 512,
         .viewportHeight = 512,
         .antialiasingFactor = 8,
-        .threads = std::thread::hardware_concurrency()
+        .threads = std::thread::hardware_concurrency(),
+        .bounces = 0
     };
 
     Camera cam(

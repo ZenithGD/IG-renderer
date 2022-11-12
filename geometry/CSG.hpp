@@ -27,8 +27,8 @@ public:
      * @param operation The operation applied to both solids
      * @param e The emission value.
      */
-    CSG(const shared_ptr<Primitive>& l, const shared_ptr<Primitive>& r, CSGOperation op, RGB emission = RGB())
-        : Primitive(emission), operation(op), left(l), right(r) {}
+    CSG(const shared_ptr<Primitive>& l, const shared_ptr<Primitive>& r, CSGOperation op, BSDF bsdf = BSDF())
+        : Primitive(bsdf), operation(op), left(l), right(r) {}
 
     Intersection intersection(const Ray& r, double minT, double maxT) override;
 

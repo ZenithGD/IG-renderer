@@ -1,6 +1,15 @@
 #include <chrono>
 #include <functional>
 
+/*
+ * Fine tune values 
+ */
+const double INTERSECTION_TOLERANCE = 0.00001;
+
+
+/*
+ * Core functions
+ */
 template <typename Unit>
 uint64_t measureTime(std::function<void()> f) {
     auto begin = std::chrono::high_resolution_clock::now();

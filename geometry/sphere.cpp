@@ -1,5 +1,7 @@
 #include <geometry/sphere.hpp>
 
+#include <core/core.hpp>
+
 Intersection Sphere::intersection(const Ray& r, double minT, double maxT) {
 
     Vector3 dif = r.origin - center;
@@ -22,9 +24,9 @@ Intersection Sphere::intersection(const Ray& r, double minT, double maxT) {
     double root1 = (-halfb - sq) / a;
     double root2 = (-halfb + sq) / a;
     
-    if ( root1 < minT || maxT < root1 ) {
+    if ( root1 < minT + INTERSECTION_TOLERANCE || maxT < root1 ) {
         // farthest root, ray origin inside of sphere
-        if ( root2 < minT || maxT < root2 )
+        if ( root2 < minT + INTERSECTION_TOLERANCE || maxT < root2 )
             // no intersections
             return inter;
         else {
@@ -36,7 +38,7 @@ Intersection Sphere::intersection(const Ray& r, double minT, double maxT) {
     }
 
     inter.intersects = true;
-    inter.emission = emission;
+    inter.bsdf = bsdf;
 
     return inter;
 }

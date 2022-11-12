@@ -1,5 +1,7 @@
 #include <geometry/plane.hpp>
 
+#include <core/core.hpp>
+
 Intersection Plane::intersection(const Ray& r, double minT, double maxT) {
     Intersection inter;
 
@@ -7,7 +9,7 @@ Intersection Plane::intersection(const Ray& r, double minT, double maxT) {
     double t = -((c + dot(r.origin, normal)) / dot(r.direction, normal));
 
     // Verify if the plane not intersect behind of the r.origin
-    if (t < minT || t > maxT) {
+    if (t < minT + INTERSECTION_TOLERANCE || t > maxT) {
         inter.intersects = false;
     }
     else {
@@ -15,7 +17,7 @@ Intersection Plane::intersection(const Ray& r, double minT, double maxT) {
     }
 
     if ( inter.intersects ) {
-        inter.emission = emission;
+        inter.bsdf = bsdf;
         inter.intersections.emplace(t, normalize(normal));
     }
     return inter;

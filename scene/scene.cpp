@@ -37,7 +37,7 @@ RGB Scene::nextEventEstimation(const Vector3 origin, const Vector3 obsDirection,
         for (auto p : _primitives)
         {
 
-            Intersection inter = p->intersection(r, 0.00001, directRayDir.modulus());
+            Intersection inter = p->intersection(r, 0, directRayDir.modulus());
             if (inter.intersects && inter.closest() < closestT)
             {
                 closest = inter;
@@ -47,7 +47,7 @@ RGB Scene::nextEventEstimation(const Vector3 origin, const Vector3 obsDirection,
 
         double geometryContrib = abs(dot(it.closestNormal(), directRayDir.normalized()));
         // TODO: more general BSDF object
-        RGB materialContrib = it.emission / M_PI;
+        RGB materialContrib = it.bsdf.eval(r(it.closest()), obsDirection, r.direction) / M_PI;
 
         RGB lightContrib = l->power / dot(directRayDir, directRayDir) * materialContrib * geometryContrib;
 
@@ -71,10 +71,11 @@ RGB Scene::pathTracing(const Ray& r, unsigned int n) const{
     Intersection closest {
         .intersects = false,
     };
+
     double closestT = INFINITY;
     for ( auto p : _primitives ) {
 
-        Intersection inter = p->intersection(r, 0.001);
+        Intersection inter = p->intersection(r, 0);
         if ( inter.intersects && inter.closest() < closestT ){
             closest = inter;
             closestT = inter.closest();
@@ -86,11 +87,13 @@ RGB Scene::pathTracing(const Ray& r, unsigned int n) const{
         contrib = contrib + nextEventEstimation(r(closest.closest()), r.direction, closest);
     }
 
+    
     double theta = M_PI/2, phi = M_PI/2;
     auto [ omega, li ] = closest.bsdf.sample(theta, phi, r.direction, r(closest.closest()), closest.closestNormal());
     
-    contrib = contrib + pathTracing(r(closest.closest()),n++)
-    
+    contrib = contrib + pathTracing(r, n + 1);
+
+    return contrib;
 }
 
 struct PixelResult
