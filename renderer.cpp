@@ -21,7 +21,7 @@ int main() {
         .viewportHeight = 512,
         .antialiasingFactor = 8,
         .threads = std::thread::hardware_concurrency(),
-        .bounces = 0
+        .bounces = 2
     };
 
     Camera cam(
@@ -37,8 +37,8 @@ int main() {
     auto pC = make_shared<Plane> (1, Vector3(0, -1, 0), RGB(0.5, 0.5, 0.5));
     auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), RGB(0.5, 0.5, 0.5));
 
-    auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.5), 0.3, RGB(1, 1, 0));
-    auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, 0.25), 0.4, RGB(0, 1, 1));
+    auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.5), 0.3, RGB(1, 0.8, 1));
+    auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, 0.25), 0.4, RGB(1, 0.8, 1));
 
     auto s1 = make_shared<Sphere>(Vector3(0.0, 0.3, 0.5), 0.4, RGB(1, 0, 0.5));
     auto s2 = make_shared<Sphere>(Vector3(0.0, 0.3, 0.5), 0.35, RGB(1, 0, 0.5));
@@ -63,7 +63,7 @@ int main() {
     //sc.addPrimitive(sCSG2);
 
     sc.addLight(light);
-    sc.addLight(light2);
+    //sc.addLight(light2);
     //sc.addPrimitive(sTri);
 
     Image img(props.viewportWidth, props.viewportHeight);
