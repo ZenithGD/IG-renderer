@@ -129,6 +129,7 @@ struct RGB : public Color {
     }
 };
 
+inline double maxChannel(const RGB& r) { return max(r.red, max(r.green, r.blue)); }
 inline RGB changeLuminance(const RGB& c, double outLuminance) { return c * ( outLuminance / c.getLuminance() ); }
 
 inline RGB clamp(const RGB& c, double v) { return RGB(clampHigh(c.red, v), clampHigh(c.green, v), clampHigh(c.blue, v)); };

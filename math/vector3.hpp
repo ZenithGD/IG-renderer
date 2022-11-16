@@ -134,3 +134,22 @@ inline Vector3 normalize(const Vector3 v) { return v.normalized(); }
  * @return Vector3 The perpendicular vector
  */
 Vector3 perpendicular(const Vector3 v);
+
+/**
+ * @brief Return delta function of a vector in one direction.
+ * 
+ * @param dir The direction to check
+ * @param v The vector to check against the direction
+ * @return double 1 if vectors have the same direction and orientation,
+ * 0 otherwise
+ */
+double delta(Vector3 dir, Vector3 v);
+
+/**
+ * @brief Return the angle between dir1 and n
+ * 
+ * @param dir Direction of the ray
+ * @param n Vector normal
+ * @return double 
+ */
+double angle(Vector3 dir, Vector3 n);

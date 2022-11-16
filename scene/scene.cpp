@@ -4,6 +4,7 @@
 #include <random>
 
 #include <acceleration/threadpool.hpp>
+#include <scene/BSDF.hpp>
 
 void Scene::addPrimitive(const shared_ptr<Primitive> p)
 {
@@ -48,7 +49,8 @@ RGB Scene::nextEventEstimation(const Vector3 origin, const Vector3 obsDirection,
 
         double geometryContrib = abs(dot(it.closestNormal(), directRayDir.normalized()));
         // TODO: more general BSDF object
-        RGB materialContrib = it.bsdf.eval(r(it.closest()), obsDirection, r.direction);
+        RGB materialContrib = it.bsdf.eval(r(it.closest()), obsDirection, r.direction, 
+            closest.closestNormal(), closest.prevRefractionIndex);
 
         RGB lightContrib = l->power / dot(directRayDir, directRayDir) * materialContrib * geometryContrib;
 
@@ -86,16 +88,11 @@ RGB Scene::pathTracing(const Ray& r, unsigned int n) const{
     
     // trace direct light ray
     if( closest.intersects ) {
-        std::random_device rand_dev;
-        uniform_real_distribution<double> distribution(0.0,1.0);
-        default_random_engine generator(rand_dev());
-        auto dice = std::bind ( distribution, generator );
+        
         
         contrib = contrib + nextEventEstimation(r(closest.closest()), r.direction, closest);
 
-        double theta = dice(), phi = dice();
-
-        auto [ omega, li ] = closest.bsdf.sample(theta, phi, r.direction, r(closest.closest()), closest.closestNormal());
+        auto [ omega, li ] = closest.bsdf.sample(r.direction, r(closest.closest()), closest.closestNormal(), 1.0);
         
         Ray out(r(closest.closest()), omega);
 
