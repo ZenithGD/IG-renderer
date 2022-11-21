@@ -40,7 +40,7 @@ namespace tonemapping {
         for ( unsigned int i = 0; i < image.height; i++ ) {
             for ( unsigned int j = 0; j < image.width; j++ ) {
                 RGB color = image.imageData[i][j];
-                result.imageData[i][j] = gammaCorrection(color, image.maxNumber, gamma);
+                result.imageData[i][j] = gammaCorrection(color, image.maxNumber, 1 / gamma);
             }
         }
         return result;
@@ -66,7 +66,7 @@ namespace tonemapping {
         for ( unsigned int i = 0; i < image.height; i++ ) {
             for ( unsigned int j = 0; j < image.width; j++ ) {
                 RGB color = image.imageData[i][j];
-                result.imageData[i][j] = gammaCorrection(color, k, gamma);
+                result.imageData[i][j] = gammaCorrection(color, k, 1 / gamma);
             }
         }
         return result;

@@ -20,10 +20,24 @@ public:
           probDiffuse(maxChannel(diffuse)), 
           probSpecular(maxChannel(specular)), 
           probRefraction(maxChannel(refraction)), 
-          refractionIndex(ri) {};
+          refractionIndex(ri) 
+    {};
 
-    RGB eval(const Vector3 x, const Vector3 omegaI, const Vector3 omega, const Vector3 n, double index0) const;
-    tuple<Vector3, RGB> sample(const Vector3 omega0, const Vector3 x, const Vector3 n, double index0);
+    BSDF(const RGB d, const RGB s, const RGB r, 
+         const double pd, const double ps, const double pr, const double ri) 
+        : diffuse(d), 
+          specular(s), 
+          refraction(r),
+          probDiffuse(pd), 
+          probSpecular(ps), 
+          probRefraction(pr), 
+          refractionIndex(ri) 
+    {};
+
+
+
+    RGB eval(const Vector3 x, const Vector3 omegaI, const Vector3 omega, const Vector3 n) const;
+    tuple<Vector3, RGB> sample(const Vector3 omega0, const Vector3 x, const Vector3 n);
 
 private:
 
@@ -42,9 +56,9 @@ private:
      * @param n The normal
      * @return Vector3 
      */
-    Vector3 sampleDiffuse(const Vector3 omega0, const Vector3 x, const Vector3 n);
-    Vector3 sampleSpecular(const Vector3 omega0, const Vector3 x, const Vector3 n);
-    Vector3 sampleRefraction(const Vector3 omega0, const Vector3 x, const Vector3 n, const double index0);
+    Vector3 sampleDiffuse(const Vector3 omega0, const Vector3 x, const Vector3 n) const;
+    Vector3 sampleSpecular(const Vector3 omega0, const Vector3 x, const Vector3 n) const;
+    Vector3 sampleRefraction(const Vector3 omega0, const Vector3 x, const Vector3 n) const;
     
     
     EventType russianRoulette(double t);

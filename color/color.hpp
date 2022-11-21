@@ -123,7 +123,7 @@ struct RGB : public Color {
     string toString() const override {
         ostringstream ss;
 
-        ss << "R: " << red << ", G: " << green << ", B: " << blue << endl;
+        ss << "R: " << red << ", G: " << green << ", B: " << blue;
 
         return ss.str();
     }

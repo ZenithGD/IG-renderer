@@ -4,7 +4,7 @@
 /*
  * Fine tune values 
  */
-const double INTERSECTION_TOLERANCE = 0.00001;
+const double INTERSECTION_TOLERANCE = 0.0001;
 
 
 /*

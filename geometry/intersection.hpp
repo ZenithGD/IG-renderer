@@ -40,8 +40,6 @@ struct Intersection {
     inline Vector3 closestNormal() const { return intersections.begin()->second; }
 
     friend ostream& operator<<(ostream& os, const Intersection& it);
-
-    double prevRefractionIndex = 1;
 };
 
 ostream& operator<<(ostream& os, const Intersection& it);

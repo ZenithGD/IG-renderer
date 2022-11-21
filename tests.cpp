@@ -24,26 +24,89 @@ bool testUnionCSG() {
     return it.intersects;
 }
 
-bool testSample() {
-    
-    BSDF b(RGB(0,1,1));
 
-    for ( double th = 0; th <= 1; th += 0.2 ) {
-        for ( double phi = 0; phi <= 1; phi += 0.2 ) {
-            auto [ omega, c ] = b.sample(th, phi, Vector3(0,-1, 1), Vector3(1,1,1), Vector3(0,1,0));
-            cout << "th: " << th << ", phi: " << phi << "; " << omega << endl;
-        }
-    }
+bool testSampleReflection() {
+    
+    BSDF b(RGB(), RGB(0.9,0.9,0.9));
+
+    Vector3 in(0, 1, -1);
+
+    Sphere sp(Vector3(0,-0.5,0), 1, b);
+
+    Ray r(in * -2, in);
+
+    auto it = sp.intersection(r, 0, INFINITY);
+
+    auto [ omega, c ] = b.sample(normalize(in), r(it.closest()), it.closestNormal());
+
+    Ray r2(r(it.closest()), omega);
+
+    cout << r << endl;
+    
+    cout << c << endl;
+
+    cout << r2 << endl;
+    
     return false;
+}
+
+bool testSampleRefraction() {
+    
+    BSDF b(RGB(), RGB(), RGB(1, 1, 1), 1.5);
+
+    Vector3 in(0,1, -1);
+
+    Sphere sp(Vector3(0,-0.5,0), 1, b);
+
+    Ray r(in * -2, in);
+
+    auto it = sp.intersection(r, 0, INFINITY);
+
+    auto [ omega, c ] = b.sample(normalize(in), r(it.closest()), it.closestNormal());
+
+    Ray r2(r(it.closest()), omega);
+
+    auto it2 = sp.intersection(r2, 0, INFINITY);
+
+    auto [ omega2, c2 ] = b.sample(normalize(omega), r2(it2.closest()), it2.closestNormal());
+
+    Ray r3(r2(it2.closest()), omega2);
+
+    cout << r << endl;
+    
+    cout << c << endl;
+
+    cout << r2 << endl;
+    
+    cout << c2 << endl;
+
+    cout << r3 << endl;
+    return false;
+}
+
+bool testSampleUniform() {
+    BSDF b(RGB(1,1,1));
+
+    Vector3 in(0,-1, 1);
+
+    cout << "x,y,z" << endl;
+    for ( int i = 0; i < 64; i++ ) {
+        auto [ omega, c ] = b.sample(normalize(in), Vector3(1,1,1), Vector3(0,0,1));
+        cout << omega << endl;
+    }
+
+    return true;
 }
 
 int main() {
     
     TestSuite tCSG({
         Test(testUnionCSG, true),
-        Test(testSample, false)
+        Test(testSampleReflection, false),
+        Test(testSampleRefraction, false),
+        Test(testSampleUniform, true),
     });
 
     int okCSG = tCSG.runSuite();
-    cout << okCSG << endl;
+    //cout << okCSG << endl;
 }

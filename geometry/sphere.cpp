@@ -17,7 +17,7 @@ Intersection Sphere::intersection(const Ray& r, double minT, double maxT) {
     // Get discriminant
     double discr = halfb * halfb - a * c;
 
-    if (discr < 0) return inter;
+    if (discr < INTERSECTION_TOLERANCE) return inter;
 
     double sq = sqrt(discr);
     // closest root

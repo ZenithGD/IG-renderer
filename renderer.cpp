@@ -17,11 +17,11 @@ using namespace std;
 int main() {
 
     SceneProps props {
-        .viewportWidth = 512,
-        .viewportHeight = 512,
-        .antialiasingFactor = 16,
+        .viewportWidth = 300,
+        .viewportHeight = 300,
+        .antialiasingFactor = 64,
         .threads = std::thread::hardware_concurrency(),
-        .bounces = 5
+        .bounces = 4
     };
 
     Camera cam(
@@ -31,18 +31,19 @@ int main() {
 
     Scene sc(props, cam);
 
-    BSDF bsdfPL(RGB(0.2, 0, 0), RGB(0.8, 0, 0));
-    BSDF bsdfPR(RGB(0, 0.2, 0), RGB(0, 0.8, 0));
-    BSDF bsdfL(RGB(0.1, 0.1, 0.1), RGB(0.3, 0.5, 0.9));
+    BSDF bsdfPL(RGB(1, 0, 0));
+    BSDF bsdfPR(RGB(0, 1, 0));
+    BSDF bsdfL(RGB(0.5, 0.65, 0.8), RGB(0.2, 0.2, 0.2));
+    BSDF bsdfR(RGB(), RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9), 1.5);
 
     auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), bsdfPL);
     auto pR = make_shared<Plane> (1, Vector3(-1, 0, 0), bsdfPR);
-    auto pF = make_shared<Plane> (1, Vector3(0, 1, 0), bsdfL);
-    auto pC = make_shared<Plane> (1, Vector3(0, -1, 0), bsdfL);
-    auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), bsdfL);
+    auto pF = make_shared<Plane> (1, Vector3(0, 1, 0), RGB(0.5, 0.5, 0.5));
+    auto pC = make_shared<Plane> (1, Vector3(0, -1, 0), RGB(1, 1, 1));
+    auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), RGB(1, 1, 1));
 
-    auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.5), 0.3, bsdfL);
-    auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, 0.25), 0.4, RGB(1, 0.8, 1));
+    auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, bsdfL);
+    auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, -0.25), 0.3, bsdfR);
 
     /*
     auto s1 = make_shared<Sphere>(Vector3(0.0, 0.3, 0.5), 0.4, RGB(1, 0, 0.5));
@@ -53,8 +54,7 @@ int main() {
     auto sCSG2 = make_shared<CSG>(sCSG1, s3, CSGOperation::Difference, RGB(1, 0, 0.5));
     */
     
-    auto light  = make_shared<PointLight>(Vector3(0.0, 0.25, -0.5), RGB(1,1,1));
-    auto light2 = make_shared<PointLight>(Vector3(0.0,  0.0, -1.5), RGB(1,1,1));
+    auto light  = make_shared<PointLight>(Vector3(0.0, 0.5, 0), RGB(1,1,1));
 
     // auto sTri = make_shared<Triangle>(Vector3(0, 0, 0.5), Vector3(0, 1, 0.5), Vector3(1, 0, 0.5), RGB(0.72, 0.57, 0.62));
 
@@ -70,7 +70,7 @@ int main() {
     //sc.addPrimitive(sCSG2);
 
     sc.addLight(light);
-    sc.addLight(light2);
+    //sc.addLight(light2);
     //sc.addPrimitive(sTri);
 
     Image img(props.viewportWidth, props.viewportHeight);
@@ -82,7 +82,7 @@ int main() {
 
     cout << "Tonemapping image..." << flush;
 
-    Image tmImg = tonemapping::gamma(img, 1 / 2.2);
+    Image tmImg = tonemapping::gamma(img, 2.2);
 
     cout << "Writing image... " << flush;
 

@@ -7,9 +7,9 @@ ostream& operator<<(ostream& os, const Color& c) {
 
 RGB equalizeClamp(const RGB& c, double v) {
 
-    double r = c.red > v ? 1 : c.red / v; 
-    double g = c.green > v ? 1 : c.green / v; 
-    double b = c.blue > v ? 1 : c.blue / v; 
+    double r = c.red > v ? 1.0 : c.red / v; 
+    double g = c.green > v ? 1.0 : c.green / v; 
+    double b = c.blue > v ? 1.0 : c.blue / v; 
 
     return RGB(r, g, b);
 }
