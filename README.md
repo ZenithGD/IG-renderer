@@ -1,5 +1,5 @@
 # IG-renderer
-A CPU renderer written in standard c++
+A CPU renderer written in standard c++ ![Build Status](https://github.com/ZenithGD/IG-renderer/actions/workflows/cppcheck.yml/badge.svg?branch=work&event=push)
 
 ## Installation and requirements
 
