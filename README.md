@@ -83,12 +83,22 @@ Here are some funny rendering mistakes that we found during development:
 </div>
 ---
 
-## Debugging
+## Developer tools
+
+### Memory analysis
 
 We all know how annoying C/C++ can be with memory management, so here's a little tool to help. First install Valgrind on your machine via package manager or from the [official website](https://valgrind.org). After that, execute Valgrind with the executable as an argument:
 
 ```bash
 valgrind --track-origins=yes --verbose ./bin/ToneMapper
+```
+
+### Static analysis
+
+There are some good analysis tools for C++, such as [CPPCheck](https://cppcheck.sourceforge.io). You can install this tool (On Ubuntu for example it would be `sudo apt-get install cppcheck`) and analyze the project with the following command:
+
+```bash
+cppcheck .
 ```
 
 ## References

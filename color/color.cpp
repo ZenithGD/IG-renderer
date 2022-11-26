@@ -16,9 +16,9 @@ RGB equalizeClamp(const RGB& c, double v) {
 
 
 RGB gammaCorrection(const RGB& c, double k, double gamma){
-    double r = r > k ? k : (pow(c.red, gamma) / pow(k, gamma));
-    double g = g > k ? k : (pow(c.green, gamma) / pow(k, gamma));
-    double b = b > k ? k : (pow(c.blue, gamma) / pow(k, gamma));
+    double r = c.red > k ? k : (pow(c.red, gamma) / pow(k, gamma));
+    double g = c.green > k ? k : (pow(c.green, gamma) / pow(k, gamma));
+    double b = c.blue > k ? k : (pow(c.blue, gamma) / pow(k, gamma));
 
     return RGB(r, g, b);
 }

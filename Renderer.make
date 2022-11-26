@@ -14,7 +14,7 @@ ifeq ($(config),debug)
   RESCOMP = windres
   TARGETDIR = bin/${cfg.buildcfg}
   TARGET = $(TARGETDIR)/Renderer
-  OBJDIR = obj/Debug
+  OBJDIR = obj/Debug/Renderer
   DEFINES += -DDEBUG
   INCLUDES += -I.
   FORCE_INCLUDE +=
@@ -41,7 +41,7 @@ ifeq ($(config),release)
   RESCOMP = windres
   TARGETDIR = bin/${cfg.buildcfg}
   TARGET = $(TARGETDIR)/Renderer
-  OBJDIR = obj/Release
+  OBJDIR = obj/Release/Renderer
   DEFINES +=
   INCLUDES += -I.
   FORCE_INCLUDE +=

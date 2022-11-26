@@ -80,9 +80,12 @@ OBJECTS := \
 	$(OBJDIR)/mat4.o \
 	$(OBJDIR)/misc.o \
 	$(OBJDIR)/vector3.o \
+	$(OBJDIR)/pathtracing.o \
 	$(OBJDIR)/photon.o \
+	$(OBJDIR)/photonmapping.o \
 	$(OBJDIR)/BSDF.o \
 	$(OBJDIR)/camera.o \
+	$(OBJDIR)/light.o \
 	$(OBJDIR)/scene.o \
 	$(OBJDIR)/testsuite.o \
 	$(OBJDIR)/tests.o \
@@ -189,13 +192,22 @@ $(OBJDIR)/misc.o: math/misc.cpp
 $(OBJDIR)/vector3.o: math/vector3.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/pathtracing.o: pathtracer/pathtracing.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/photon.o: photonmapper/photon.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/photonmapping.o: photonmapper/photonmapping.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/BSDF.o: scene/BSDF.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/camera.o: scene/camera.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/light.o: scene/light.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/scene.o: scene/scene.cpp
