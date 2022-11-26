@@ -1,0 +1,350 @@
+color/color.hpp:64:36: performance: Function parameter 'col' should be passed by const reference. [passedByValue]
+    inline RGB operator+(const RGB col) const { return RGB(red + col.red, green + col.green, blue + col.blue); }
+                                   ^
+color/color.hpp:72:36: performance: Function parameter 'col' should be passed by const reference. [passedByValue]
+    inline RGB operator-(const RGB col) const { return RGB(red - col.red, green - col.green, blue - col.blue); }
+                                   ^
+color/color.hpp:80:36: performance: Function parameter 'col' should be passed by const reference. [passedByValue]
+    inline RGB operator*(const RGB col) const { return RGB(red * col.red, green * col.green, blue * col.blue); }
+                                   ^
+color/color.hpp:88:36: performance: Function parameter 'col' should be passed by const reference. [passedByValue]
+    inline RGB operator/(const RGB col) const { return RGB(red / col.red, green / col.green, blue / col.blue); }
+                                   ^
+color/color.cpp:33:36: performance: Function parameter 'x' should be passed by const reference. [passedByValue]
+RGB uncharted2_tonemap_partial(RGB x)
+                                   ^
+color/color.cpp:44:25: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+RGB filmicUncharted(RGB v)
+                        ^
+image/image.hpp:13:12: style:inconclusive: Member variable 'Image::maxNumber' is in the wrong place in the initializer list. [initializerList]
+    double maxNumber;
+           ^
+image/image.hpp:22:63: note: Member variable 'Image::maxNumber' is in the wrong place in the initializer list.
+        :  width(w), height(h), imageData(h, vector<RGB>(w)), maxNumber(1) {}
+                                                              ^
+image/image.hpp:13:12: note: Member variable 'Image::maxNumber' is in the wrong place in the initializer list.
+    double maxNumber;
+           ^
+image/image.hpp:13:12: style:inconclusive: Member variable 'Image::maxNumber' is in the wrong place in the initializer list. [initializerList]
+    double maxNumber;
+           ^
+image/image.hpp:32:50: note: Member variable 'Image::maxNumber' is in the wrong place in the initializer list.
+        :  width(w), height(h), imageData(data), maxNumber(max) {}
+                                                 ^
+image/image.hpp:13:12: note: Member variable 'Image::maxNumber' is in the wrong place in the initializer list.
+    double maxNumber;
+           ^
+image/image.hpp:31:63: performance: Function parameter 'data' should be passed by const reference. [passedByValue]
+    Image(unsigned int w, unsigned int h, vector<vector<RGB>> data, double max)
+                                                              ^
+image/image.cpp:16:35: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
+Image Image::readPPM(const string path){
+                                  ^
+image/image.cpp:75:37: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
+void Image::writeToPPM(const string path, double max, unsigned int res) const {
+                                    ^
+image/image.cpp:99:37: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
+void Image::writeToBMP(const string path) const {
+                                    ^
+image/image.cpp:185:35: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
+Image Image::readBMP(const string path) {
+                                  ^
+image/tonemapping.cpp:165:24: style: The scope of the variable 'v' can be reduced. [variableScope]
+                double v, v1, scale;
+                       ^
+image/tonemapping.cpp:165:31: style: The scope of the variable 'scale' can be reduced. [variableScope]
+                double v, v1, scale;
+                              ^
+image/tonemapping.cpp:62:49: style:inconclusive: Function 'gammaClamp' argument 2 names different: declaration 'v' definition 'k'. [funcArgNamesDifferent]
+    Image gammaClamp(const Image& image, double k, double gamma) {
+                                                ^
+image/tonemapping.hpp:21:49: note: Function 'gammaClamp' argument 2 names different: declaration 'v' definition 'k'.
+    Image gammaClamp(const Image& image, double v, double gamma);
+                                                ^
+image/tonemapping.cpp:62:49: note: Function 'gammaClamp' argument 2 names different: declaration 'v' definition 'k'.
+    Image gammaClamp(const Image& image, double k, double gamma) {
+                                                ^
+image/image.hpp:43:34: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
+    void writeToPPM(const string path, double max, unsigned int res = 255) const;
+                                 ^
+image/image.hpp:52:39: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
+    static Image readPPM(const string path);
+                                      ^
+image/image.hpp:63:34: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
+    void writeToBMP(const string path) const;
+                                 ^
+image/image.hpp:71:39: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
+    static Image readBMP(const string path);
+                                      ^
+image/tonemapping.cpp:183:67: error: Uninitialized variable: v1 [uninitvar]
+                double newLuminance = clampHigh(prevLuminance / ( v1 + 1 ), 1);
+                                                                  ^
+image/tonemapping.cpp:171:34: note: Assuming condition is false
+                    if ( abs(vs) < threshold ) {
+                                 ^
+image/tonemapping.cpp:183:67: note: Uninitialized variable: v1
+                double newLuminance = clampHigh(prevLuminance / ( v1 + 1 ), 1);
+                                                                  ^
+math/mat4.hpp:24:5: style: Class 'Mat4' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    Mat4(double m[4][4]);
+    ^
+math/coordinate.hpp:28:5: style: Class 'Coordinate' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    Coordinate(double wCoord) : matrix() { matrix[3][3] = wCoord; }
+    ^
+math/coordinate.hpp:65:12: style: Class 'Coordinate' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    inline Coordinate(const Mat4 mat) : matrix(mat) {}
+           ^
+math/vector3.hpp:37:44: performance: Function parameter 'that' should be passed by const reference. [passedByValue]
+    inline Vector3 operator+(const Vector3 that) const { return Vector3(x + that.x, y + that.y, z + that.z); }
+                                           ^
+math/vector3.hpp:45:44: performance: Function parameter 'that' should be passed by const reference. [passedByValue]
+    inline Vector3 operator-(const Vector3 that) const { return Vector3(x - that.x, y - that.y, z - that.z);}
+                                           ^
+math/vector3.hpp:90:38: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+    Vector3 projection(const Vector3 v) const;
+                                     ^
+math/vector3.hpp:111:26: performance: Function parameter 'u' should be passed by const reference. [passedByValue]
+double dot(const Vector3 u, const Vector3 v);
+                         ^
+math/vector3.hpp:111:43: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+double dot(const Vector3 u, const Vector3 v);
+                                          ^
+math/vector3.hpp:120:29: performance: Function parameter 'u' should be passed by const reference. [passedByValue]
+Vector3 cross(const Vector3 u, const Vector3 v);
+                            ^
+math/vector3.hpp:120:46: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+Vector3 cross(const Vector3 u, const Vector3 v);
+                                             ^
+math/vector3.hpp:128:40: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+inline Vector3 normalize(const Vector3 v) { return v.normalized(); }
+                                       ^
+math/vector3.hpp:136:37: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+Vector3 perpendicular(const Vector3 v);
+                                    ^
+math/mat4.hpp:32:31: performance: Function parameter 'that' should be passed by const reference. [passedByValue]
+    Mat4 operator+(const Mat4 that) const;
+                              ^
+math/mat4.hpp:40:31: performance: Function parameter 'that' should be passed by const reference. [passedByValue]
+    Mat4 operator-(const Mat4 that) const;
+                              ^
+math/mat4.hpp:48:31: performance: Function parameter 'that' should be passed by const reference. [passedByValue]
+    Mat4 operator*(const Mat4 that) const;
+                              ^
+math/coordinate.hpp:65:34: performance: Function parameter 'mat' should be passed by const reference. [passedByValue]
+    inline Coordinate(const Mat4 mat) : matrix(mat) {}
+                                 ^
+math/coordinate.hpp:80:44: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
+    Coordinate operator()(const Coordinate coord) { return Coordinate(matrix * coord.matrix); }
+                                           ^
+math/coordinate.cpp:10:41: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
+Coordinate translation(const Coordinate coord, const Vector3 v){
+                                        ^
+math/coordinate.cpp:10:62: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+Coordinate translation(const Coordinate coord, const Vector3 v){
+                                                             ^
+math/coordinate.cpp:21:39: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
+Coordinate rotationX(const Coordinate coord, double theta) {
+                                      ^
+math/coordinate.cpp:36:39: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
+Coordinate rotationY(const Coordinate coord,  double theta){
+                                      ^
+math/coordinate.cpp:51:39: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
+Coordinate rotationZ(const Coordinate coord, double theta){
+                                      ^
+math/coordinate.cpp:66:35: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
+Coordinate scale(const Coordinate coord, const Vector3 v){
+                                  ^
+math/coordinate.cpp:66:56: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+Coordinate scale(const Coordinate coord, const Vector3 v){
+                                                       ^
+math/coordinate.cpp:77:41: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
+Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o){
+                                        ^
+math/coordinate.cpp:77:62: performance: Function parameter 'u' should be passed by const reference. [passedByValue]
+Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o){
+                                                             ^
+math/coordinate.cpp:77:79: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o){
+                                                                              ^
+math/coordinate.cpp:77:96: performance: Function parameter 'w' should be passed by const reference. [passedByValue]
+Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o){
+                                                                                               ^
+math/coordinate.cpp:77:113: performance: Function parameter 'o' should be passed by const reference. [passedByValue]
+Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o){
+                                                                                                                ^
+math/mat4.cpp:13:33: performance: Function parameter 'that' should be passed by const reference. [passedByValue]
+Mat4 Mat4::operator+(const Mat4 that) const {
+                                ^
+math/mat4.cpp:25:33: performance: Function parameter 'that' should be passed by const reference. [passedByValue]
+Mat4 Mat4::operator-(const Mat4 that) const {
+                                ^
+math/mat4.cpp:37:33: performance: Function parameter 'that' should be passed by const reference. [passedByValue]
+Mat4 Mat4::operator*(const Mat4 that) const{
+                                ^
+math/vector3.cpp:39:23: style:inconclusive: Function 'angle' argument 1 names different: declaration 'dir' definition 'dir1'. [funcArgNamesDifferent]
+double angle (Vector3 dir1, Vector3 n){
+                      ^
+math/vector3.hpp:155:22: note: Function 'angle' argument 1 names different: declaration 'dir' definition 'dir1'.
+double angle(Vector3 dir, Vector3 n);
+                     ^
+math/vector3.cpp:39:23: note: Function 'angle' argument 1 names different: declaration 'dir' definition 'dir1'.
+double angle (Vector3 dir1, Vector3 n){
+                      ^
+math/vector3.cpp:14:43: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+Vector3 Vector3::projection(const Vector3 v) const {
+                                          ^
+math/vector3.cpp:18:26: performance: Function parameter 'u' should be passed by const reference. [passedByValue]
+double dot(const Vector3 u, const Vector3 v) {
+                         ^
+math/vector3.cpp:18:43: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+double dot(const Vector3 u, const Vector3 v) {
+                                          ^
+math/vector3.cpp:22:29: performance: Function parameter 'u' should be passed by const reference. [passedByValue]
+Vector3 cross(const Vector3 u, const Vector3 v) {
+                            ^
+math/vector3.cpp:22:46: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+Vector3 cross(const Vector3 u, const Vector3 v) {
+                                             ^
+math/vector3.cpp:26:37: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+Vector3 perpendicular(const Vector3 v) {
+                                    ^
+math/vector3.cpp:34:22: performance: Function parameter 'dir' should be passed by const reference. [passedByValue]
+double delta(Vector3 dir, Vector3 v) {
+                     ^
+math/vector3.cpp:34:35: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+double delta(Vector3 dir, Vector3 v) {
+                                  ^
+math/vector3.cpp:39:23: performance: Function parameter 'dir1' should be passed by const reference. [passedByValue]
+double angle (Vector3 dir1, Vector3 n){
+                      ^
+math/vector3.cpp:39:37: performance: Function parameter 'n' should be passed by const reference. [passedByValue]
+double angle (Vector3 dir1, Vector3 n){
+                                    ^
+pathtracer/pathtracing.cpp:123:29: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+                    contrib = contrib + pathTraceRay(sc, r, 0);
+                            ^
+photonmapper/photonmapping.cpp:12:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+        luminanceTotal += l->power.getLuminance();
+                       ^
+math/coordinate.hpp:101:41: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
+Coordinate translation(const Coordinate coord, const Vector3 v);
+                                        ^
+math/coordinate.hpp:101:62: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+Coordinate translation(const Coordinate coord, const Vector3 v);
+                                                             ^
+math/coordinate.hpp:110:39: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
+Coordinate rotationX(const Coordinate coord, double theta);
+                                      ^
+math/coordinate.hpp:119:39: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
+Coordinate rotationY(const Coordinate coord, double theta);
+                                      ^
+math/coordinate.hpp:128:39: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
+Coordinate rotationZ(const Coordinate coord, double theta);
+                                      ^
+math/coordinate.hpp:137:35: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
+Coordinate scale(const Coordinate coord, const Vector3 v);
+                                  ^
+math/coordinate.hpp:137:56: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+Coordinate scale(const Coordinate coord, const Vector3 v);
+                                                       ^
+math/coordinate.hpp:149:41: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
+Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o);
+                                        ^
+math/coordinate.hpp:149:62: performance: Function parameter 'u' should be passed by const reference. [passedByValue]
+Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o);
+                                                             ^
+math/coordinate.hpp:149:79: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o);
+                                                                              ^
+math/coordinate.hpp:149:96: performance: Function parameter 'w' should be passed by const reference. [passedByValue]
+Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o);
+                                                                                               ^
+math/coordinate.hpp:149:113: performance: Function parameter 'o' should be passed by const reference. [passedByValue]
+Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o);
+                                                                                                                ^
+planet.cpp:15:26: performance: Function parameter 'c' should be passed by const reference. [passedByValue]
+    Planet(const Vector3 c, const Vector3 ax, const Vector3 ref)
+                         ^
+planet.cpp:15:43: performance: Function parameter 'ax' should be passed by const reference. [passedByValue]
+    Planet(const Vector3 c, const Vector3 ax, const Vector3 ref)
+                                          ^
+planet.cpp:15:61: performance: Function parameter 'ref' should be passed by const reference. [passedByValue]
+    Planet(const Vector3 c, const Vector3 ax, const Vector3 ref)
+                                                            ^
+planet.cpp:64:33: performance: Function parameter 'p1' should be passed by const reference. [passedByValue]
+Vector3 getConnDirection(Planet p1, Planet p2) {
+                                ^
+planet.cpp:64:44: performance: Function parameter 'p2' should be passed by const reference. [passedByValue]
+Vector3 getConnDirection(Planet p1, Planet p2) {
+                                           ^
+geometry/plane.hpp:18:12: style:inconclusive: Member variable 'Plane::c' is in the wrong place in the initializer list. [initializerList]
+    double c;
+           ^
+geometry/plane.hpp:23:64: note: Member variable 'Plane::c' is in the wrong place in the initializer list.
+          normal(cross(_pointB - _pointA, _pointC - _pointA)), c(-dot(_pointA, normal)) {}
+                                                               ^
+geometry/plane.hpp:18:12: note: Member variable 'Plane::c' is in the wrong place in the initializer list.
+    double c;
+           ^
+geometry/triangle.hpp:40:12: style:inconclusive: Member variable 'Triangle::c' is in the wrong place in the initializer list. [initializerList]
+    double c;
+           ^
+geometry/triangle.hpp:29:60: note: Member variable 'Triangle::c' is in the wrong place in the initializer list.
+          normal(cross(pointB - pointA, pointC - pointA)), c(-dot(pointA, normal)) {}
+                                                           ^
+geometry/triangle.hpp:40:12: note: Member variable 'Triangle::c' is in the wrong place in the initializer list.
+    double c;
+           ^
+scene/scene.hpp:26:22: performance: Function parameter 's' should be passed by const reference. [passedByValue]
+    Scene(SceneProps s, Camera c) : cam(c), _scprops(s) {};
+                     ^
+tests/testsuite.hpp:15:5: style: Class 'TestSuite' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    TestSuite(std::initializer_list<Test> tests) : _tests(tests) {}
+    ^
+tests.cpp:110:15: style: Variable 'okCSG' is assigned a value that is never used. [unreadVariable]
+    int okCSG = tCSG.runSuite();
+              ^
+tonemapper.cpp:13:23: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
+void ppm(const string path) {
+                      ^
+tonemapper.cpp:28:23: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
+void bmp(const string path) {
+                      ^
+math/vector3.cpp:39:0: style: The function 'angle' is never used. [unusedFunction]
+
+^
+math/coordinate.cpp:77:0: style: The function 'changeBasis' is never used. [unusedFunction]
+
+^
+math/misc.cpp:7:0: style: The function 'clampLow' is never used. [unusedFunction]
+
+^
+image/tonemapping.cpp:62:0: style: The function 'gammaClamp' is never used. [unusedFunction]
+
+^
+photonmapper/photonmapping.cpp:59:0: style: The function 'photonMapping' is never used. [unusedFunction]
+
+^
+photonmapper/photonmapping.cpp:5:0: style: The function 'photonTrace' is never used. [unusedFunction]
+
+^
+image/image.cpp:185:0: style: The function 'readBMP' is never used. [unusedFunction]
+
+^
+math/coordinate.cpp:21:0: style: The function 'rotationX' is never used. [unusedFunction]
+
+^
+math/coordinate.cpp:36:0: style: The function 'rotationY' is never used. [unusedFunction]
+
+^
+math/coordinate.cpp:51:0: style: The function 'rotationZ' is never used. [unusedFunction]
+
+^
+math/coordinate.cpp:10:0: style: The function 'translation' is never used. [unusedFunction]
+
+^
+math/mat4.cpp:92:0: style: The function 'transpose' is never used. [unusedFunction]
+
+^
+nofile:0:0: information: Cppcheck cannot find all the include files (use --check-config for details) [missingIncludeSystem]
+
