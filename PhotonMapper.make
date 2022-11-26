@@ -13,8 +13,8 @@ endif
 ifeq ($(config),debug)
   RESCOMP = windres
   TARGETDIR = bin/${cfg.buildcfg}
-  TARGET = $(TARGETDIR)/Renderer
-  OBJDIR = obj/Debug
+  TARGET = $(TARGETDIR)/PhotonMapper
+  OBJDIR = obj/Debug/PhotonMapper
   DEFINES += -DDEBUG
   INCLUDES += -I.
   FORCE_INCLUDE +=
@@ -40,8 +40,8 @@ endif
 ifeq ($(config),release)
   RESCOMP = windres
   TARGETDIR = bin/${cfg.buildcfg}
-  TARGET = $(TARGETDIR)/Renderer
-  OBJDIR = obj/Release
+  TARGET = $(TARGETDIR)/PhotonMapper
+  OBJDIR = obj/Release/PhotonMapper
   DEFINES +=
   INCLUDES += -I.
   FORCE_INCLUDE +=
@@ -80,12 +80,12 @@ OBJECTS := \
 	$(OBJDIR)/mat4.o \
 	$(OBJDIR)/misc.o \
 	$(OBJDIR)/vector3.o \
-	$(OBJDIR)/pathtracing.o \
-	$(OBJDIR)/renderer.o \
+	$(OBJDIR)/photon.o \
+	$(OBJDIR)/photonmapper.o \
 	$(OBJDIR)/BSDF.o \
 	$(OBJDIR)/camera.o \
-	$(OBJDIR)/light.o \
 	$(OBJDIR)/scene.o \
+	$(OBJDIR)/testsuite.o \
 
 RESOURCES := \
 
@@ -97,7 +97,7 @@ ifeq (.exe,$(findstring .exe,$(ComSpec)))
 endif
 
 $(TARGET): $(GCH) ${CUSTOMFILES} $(OBJECTS) $(LDDEPS) $(RESOURCES) | $(TARGETDIR)
-	@echo Linking Renderer
+	@echo Linking PhotonMapper
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
 
@@ -120,7 +120,7 @@ else
 endif
 
 clean:
-	@echo Cleaning Renderer
+	@echo Cleaning PhotonMapper
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(OBJDIR)
@@ -189,10 +189,10 @@ $(OBJDIR)/misc.o: math/misc.cpp
 $(OBJDIR)/vector3.o: math/vector3.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/pathtracing.o: pathtracer/pathtracing.cpp
+$(OBJDIR)/photon.o: photonmapper/photon.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/renderer.o: renderer.cpp
+$(OBJDIR)/photonmapper.o: photonmapper.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/BSDF.o: scene/BSDF.cpp
@@ -201,10 +201,10 @@ $(OBJDIR)/BSDF.o: scene/BSDF.cpp
 $(OBJDIR)/camera.o: scene/camera.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/light.o: scene/light.cpp
+$(OBJDIR)/scene.o: scene/scene.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/scene.o: scene/scene.cpp
+$(OBJDIR)/testsuite.o: tests/testsuite.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

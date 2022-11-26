@@ -18,6 +18,10 @@ public:
     double c;
     Vector3 normal;
     
+    Plane(Vector3 _pointA, Vector3 _pointB, Vector3 _pointC, BSDF bsdf = BSDF())
+        : Primitive(bsdf),
+          normal(cross(_pointB - _pointA, _pointC - _pointA)), c(-dot(_pointA, normal)) {}
+
     /**
      * @brief Construct a new Plane with values
      * @param _c The value of c

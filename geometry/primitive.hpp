@@ -10,7 +10,6 @@
  */
 class Primitive {
 public:
-    // TODO change to a material structure 
     BSDF bsdf;
 
     /**

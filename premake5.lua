@@ -1,7 +1,7 @@
 workspace "Renderer"
         configurations { "Debug", "Release" }
 
-function setupProject(name, mainFile)
+function setupProject(name, mainFile, folders)
     project(name)
     kind "ConsoleApp"
     language "C++"
@@ -13,7 +13,7 @@ function setupProject(name, mainFile)
         cppdialect "C++17"
 
         -- files here
-        files { "*/**.cpp", "*/**.hpp", mainFile }
+        files { mainFile, table.unpack(folders) }
 
         -- link libraries
         links { "pthread" }
@@ -26,6 +26,18 @@ function setupProject(name, mainFile)
                 optimize "On"
 end
 
-setupProject("Renderer", "renderer.cpp")
-setupProject("ToneMapper", "tonemapper.cpp")
-setupProject("Tests", "tests.cpp")
+local rendererFiles = {
+    "acceleration/**.hpp",  "acceleration/**.cpp",
+    "color/**.hpp",         "color/**.cpp",
+    "core/**.hpp",          "core/**.cpp",
+    "geometry/**.hpp",      "geometry/**.cpp",
+    "image/**.hpp",         "image/**.cpp",
+    "math/**.hpp",          "math/**.cpp",
+    "scene/**.hpp",         "scene/**.cpp",
+    "pathtracer/**.hpp",    "pathtracer/**.cpp",
+}
+
+setupProject("Renderer", "renderer.cpp", rendererFiles )
+--setupProject("ToneMapper", "tonemapper.cpp")
+--setupProject("PhotonMapper", "photonmapper.cpp")
+--setupProject("Tests", "tests.cpp")

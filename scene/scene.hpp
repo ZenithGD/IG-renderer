@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include <functional>
 
 #include <geometry/primitive.hpp>
 #include <image/image.hpp>
@@ -20,23 +21,22 @@ struct SceneProps {
 
 class Scene {
 public:
+    using RenderMethod = function<Image(const Scene&)>;
 
     Scene(SceneProps s, Camera c) : cam(c), _scprops(s) {};
 
     Camera cam;
 
     // TODO change to acceleration data structure
-    vector<shared_ptr<Primitive>> _primitives;
-    vector<shared_ptr<Light>> _lights;
+    vector<shared_ptr<Primitive>> primitives;
+    vector<shared_ptr<Light>> lights;
 
     void addPrimitive(const shared_ptr<Primitive> p);
     void addLight(const shared_ptr<Light> l);
 
-    Image drawScene();
+    inline SceneProps getProps() const { return _scprops; } 
 
+    inline Image drawScene(RenderMethod method) { return method(*this); }
 private:
-
-    RGB nextEventEstimation(const Vector3 origin, const Vector3 obsDirection, const Intersection it) const;
-    RGB pathTracing(const Ray& r, unsigned int n) const;
     SceneProps _scprops;
 };

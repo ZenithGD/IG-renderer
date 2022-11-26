@@ -10,16 +10,12 @@ endif
 
 ifeq ($(config),debug)
   Renderer_config = debug
-  ToneMapper_config = debug
-  Tests_config = debug
 endif
 ifeq ($(config),release)
   Renderer_config = release
-  ToneMapper_config = release
-  Tests_config = release
 endif
 
-PROJECTS := Renderer ToneMapper Tests
+PROJECTS := Renderer
 
 .PHONY: all clean help $(PROJECTS) 
 
@@ -31,22 +27,8 @@ ifneq (,$(Renderer_config))
 	@${MAKE} --no-print-directory -C . -f Renderer.make config=$(Renderer_config)
 endif
 
-ToneMapper:
-ifneq (,$(ToneMapper_config))
-	@echo "==== Building ToneMapper ($(ToneMapper_config)) ===="
-	@${MAKE} --no-print-directory -C . -f ToneMapper.make config=$(ToneMapper_config)
-endif
-
-Tests:
-ifneq (,$(Tests_config))
-	@echo "==== Building Tests ($(Tests_config)) ===="
-	@${MAKE} --no-print-directory -C . -f Tests.make config=$(Tests_config)
-endif
-
 clean:
 	@${MAKE} --no-print-directory -C . -f Renderer.make clean
-	@${MAKE} --no-print-directory -C . -f ToneMapper.make clean
-	@${MAKE} --no-print-directory -C . -f Tests.make clean
 
 help:
 	@echo "Usage: make [config=name] [target]"
@@ -59,7 +41,5 @@ help:
 	@echo "   all (default)"
 	@echo "   clean"
 	@echo "   Renderer"
-	@echo "   ToneMapper"
-	@echo "   Tests"
 	@echo ""
 	@echo "For more information, see https://github.com/premake/premake-core/wiki"

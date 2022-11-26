@@ -80,6 +80,7 @@ OBJECTS := \
 	$(OBJDIR)/mat4.o \
 	$(OBJDIR)/misc.o \
 	$(OBJDIR)/vector3.o \
+	$(OBJDIR)/photon.o \
 	$(OBJDIR)/BSDF.o \
 	$(OBJDIR)/camera.o \
 	$(OBJDIR)/scene.o \
@@ -186,6 +187,9 @@ $(OBJDIR)/misc.o: math/misc.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/vector3.o: math/vector3.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/photon.o: photonmapper/photon.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/BSDF.o: scene/BSDF.cpp
