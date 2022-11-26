@@ -14,5 +14,7 @@ public:
     Camera(Vector3 l, Vector3 u, Vector3 f, Vector3 o, unsigned int _w, unsigned int _h)
         : left(l), up(u), forward(f), origin(o), width(_w), height(_h) {}
 
-    list<Ray> perPixel(unsigned int x, unsigned int y, unsigned int n);
+    Camera(const Vector3 o, const Vector3 t, double fov);
+
+    list<Ray> perPixel(unsigned int x, unsigned int y, unsigned int n) const;
 };
