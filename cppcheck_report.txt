@@ -226,57 +226,6 @@ pathtracer/pathtracing.cpp:123:29: style: Consider using std::accumulate algorit
 photonmapper/photonmapping.cpp:12:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
         luminanceTotal += l->power.getLuminance();
                        ^
-math/coordinate.hpp:101:41: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
-Coordinate translation(const Coordinate coord, const Vector3 v);
-                                        ^
-math/coordinate.hpp:101:62: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
-Coordinate translation(const Coordinate coord, const Vector3 v);
-                                                             ^
-math/coordinate.hpp:110:39: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
-Coordinate rotationX(const Coordinate coord, double theta);
-                                      ^
-math/coordinate.hpp:119:39: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
-Coordinate rotationY(const Coordinate coord, double theta);
-                                      ^
-math/coordinate.hpp:128:39: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
-Coordinate rotationZ(const Coordinate coord, double theta);
-                                      ^
-math/coordinate.hpp:137:35: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
-Coordinate scale(const Coordinate coord, const Vector3 v);
-                                  ^
-math/coordinate.hpp:137:56: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
-Coordinate scale(const Coordinate coord, const Vector3 v);
-                                                       ^
-math/coordinate.hpp:149:41: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
-Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o);
-                                        ^
-math/coordinate.hpp:149:62: performance: Function parameter 'u' should be passed by const reference. [passedByValue]
-Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o);
-                                                             ^
-math/coordinate.hpp:149:79: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
-Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o);
-                                                                              ^
-math/coordinate.hpp:149:96: performance: Function parameter 'w' should be passed by const reference. [passedByValue]
-Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o);
-                                                                                               ^
-math/coordinate.hpp:149:113: performance: Function parameter 'o' should be passed by const reference. [passedByValue]
-Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o);
-                                                                                                                ^
-planet.cpp:15:26: performance: Function parameter 'c' should be passed by const reference. [passedByValue]
-    Planet(const Vector3 c, const Vector3 ax, const Vector3 ref)
-                         ^
-planet.cpp:15:43: performance: Function parameter 'ax' should be passed by const reference. [passedByValue]
-    Planet(const Vector3 c, const Vector3 ax, const Vector3 ref)
-                                          ^
-planet.cpp:15:61: performance: Function parameter 'ref' should be passed by const reference. [passedByValue]
-    Planet(const Vector3 c, const Vector3 ax, const Vector3 ref)
-                                                            ^
-planet.cpp:64:33: performance: Function parameter 'p1' should be passed by const reference. [passedByValue]
-Vector3 getConnDirection(Planet p1, Planet p2) {
-                                ^
-planet.cpp:64:44: performance: Function parameter 'p2' should be passed by const reference. [passedByValue]
-Vector3 getConnDirection(Planet p1, Planet p2) {
-                                           ^
 geometry/plane.hpp:18:12: style:inconclusive: Member variable 'Plane::c' is in the wrong place in the initializer list. [initializerList]
     double c;
            ^
@@ -326,6 +275,9 @@ photonmapper/photonmapping.cpp:59:0: style: The function 'photonMapping' is neve
 
 ^
 photonmapper/photonmapping.cpp:5:0: style: The function 'photonTrace' is never used. [unusedFunction]
+
+^
+math/vector3.cpp:14:0: style: The function 'projection' is never used. [unusedFunction]
 
 ^
 image/image.cpp:185:0: style: The function 'readBMP' is never used. [unusedFunction]
