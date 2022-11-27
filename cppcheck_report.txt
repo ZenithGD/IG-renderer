@@ -151,7 +151,7 @@ double angle (Vector3 dir1, Vector3 n){
 math/vector3.cpp:39:37: performance: Function parameter 'n' should be passed by const reference. [passedByValue]
 double angle (Vector3 dir1, Vector3 n){
                                     ^
-pathtracer/pathtracing.cpp:123:29: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+pathtracer/pathtracing.cpp:142:29: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
                     contrib = contrib + pathTraceRay(sc, r, 0);
                             ^
 photonmapper/photonmapping.cpp:12:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
@@ -175,7 +175,7 @@ geometry/triangle.hpp:29:60: note: Member variable 'Triangle::c' is in the wrong
 geometry/triangle.hpp:40:12: note: Member variable 'Triangle::c' is in the wrong place in the initializer list.
     double c;
            ^
-scene/scene.hpp:26:22: performance: Function parameter 's' should be passed by const reference. [passedByValue]
+scene/scene.hpp:33:22: performance: Function parameter 's' should be passed by const reference. [passedByValue]
     Scene(SceneProps s, Camera c) : cam(c), _scprops(s) {};
                      ^
 tests/testsuite.hpp:15:5: style: Class 'TestSuite' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
