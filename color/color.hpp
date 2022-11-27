@@ -129,7 +129,20 @@ struct RGB : public Color {
     }
 };
 
+/**
+ * @brief Get the maximum of the three colour channels.
+ * 
+ * @param r The colour object.
+ * @return double The max channel value
+ */
 inline double maxChannel(const RGB& r) { return max(r.red, max(r.green, r.blue)); }
+
+/**
+ * @brief Return an equivalent colour with a new luminance value.
+ * 
+ * @param r The colour object.
+ * @return double The scaled colour.
+ */
 inline RGB changeLuminance(const RGB& c, double outLuminance) { return c * ( outLuminance / c.getLuminance() ); }
 
 inline RGB clamp(const RGB& c, double v) { return RGB(clampHigh(c.red, v), clampHigh(c.green, v), clampHigh(c.blue, v)); };

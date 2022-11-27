@@ -75,4 +75,11 @@ struct Image {
     vector<vector<RGB>> imageData;
 };
 
+/**
+ * @brief Print general image infomation to an output stream
+ * 
+ * @param os The output stream
+ * @param image The image object
+ * @return ostream& The same output stream
+ */
 ostream& operator<<(ostream& os, const Image& image);

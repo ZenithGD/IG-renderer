@@ -8,7 +8,18 @@
 #include <acceleration/threadpool.hpp>
 #include <scene/BRDF.hpp>
 
-RGB nextEventEstimation(const Scene& sc, const Vector3 origin, const Vector3 obsDirection, const Intersection it) {
+/**
+ * @brief Estimate direct light contribution on a point given the observation
+ * direction and intersection data.
+ * 
+ * @param sc The scene
+ * @param origin The point of intersection
+ * @param obsDirection The observation direction
+ * @param it The intersection data
+ * @return RGB The direct light contribution
+ */
+RGB nextEventEstimation(const Scene& sc, const Vector3 origin, 
+    const Vector3 obsDirection, const Intersection it) {
     RGB totalContrib;
     for (auto l : sc.lights)
     {
@@ -56,6 +67,14 @@ RGB nextEventEstimation(const Scene& sc, const Vector3 origin, const Vector3 obs
     return totalContrib;
 }
 
+/**
+ * @brief Perform path tracing up to n bounces starting with ray r on the scene.
+ * 
+ * @param sc The scene
+ * @param r The ray
+ * @param n The number of remaining bounces
+ * @return RGB 
+ */
 RGB pathTraceRay(const Scene& sc, const Ray& r, unsigned int n) {
     
     //cout << "bounce " << n << endl;
