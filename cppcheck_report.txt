@@ -1,81 +1,12 @@
-color/color.hpp:64:36: performance: Function parameter 'col' should be passed by const reference. [passedByValue]
-    inline RGB operator+(const RGB col) const { return RGB(red + col.red, green + col.green, blue + col.blue); }
-                                   ^
-color/color.hpp:72:36: performance: Function parameter 'col' should be passed by const reference. [passedByValue]
-    inline RGB operator-(const RGB col) const { return RGB(red - col.red, green - col.green, blue - col.blue); }
-                                   ^
-color/color.hpp:80:36: performance: Function parameter 'col' should be passed by const reference. [passedByValue]
-    inline RGB operator*(const RGB col) const { return RGB(red * col.red, green * col.green, blue * col.blue); }
-                                   ^
-color/color.hpp:88:36: performance: Function parameter 'col' should be passed by const reference. [passedByValue]
-    inline RGB operator/(const RGB col) const { return RGB(red / col.red, green / col.green, blue / col.blue); }
-                                   ^
-color/color.cpp:33:36: performance: Function parameter 'x' should be passed by const reference. [passedByValue]
-RGB uncharted2_tonemap_partial(RGB x)
-                                   ^
-color/color.cpp:44:25: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
-RGB filmicUncharted(RGB v)
-                        ^
-image/image.hpp:13:12: style:inconclusive: Member variable 'Image::maxNumber' is in the wrong place in the initializer list. [initializerList]
-    double maxNumber;
-           ^
-image/image.hpp:22:63: note: Member variable 'Image::maxNumber' is in the wrong place in the initializer list.
-        :  width(w), height(h), imageData(h, vector<RGB>(w)), maxNumber(1) {}
-                                                              ^
-image/image.hpp:13:12: note: Member variable 'Image::maxNumber' is in the wrong place in the initializer list.
-    double maxNumber;
-           ^
-image/image.hpp:13:12: style:inconclusive: Member variable 'Image::maxNumber' is in the wrong place in the initializer list. [initializerList]
-    double maxNumber;
-           ^
-image/image.hpp:32:50: note: Member variable 'Image::maxNumber' is in the wrong place in the initializer list.
-        :  width(w), height(h), imageData(data), maxNumber(max) {}
-                                                 ^
-image/image.hpp:13:12: note: Member variable 'Image::maxNumber' is in the wrong place in the initializer list.
-    double maxNumber;
-           ^
 image/image.hpp:31:63: performance: Function parameter 'data' should be passed by const reference. [passedByValue]
     Image(unsigned int w, unsigned int h, vector<vector<RGB>> data, double max)
                                                               ^
-image/image.cpp:16:35: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
-Image Image::readPPM(const string path){
-                                  ^
-image/image.cpp:75:37: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
-void Image::writeToPPM(const string path, double max, unsigned int res) const {
-                                    ^
-image/image.cpp:99:37: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
-void Image::writeToBMP(const string path) const {
-                                    ^
-image/image.cpp:185:35: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
-Image Image::readBMP(const string path) {
-                                  ^
 image/tonemapping.cpp:165:24: style: The scope of the variable 'v' can be reduced. [variableScope]
                 double v, v1, scale;
                        ^
 image/tonemapping.cpp:165:31: style: The scope of the variable 'scale' can be reduced. [variableScope]
                 double v, v1, scale;
                               ^
-image/tonemapping.cpp:62:49: style:inconclusive: Function 'gammaClamp' argument 2 names different: declaration 'v' definition 'k'. [funcArgNamesDifferent]
-    Image gammaClamp(const Image& image, double k, double gamma) {
-                                                ^
-image/tonemapping.hpp:21:49: note: Function 'gammaClamp' argument 2 names different: declaration 'v' definition 'k'.
-    Image gammaClamp(const Image& image, double v, double gamma);
-                                                ^
-image/tonemapping.cpp:62:49: note: Function 'gammaClamp' argument 2 names different: declaration 'v' definition 'k'.
-    Image gammaClamp(const Image& image, double k, double gamma) {
-                                                ^
-image/image.hpp:43:34: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
-    void writeToPPM(const string path, double max, unsigned int res = 255) const;
-                                 ^
-image/image.hpp:52:39: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
-    static Image readPPM(const string path);
-                                      ^
-image/image.hpp:63:34: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
-    void writeToBMP(const string path) const;
-                                 ^
-image/image.hpp:71:39: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
-    static Image readBMP(const string path);
-                                      ^
 image/tonemapping.cpp:183:67: error: Uninitialized variable: v1 [uninitvar]
                 double newLuminance = clampHigh(prevLuminance / ( v1 + 1 ), 1);
                                                                   ^
