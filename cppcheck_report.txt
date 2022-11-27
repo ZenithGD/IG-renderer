@@ -64,45 +64,24 @@ math/mat4.hpp:48:31: performance: Function parameter 'that' should be passed by 
 math/coordinate.hpp:65:34: performance: Function parameter 'mat' should be passed by const reference. [passedByValue]
     inline Coordinate(const Mat4 mat) : matrix(mat) {}
                                  ^
-math/coordinate.hpp:80:44: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
-    Coordinate operator()(const Coordinate coord) { return Coordinate(matrix * coord.matrix); }
-                                           ^
-math/coordinate.cpp:10:41: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
-Coordinate translation(const Coordinate coord, const Vector3 v){
-                                        ^
-math/coordinate.cpp:10:62: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
-Coordinate translation(const Coordinate coord, const Vector3 v){
-                                                             ^
-math/coordinate.cpp:21:39: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
-Coordinate rotationX(const Coordinate coord, double theta) {
-                                      ^
-math/coordinate.cpp:36:39: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
-Coordinate rotationY(const Coordinate coord,  double theta){
-                                      ^
-math/coordinate.cpp:51:39: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
-Coordinate rotationZ(const Coordinate coord, double theta){
-                                      ^
-math/coordinate.cpp:66:35: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
-Coordinate scale(const Coordinate coord, const Vector3 v){
-                                  ^
-math/coordinate.cpp:66:56: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
-Coordinate scale(const Coordinate coord, const Vector3 v){
-                                                       ^
-math/coordinate.cpp:77:41: performance: Function parameter 'coord' should be passed by const reference. [passedByValue]
-Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o){
-                                        ^
-math/coordinate.cpp:77:62: performance: Function parameter 'u' should be passed by const reference. [passedByValue]
-Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o){
-                                                             ^
-math/coordinate.cpp:77:79: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
-Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o){
-                                                                              ^
-math/coordinate.cpp:77:96: performance: Function parameter 'w' should be passed by const reference. [passedByValue]
-Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o){
-                                                                                               ^
-math/coordinate.cpp:77:113: performance: Function parameter 'o' should be passed by const reference. [passedByValue]
-Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o){
-                                                                                                                ^
+math/coordinate.cpp:10:63: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+Coordinate translation(const Coordinate& coord, const Vector3 v){
+                                                              ^
+math/coordinate.cpp:66:57: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+Coordinate scale(const Coordinate& coord, const Vector3 v){
+                                                        ^
+math/coordinate.cpp:77:63: performance: Function parameter 'u' should be passed by const reference. [passedByValue]
+Coordinate changeBasis(const Coordinate& coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o){
+                                                              ^
+math/coordinate.cpp:77:80: performance: Function parameter 'v' should be passed by const reference. [passedByValue]
+Coordinate changeBasis(const Coordinate& coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o){
+                                                                               ^
+math/coordinate.cpp:77:97: performance: Function parameter 'w' should be passed by const reference. [passedByValue]
+Coordinate changeBasis(const Coordinate& coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o){
+                                                                                                ^
+math/coordinate.cpp:77:114: performance: Function parameter 'o' should be passed by const reference. [passedByValue]
+Coordinate changeBasis(const Coordinate& coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o){
+                                                                                                                 ^
 math/mat4.cpp:13:33: performance: Function parameter 'that' should be passed by const reference. [passedByValue]
 Mat4 Mat4::operator+(const Mat4 that) const {
                                 ^
