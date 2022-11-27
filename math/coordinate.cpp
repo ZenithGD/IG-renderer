@@ -7,7 +7,7 @@ ostream& operator<< (ostream& os, Coordinate coor){
     return os;
 }
 
-Coordinate translation(const Coordinate coord, const Vector3 v){
+Coordinate translation(const Coordinate& coord, const Vector3 v){
 
     Coordinate transform;
 
@@ -18,7 +18,7 @@ Coordinate translation(const Coordinate coord, const Vector3 v){
     return transform(coord);
 }
 
-Coordinate rotationX(const Coordinate coord, double theta) {
+Coordinate rotationX(const Coordinate& coord, double theta) {
 
     Coordinate transform;
 
@@ -33,7 +33,7 @@ Coordinate rotationX(const Coordinate coord, double theta) {
     return transform(coord);
 }
 
-Coordinate rotationY(const Coordinate coord,  double theta){
+Coordinate rotationY(const Coordinate& coord,  double theta){
 
     Coordinate transform;
 
@@ -48,7 +48,7 @@ Coordinate rotationY(const Coordinate coord,  double theta){
     return transform(coord);
 }
 
-Coordinate rotationZ(const Coordinate coord, double theta){
+Coordinate rotationZ(const Coordinate& coord, double theta){
 
     Coordinate transform;
 
@@ -63,7 +63,7 @@ Coordinate rotationZ(const Coordinate coord, double theta){
     return transform(coord);
 }
 
-Coordinate scale(const Coordinate coord, const Vector3 v){
+Coordinate scale(const Coordinate& coord, const Vector3 v){
 
     Coordinate transform;
 
@@ -74,7 +74,7 @@ Coordinate scale(const Coordinate coord, const Vector3 v){
     return transform(coord);
 }
 
-Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o){
+Coordinate changeBasis(const Coordinate& coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o){
 
     Coordinate transform;
 

@@ -77,7 +77,7 @@ public:
      * @param coord The coordinates to transform 
      * @return Coordinate 
      */
-    Coordinate operator()(const Coordinate coord) { return Coordinate(matrix * coord.matrix); }
+    Coordinate operator()(const Coordinate& coord) { return Coordinate(matrix * coord.matrix); }
 
     friend ostream& operator<<(ostream& os, Coordinate coor);
 };
@@ -98,7 +98,7 @@ ostream& operator<<(ostream& os, Coordinate coor);
  * @param v The translation vector
  * @return Coordinate 
  */
-Coordinate translation(const Coordinate coord, const Vector3 v);
+Coordinate translation(const Coordinate& coord, const Vector3 v);
 
 /**
  * @brief Rotate the coordinate system by theta radians on the X axis.
@@ -107,7 +107,7 @@ Coordinate translation(const Coordinate coord, const Vector3 v);
  * @param theta The rotation angle, in radians 
  * @return Coordinate 
  */
-Coordinate rotationX(const Coordinate coord, double theta);
+Coordinate rotationX(const Coordinate& coord, double theta);
 
 /**
  * @brief Rotate the coordinate system by theta radians on the Y axis.
@@ -116,7 +116,7 @@ Coordinate rotationX(const Coordinate coord, double theta);
  * @param theta The rotation angle, in radians 
  * @return Coordinate 
  */
-Coordinate rotationY(const Coordinate coord, double theta);
+Coordinate rotationY(const Coordinate& coord, double theta);
 
 /**
  * @brief Rotate the coordinate system by theta radians on the Z axis.
@@ -125,7 +125,7 @@ Coordinate rotationY(const Coordinate coord, double theta);
  * @param theta The rotation angle, in radians 
  * @return Coordinate 
  */
-Coordinate rotationZ(const Coordinate coord, double theta);
+Coordinate rotationZ(const Coordinate& coord, double theta);
 
 /**
  * @brief Scale the coordinate system by a scale vector
@@ -134,7 +134,7 @@ Coordinate rotationZ(const Coordinate coord, double theta);
  * @param v The scale vector
  * @return Coordinate 
  */
-Coordinate scale(const Coordinate coord, const Vector3 v);
+Coordinate scale(const Coordinate& coord, const Vector3 v);
 
 /**
  * @brief Change the coordinate basis.
@@ -146,7 +146,7 @@ Coordinate scale(const Coordinate coord, const Vector3 v);
  * @param o The new basis's origin in the old basis's coordinates
  * @return Coordinate 
  */
-Coordinate changeBasis(const Coordinate coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o);
+Coordinate changeBasis(const Coordinate& coord, const Vector3 u, const Vector3 v, const Vector3 w, const Vector3 o);
 
 /**
  * @brief Return the inverse transform of the coordinate object.
