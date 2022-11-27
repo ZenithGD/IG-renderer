@@ -6,7 +6,7 @@
 #include <iomanip>
 
 #include <acceleration/threadpool.hpp>
-#include <scene/BSDF.hpp>
+#include <scene/BRDF.hpp>
 
 RGB nextEventEstimation(const Scene& sc, const Vector3 origin, const Vector3 obsDirection, const Intersection it) {
     RGB totalContrib;
@@ -40,8 +40,8 @@ RGB nextEventEstimation(const Scene& sc, const Vector3 origin, const Vector3 obs
 
         double geometryContrib = abs(dot(it.closestNormal(), normalize(directRayDir)));
 
-        // TODO: more general BSDF object
-        RGB materialContrib = it.bsdf.eval(r(it.closest()), obsDirection, r.direction, 
+        // TODO: more general BRDF object
+        RGB materialContrib = it.brdf.eval(r(it.closest()), obsDirection, r.direction, 
             closest.closestNormal());
 
         RGB lightContrib = l->power / dot(directRayDir, directRayDir) * materialContrib * geometryContrib;
@@ -83,7 +83,7 @@ RGB pathTraceRay(const Scene& sc, const Ray& r, unsigned int n) {
         
         contrib = contrib + nextEventEstimation(sc, r(closest.closest()), r.direction, closest);
 
-        auto [ omega, li ] = closest.bsdf.sample(normalize(r.direction), r(closest.closest()), normalize(closest.closestNormal()));
+        auto [ omega, li ] = closest.brdf.sample(normalize(r.direction), r(closest.closest()), normalize(closest.closestNormal()));
         
         Ray out(r(closest.closest()), omega);
 

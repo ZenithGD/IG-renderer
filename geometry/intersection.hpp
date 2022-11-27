@@ -4,7 +4,7 @@
 
 #include <math/vector3.hpp>
 #include <color/color.hpp>
-#include <scene/BSDF.hpp>
+#include <scene/BRDF.hpp>
 
 /**
  * @brief Struct that carries general intersection info.
@@ -22,8 +22,8 @@ struct Intersection {
      */
     std::multimap<double, Vector3, std::less<double>> intersections;
 
-    // BSDF of closest object
-    BSDF bsdf;
+    // BRDF of closest object
+    BRDF brdf;
 
     /**
      * @brief Return closest value of intersection

@@ -20,6 +20,12 @@ public:
     Ray(Vector3 o, Vector3 d) : origin(o), direction(d) {}
     Vector3 origin, direction;
 
+    /**
+     * @brief Evaluate ray for value t.
+     * 
+     * @param t The value or the parameter.
+     * @return Vector3 The result of the parametric equation v = o + t * d.
+     */
     inline Vector3 eval(double t) const { return origin + direction * t; }
 
     inline Vector3 operator()(double t) const { return eval(t); }

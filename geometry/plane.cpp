@@ -17,7 +17,7 @@ Intersection Plane::intersection(const Ray& r, double minT, double maxT) {
     }
 
     if ( inter.intersects ) {
-        inter.bsdf = bsdf;
+        inter.brdf = brdf;
         inter.intersections.emplace(t, normalize(normal));
     }
     return inter;

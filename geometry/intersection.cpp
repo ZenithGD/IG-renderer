@@ -6,7 +6,7 @@ ostream& operator<<(ostream& os, const Intersection& it) {
         cout << "{ " << t << ": " << normal << " }" << endl;
     }
 
-    os << "Diffuse : " << it.bsdf.diffuse;
+    os << "Diffuse : " << it.brdf.diffuse;
     
     return os;
 }

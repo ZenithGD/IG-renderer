@@ -38,7 +38,7 @@ Intersection Sphere::intersection(const Ray& r, double minT, double maxT) {
     }
 
     inter.intersects = true;
-    inter.bsdf = bsdf;
+    inter.brdf = brdf;
 
     return inter;
 }

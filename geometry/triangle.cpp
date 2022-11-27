@@ -4,17 +4,17 @@
 
 bool Triangle::insideOutsideTest(Vector3 point) const {
 
-    // TODO
     return true;
+
 }
 
 Intersection Triangle::intersection(const Ray& r, double minT, double maxT) {
     Intersection inter;
 
     //Solve for t
-    double t = -(( c + dot(r.origin, normal)) / dot(r.direction, normal));
+    double t = -((c + dot(r.origin, normal)) / dot(r.direction, normal));
 
-    // Verify if the triangle doesn't intersect behind of the ray's origin
+    // Verify if the plane not intersect behind of the r.origin
     if (t < minT + INTERSECTION_TOLERANCE || t > maxT) {
         inter.intersects = false;
     }
@@ -23,9 +23,8 @@ Intersection Triangle::intersection(const Ray& r, double minT, double maxT) {
     }
 
     if ( inter.intersects ) {
-        inter.bsdf = bsdf;
+        inter.brdf = brdf;
         inter.intersections.emplace(t, normalize(normal));
     }
-
     return inter;
 }

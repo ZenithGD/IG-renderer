@@ -83,7 +83,7 @@ OBJECTS := \
 	$(OBJDIR)/photon.o \
 	$(OBJDIR)/photonmapping.o \
 	$(OBJDIR)/photonmapper.o \
-	$(OBJDIR)/BSDF.o \
+	$(OBJDIR)/BRDF.o \
 	$(OBJDIR)/camera.o \
 	$(OBJDIR)/light.o \
 	$(OBJDIR)/scene.o \
@@ -199,7 +199,7 @@ $(OBJDIR)/photonmapping.o: photonmapper/photonmapping.cpp
 $(OBJDIR)/photonmapper.o: photonmapper.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/BSDF.o: scene/BSDF.cpp
+$(OBJDIR)/BRDF.o: scene/BRDF.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/camera.o: scene/camera.cpp

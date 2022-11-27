@@ -82,7 +82,7 @@ OBJECTS := \
 	$(OBJDIR)/vector3.o \
 	$(OBJDIR)/pathtracing.o \
 	$(OBJDIR)/renderer.o \
-	$(OBJDIR)/BSDF.o \
+	$(OBJDIR)/BRDF.o \
 	$(OBJDIR)/camera.o \
 	$(OBJDIR)/light.o \
 	$(OBJDIR)/scene.o \
@@ -195,7 +195,7 @@ $(OBJDIR)/pathtracing.o: pathtracer/pathtracing.cpp
 $(OBJDIR)/renderer.o: renderer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/BSDF.o: scene/BSDF.cpp
+$(OBJDIR)/BRDF.o: scene/BRDF.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/camera.o: scene/camera.cpp

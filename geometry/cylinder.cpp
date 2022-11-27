@@ -36,7 +36,7 @@ Intersection Cylinder::intersection(const Ray& ray, double minT, double maxT) {
     }
 
     inter.intersects = true;
-    inter.bsdf = bsdf;
+    inter.brdf = brdf;
 
     return inter;
 }

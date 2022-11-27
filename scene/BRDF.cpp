@@ -1,10 +1,10 @@
-#include <scene/BSDF.hpp>
+#include <scene/BRDF.hpp>
 #include <math/coordinate.hpp>
 
 #include <functional>
 #include <random>
 
-RGB BSDF::eval(const Vector3 x, const Vector3 omegaI, const Vector3 omega, const Vector3 n) const {
+RGB BRDF::eval(const Vector3 x, const Vector3 omegaI, const Vector3 omega, const Vector3 n) const {
     
     Vector3 specDir = sampleSpecular(omega, x, n);
     Vector3 refDir = sampleRefraction(omega, x, n);
@@ -16,7 +16,7 @@ RGB BSDF::eval(const Vector3 x, const Vector3 omegaI, const Vector3 omega, const
     return dif + spec + ref;
 }
 
-Vector3 BSDF::sampleDiffuse(const Vector3 omega0, const Vector3 x, const Vector3 n) const {
+Vector3 BRDF::sampleDiffuse(const Vector3 omega0, const Vector3 x, const Vector3 n) const {
     std::random_device rand_dev;
     uniform_real_distribution<double> distribution(0.0,1.0);
     default_random_engine generator(rand_dev());
@@ -39,12 +39,12 @@ Vector3 BSDF::sampleDiffuse(const Vector3 omega0, const Vector3 x, const Vector3
     return local2Global(dir).getPosition();
 }
 
-Vector3 BSDF::sampleSpecular(const Vector3 omega0, const Vector3 x, const Vector3 n) const {
+Vector3 BRDF::sampleSpecular(const Vector3 omega0, const Vector3 x, const Vector3 n) const {
     return omega0 - n * 2 * dot(omega0, n);
 }
 
 
-Vector3 BSDF::sampleRefraction(const Vector3 omega0, const Vector3 x, const Vector3 n) const {
+Vector3 BRDF::sampleRefraction(const Vector3 omega0, const Vector3 x, const Vector3 n) const {
 
     double cosTh = min(dot(-omega0, n), 1.0);
     double sinTh = sqrt(1.0 - cosTh*cosTh);
@@ -70,7 +70,7 @@ Vector3 BSDF::sampleRefraction(const Vector3 omega0, const Vector3 x, const Vect
     }
 }
 
-BSDF::EventType BSDF::russianRoulette(double t) {
+BRDF::EventType BRDF::russianRoulette(double t) {
     if ( t < probDiffuse ) {
         return DIFFUSE;
     } else if ( t < probDiffuse + probSpecular ) {
@@ -82,7 +82,7 @@ BSDF::EventType BSDF::russianRoulette(double t) {
     }
 }
 
-tuple<Vector3, RGB> BSDF::sample(const Vector3 omega0, const Vector3 x, const Vector3 n){
+tuple<Vector3, RGB> BRDF::sample(const Vector3 omega0, const Vector3 x, const Vector3 n){
     std::random_device rand_dev;
     uniform_real_distribution<double> distribution(0.0,1.0);
     default_random_engine generator(rand_dev());

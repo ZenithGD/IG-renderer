@@ -44,7 +44,7 @@ void photonTrace(const Scene& sc, const unsigned int photons, const unsigned int
            // trace direct light ray
            if( closest.intersects ) {
     
-               auto [ omega, li ] = closest.bsdf.sample(normalize(r.direction), r(closest.closest()), normalize(closest.closestNormal()));
+               auto [ omega, li ] = closest.brdf.sample(normalize(r.direction), r(closest.closest()), normalize(closest.closestNormal()));
                
                Ray out(r(closest.closest()), omega);
     

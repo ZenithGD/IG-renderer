@@ -27,7 +27,7 @@ bool testUnionCSG() {
 
 bool testSampleReflection() {
     
-    BSDF b(RGB(), RGB(0.9,0.9,0.9));
+    BRDF b(RGB(), RGB(0.9,0.9,0.9));
 
     Vector3 in(0, 1, -1);
 
@@ -52,7 +52,7 @@ bool testSampleReflection() {
 
 bool testSampleRefraction() {
     
-    BSDF b(RGB(), RGB(), RGB(1, 1, 1), 1.5);
+    BRDF b(RGB(), RGB(), RGB(1, 1, 1), 1.5);
 
     Vector3 in(0,1, -1);
 
@@ -85,7 +85,7 @@ bool testSampleRefraction() {
 }
 
 bool testSampleUniform() {
-    BSDF b(RGB(1,1,1));
+    BRDF b(RGB(1,1,1));
 
     Vector3 in(0,-1, 1);
 

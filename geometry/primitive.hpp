@@ -10,14 +10,14 @@
  */
 class Primitive {
 public:
-    BSDF bsdf;
+    BRDF brdf;
 
     /**
      * @brief Construct a new Primitive object
      * 
      * @param _e The emission value
      */
-    Primitive(BSDF _b = BSDF()) : bsdf(_b) {}; 
+    Primitive(BRDF _b = BRDF()) : brdf(_b) {}; 
 
     /**
      * @brief Find an intersection with a ray.

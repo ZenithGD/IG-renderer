@@ -118,6 +118,6 @@ Intersection CSG::intersection(const Ray& r, double minT, double maxT) {
             break;
     }
 
-    it.bsdf = bsdf;
+    it.brdf = brdf;
     return it;
 }

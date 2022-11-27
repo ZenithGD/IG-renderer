@@ -6,14 +6,14 @@
 #include <cmath>
 #include <tuple>
 
-class BSDF {
+class BRDF {
 public:
     RGB diffuse, specular, refraction;
     double probDiffuse, probSpecular, probRefraction;
 
     double refractionIndex;
 
-    BSDF(const RGB d = RGB(), const RGB s = RGB(), const RGB r = RGB(), const double ri = 1) 
+    BRDF(const RGB d = RGB(), const RGB s = RGB(), const RGB r = RGB(), const double ri = 1) 
         : diffuse(d), 
           specular(s), 
           refraction(r),
@@ -23,7 +23,7 @@ public:
           refractionIndex(ri) 
     {};
 
-    BSDF(const RGB d, const RGB s, const RGB r, 
+    BRDF(const RGB d, const RGB s, const RGB r, 
          const double pd, const double ps, const double pr, const double ri) 
         : diffuse(d), 
           specular(s), 
