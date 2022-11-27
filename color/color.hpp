@@ -61,7 +61,7 @@ struct RGB : public Color {
      * @param col The other colour
      * @return RGB 
      */
-    inline RGB operator+(const RGB col) const { return RGB(red + col.red, green + col.green, blue + col.blue); }
+    inline RGB operator+(const RGB& col) const { return RGB(red + col.red, green + col.green, blue + col.blue); }
 
     /**
      * @brief Subtract two RGB colours together
@@ -69,7 +69,7 @@ struct RGB : public Color {
      * @param col The other colour
      * @return RGB 
      */
-    inline RGB operator-(const RGB col) const { return RGB(red - col.red, green - col.green, blue - col.blue); }
+    inline RGB operator-(const RGB& col) const { return RGB(red - col.red, green - col.green, blue - col.blue); }
 
     /**
      * @brief Multiply two RGB colours together
@@ -77,7 +77,7 @@ struct RGB : public Color {
      * @param col The other colour
      * @return RGB 
      */
-    inline RGB operator*(const RGB col) const { return RGB(red * col.red, green * col.green, blue * col.blue); }
+    inline RGB operator*(const RGB& col) const { return RGB(red * col.red, green * col.green, blue * col.blue); }
 
     /**
      * @brief Divide two RGB colours together
@@ -85,7 +85,7 @@ struct RGB : public Color {
      * @param col The other colour
      * @return RGB 
      */
-    inline RGB operator/(const RGB col) const { return RGB(red / col.red, green / col.green, blue / col.blue); }
+    inline RGB operator/(const RGB& col) const { return RGB(red / col.red, green / col.green, blue / col.blue); }
 
     /**
      * @brief Add a scalar factor to an RGB color
@@ -139,4 +139,4 @@ RGB gammaCorrection(const RGB& c, double k, double gamma);
 RGB gammaClamp(const RGB& c, double k, double gamma);
 inline RGB simpleReinhard(const RGB& col) { return col / ( col + 1 ); }
 RGB extendedReinhard(const RGB& col, double maxWhite);
-RGB filmicUncharted(RGB v);
+RGB filmicUncharted(const RGB& v);

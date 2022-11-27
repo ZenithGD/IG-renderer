@@ -30,7 +30,7 @@ RGB extendedReinhard(const RGB& col, double maxWhite) {
     return num / den;
 }
 
-RGB uncharted2_tonemap_partial(RGB x)
+RGB uncharted2_tonemap_partial(const RGB& x)
 {
     double A = 0.15f;
     double B = 0.50f;
@@ -41,7 +41,7 @@ RGB uncharted2_tonemap_partial(RGB x)
     return ((x*(x*A+C*B)+D*E)/(x*(x*A+B)+D*F)) - E/F;
 }
 
-RGB filmicUncharted(RGB v)
+RGB filmicUncharted(const RGB& v)
 {
     double exposure_bias = 2.0;
     RGB curr = uncharted2_tonemap_partial(v * exposure_bias);

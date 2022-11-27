@@ -13,7 +13,7 @@ void readHeader(ifstream& f) {
     }
 }
 
-Image Image::readPPM(const string path){
+Image Image::readPPM(const string& path){
     ifstream f(path);
 
     if( !f.is_open() ){
@@ -72,7 +72,7 @@ Image Image::readPPM(const string path){
 }
 
 
-void Image::writeToPPM(const string path, double max, unsigned int res) const {
+void Image::writeToPPM(const string& path, double max, unsigned int res) const {
     ofstream out(path);
 
     if ( !out.is_open() ) {
@@ -96,7 +96,7 @@ void Image::writeToPPM(const string path, double max, unsigned int res) const {
     }
 };
  
-void Image::writeToBMP(const string path) const {
+void Image::writeToBMP(const string& path) const {
     ofstream out(path, ios::binary);
 
     if ( !out.is_open() ) {
@@ -182,7 +182,7 @@ void Image::writeToBMP(const string path) const {
     out.write((char *) dataPtr, rasterSize);
 }
 
-Image Image::readBMP(const string path) {
+Image Image::readBMP(const string& path) {
     ifstream in(path, ios::binary);
 
     if ( !in.is_open() ) {

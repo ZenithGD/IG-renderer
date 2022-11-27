@@ -19,7 +19,7 @@ struct Image {
      * @param h 
      */
     Image(unsigned int w, unsigned int h) 
-        :  width(w), height(h), imageData(h, vector<RGB>(w)), maxNumber(1) {}
+        :  width(w), height(h), maxNumber(1), imageData(h, vector<RGB>(w)) {}
 
     /**
      * @brief Construct a new Image object
@@ -29,7 +29,7 @@ struct Image {
      * @param data 
      */
     Image(unsigned int w, unsigned int h, vector<vector<RGB>> data, double max) 
-        :  width(w), height(h), imageData(data), maxNumber(max) {}
+        :  width(w), height(h), maxNumber(max), imageData(data) {}
 
     // PPM version P3 read-write
 
@@ -40,7 +40,7 @@ struct Image {
      * @param max The max color value to store.
      * @param res The color resolution
      */
-    void writeToPPM(const string path, double max, unsigned int res = 255) const;
+    void writeToPPM(const string& path, double max, unsigned int res = 255) const;
 
     /**
      * @brief Read PPM image.
@@ -49,7 +49,7 @@ struct Image {
      * @param path 
      * @return Image 
      */
-    static Image readPPM(const string path);
+    static Image readPPM(const string& path);
 
     // BMP (LDR) read-write
 
@@ -60,7 +60,7 @@ struct Image {
      * 
      * @param path The image path 
      */
-    void writeToBMP(const string path) const;
+    void writeToBMP(const string& path) const;
 
     /**
      * @brief 
@@ -68,7 +68,7 @@ struct Image {
      * @param path 
      * @return Image 
      */
-    static Image readBMP(const string path);
+    static Image readBMP(const string& path);
 
     friend ostream& operator<<(ostream& os, const Image& image);
 
