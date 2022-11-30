@@ -27,7 +27,7 @@ public:
      * @param operation The operation applied to both solids
      * @param e The emission value.
      */
-    CSG(const shared_ptr<Primitive>& l, const shared_ptr<Primitive>& r, CSGOperation op, BRDF brdf = BRDF())
+    CSG(const shared_ptr<Primitive>& l, const shared_ptr<Primitive>& r, CSGOperation op, const shared_ptr<BRDF>& b)
         : Primitive(brdf), operation(op), left(l), right(r) {}
 
     Intersection intersection(const Ray& r, double minT, double maxT) override;

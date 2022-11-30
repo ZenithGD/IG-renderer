@@ -18,7 +18,7 @@ public:
     double c;
     Vector3 normal;
     
-    Plane(Vector3 _pointA, Vector3 _pointB, Vector3 _pointC, BRDF brdf = BRDF())
+    Plane(Vector3 _pointA, Vector3 _pointB, Vector3 _pointC, const shared_ptr<BRDF>& brdf)
         : Primitive(brdf),
           normal(cross(_pointB - _pointA, _pointC - _pointA)), c(-dot(_pointA, normal)) {}
 
@@ -27,7 +27,7 @@ public:
      * @param _c The value of c
      * @param _normal The value of the normal of the plane
      */
-    Plane(double _c, Vector3 _normal, BRDF brdf = BRDF()) : Primitive(brdf), c(_c), normal(_normal) {}
+    Plane(double _c, Vector3 _normal, const shared_ptr<BRDF>& brdf) : Primitive(brdf), c(_c), normal(_normal) {}
 
     /**
     * @brief Function of intersection with a Ray

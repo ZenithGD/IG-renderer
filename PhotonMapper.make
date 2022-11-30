@@ -76,6 +76,8 @@ OBJECTS := \
 	$(OBJDIR)/triangle.o \
 	$(OBJDIR)/image.o \
 	$(OBJDIR)/tonemapping.o \
+	$(OBJDIR)/FresnelBRDF.o \
+	$(OBJDIR)/SimpleBRDF.o \
 	$(OBJDIR)/coordinate.o \
 	$(OBJDIR)/mat4.o \
 	$(OBJDIR)/misc.o \
@@ -83,7 +85,6 @@ OBJECTS := \
 	$(OBJDIR)/photon.o \
 	$(OBJDIR)/photonmapping.o \
 	$(OBJDIR)/photonmapper.o \
-	$(OBJDIR)/BRDF.o \
 	$(OBJDIR)/camera.o \
 	$(OBJDIR)/light.o \
 	$(OBJDIR)/scene.o \
@@ -178,6 +179,12 @@ $(OBJDIR)/image.o: image/image.cpp
 $(OBJDIR)/tonemapping.o: image/tonemapping.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/FresnelBRDF.o: material/FresnelBRDF.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/SimpleBRDF.o: material/SimpleBRDF.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/coordinate.o: math/coordinate.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -197,9 +204,6 @@ $(OBJDIR)/photonmapping.o: photonmapper/photonmapping.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/photonmapper.o: photonmapper.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/BRDF.o: scene/BRDF.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/camera.o: scene/camera.cpp

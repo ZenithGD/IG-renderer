@@ -5,4 +5,4 @@
 
 using namespace std;
 
-Image photonMapping(const Scene& sc, const unsigned int photons);
+Image photonMapping(const Scene& sc, const unsigned int total, const unsigned int maxPhotons);

@@ -5,19 +5,21 @@
 #include <geometry/intersection.hpp>
 #include <geometry/ray.hpp>
 
+#include <memory>
+
 /**
  * @brief Base class for representing geometric primitives
  */
 class Primitive {
 public:
-    BRDF brdf;
+    shared_ptr<BRDF> brdf;
 
     /**
      * @brief Construct a new Primitive object
      * 
      * @param _e The emission value
      */
-    Primitive(BRDF _b = BRDF()) : brdf(_b) {}; 
+    Primitive(const shared_ptr<BRDF>& _b) : brdf(_b) {}; 
 
     /**
      * @brief Find an intersection with a ray.

@@ -6,7 +6,7 @@
 #include <iomanip>
 
 #include <acceleration/threadpool.hpp>
-#include <scene/BRDF.hpp>
+#include <material/BRDF.hpp>
 
 /**
  * @brief Estimate direct light contribution on a point given the observation
@@ -52,7 +52,7 @@ RGB nextEventEstimation(const Scene& sc, const Vector3 origin,
         double geometryContrib = abs(dot(it.closestNormal(), normalize(directRayDir)));
 
         // TODO: more general BRDF object
-        RGB materialContrib = it.brdf.eval(r(it.closest()), obsDirection, r.direction, 
+        RGB materialContrib = it.brdf->eval(r(it.closest()), obsDirection, r.direction, 
             closest.closestNormal());
 
         RGB lightContrib = l->power / dot(directRayDir, directRayDir) * materialContrib * geometryContrib;
@@ -102,7 +102,7 @@ RGB pathTraceRay(const Scene& sc, const Ray& r, unsigned int n) {
         
         contrib = contrib + nextEventEstimation(sc, r(closest.closest()), r.direction, closest);
 
-        auto [ omega, li ] = closest.brdf.sample(normalize(r.direction), r(closest.closest()), normalize(closest.closestNormal()));
+        auto [ omega, li ] = closest.brdf->sample(normalize(r.direction), r(closest.closest()), normalize(closest.closestNormal()));
         
         Ray out(r(closest.closest()), omega);
 

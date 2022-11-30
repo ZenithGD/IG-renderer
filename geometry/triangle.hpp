@@ -24,7 +24,7 @@ public:
      * @param _pointB Triangle's second vertex
      * @param _pointC Triangle's third vertex
      */
-    Triangle(Vector3 _pointA, Vector3 _pointB, Vector3 _pointC, BRDF brdf = BRDF())
+    Triangle(Vector3 _pointA, Vector3 _pointB, Vector3 _pointC, const shared_ptr<BRDF>& brdf)
         : Primitive(brdf), pointA(_pointA), pointB(_pointB), pointC(_pointC), 
           normal(cross(pointB - pointA, pointC - pointA)), c(-dot(pointA, normal)) {}
 

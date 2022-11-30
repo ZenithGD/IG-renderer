@@ -1,22 +1,22 @@
-#include <scene/BRDF.hpp>
+#include "SimpleBRDF.hpp"
 #include <math/coordinate.hpp>
 
 #include <functional>
 #include <random>
 
-RGB BRDF::eval(const Vector3 x, const Vector3 omegaI, const Vector3 omega, const Vector3 n) const {
+RGB SimpleBRDF::eval(const Vector3 x, const Vector3 omegaI, const Vector3 omega, const Vector3 n) const {
     
     Vector3 specDir = sampleSpecular(omega, x, n);
     Vector3 refDir = sampleRefraction(omega, x, n);
     
-    RGB dif = probDiffuse > 0 ? diffuse / M_PI / probDiffuse : RGB();
-    RGB spec = probSpecular > 0 ? specular * (delta(omegaI, specDir)) / probSpecular : RGB();
-    RGB ref = probRefraction > 0 ? refraction * (delta(omegaI, refDir)) / probRefraction : RGB();
+    RGB dif = probDiffuse > 0 ? diffuse / M_PI : RGB();
+    RGB spec = probSpecular > 0 ? specular * (delta(omegaI, specDir)) : RGB();
+    RGB ref = probRefraction > 0 ? refraction * (delta(omegaI, refDir)) : RGB();
     
     return dif + spec + ref;
 }
 
-Vector3 BRDF::sampleDiffuse(const Vector3 omega0, const Vector3 x, const Vector3 n) const {
+Vector3 SimpleBRDF::sampleDiffuse(const Vector3 omega0, const Vector3 x, const Vector3 n) const {
     std::random_device rand_dev;
     uniform_real_distribution<double> distribution(0.0,1.0);
     default_random_engine generator(rand_dev());
@@ -39,12 +39,12 @@ Vector3 BRDF::sampleDiffuse(const Vector3 omega0, const Vector3 x, const Vector3
     return local2Global(dir).getPosition();
 }
 
-Vector3 BRDF::sampleSpecular(const Vector3 omega0, const Vector3 x, const Vector3 n) const {
+Vector3 SimpleBRDF::sampleSpecular(const Vector3 omega0, const Vector3 x, const Vector3 n) const {
     return omega0 - n * 2 * dot(omega0, n);
 }
 
 
-Vector3 BRDF::sampleRefraction(const Vector3 omega0, const Vector3 x, const Vector3 n) const {
+Vector3 SimpleBRDF::sampleRefraction(const Vector3 omega0, const Vector3 x, const Vector3 n) const {
 
     double cosTh = min(dot(-omega0, n), 1.0);
     double sinTh = sqrt(1.0 - cosTh*cosTh);
@@ -70,7 +70,7 @@ Vector3 BRDF::sampleRefraction(const Vector3 omega0, const Vector3 x, const Vect
     }
 }
 
-BRDF::EventType BRDF::russianRoulette(double t) {
+SimpleBRDF::EventType SimpleBRDF::russianRoulette(double t) const {
     if ( t < probDiffuse ) {
         return DIFFUSE;
     } else if ( t < probDiffuse + probSpecular ) {
@@ -82,7 +82,7 @@ BRDF::EventType BRDF::russianRoulette(double t) {
     }
 }
 
-tuple<Vector3, RGB> BRDF::sample(const Vector3 omega0, const Vector3 x, const Vector3 n){
+tuple<Vector3, RGB> SimpleBRDF::sample(const Vector3 omega0, const Vector3 x, const Vector3 n) const{
     std::random_device rand_dev;
     uniform_real_distribution<double> distribution(0.0,1.0);
     default_random_engine generator(rand_dev());

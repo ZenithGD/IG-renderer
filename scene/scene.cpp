@@ -5,7 +5,7 @@
 #include <iomanip>
 
 #include <acceleration/threadpool.hpp>
-#include <scene/BRDF.hpp>
+#include <material/BRDF.hpp>
 
 void Scene::addPrimitive(const shared_ptr<Primitive> p)
 {

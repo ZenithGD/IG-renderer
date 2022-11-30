@@ -4,7 +4,7 @@
 
 class Cylinder : public Primitive {
 public:
-    Cylinder(const Vector3 ax, double r, double h, BRDF brdf = BRDF())
+    Cylinder(const Vector3 ax, double r, double h, const shared_ptr<BRDF>& brdf)
         : Primitive(brdf), axis(ax), radius(r), height(h), 
           _perp1(normalize(perpendicular(ax))), _perp2(normalize(cross(ax, _perp1))) {}
 

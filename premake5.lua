@@ -34,6 +34,7 @@ local rendererFiles = {
     "image/**.hpp",         "image/**.cpp",
     "math/**.hpp",          "math/**.cpp",
     "scene/**.hpp",         "scene/**.cpp",
+    "material/**.hpp",      "material/**.cpp",
     "pathtracer/**.hpp",    "pathtracer/**.cpp",
 }
 
@@ -45,6 +46,7 @@ local photonMapperFiles = {
     "image/**.hpp",         "image/**.cpp",
     "math/**.hpp",          "math/**.cpp",
     "scene/**.hpp",         "scene/**.cpp",
+    "material/**.hpp",         "material/**.cpp",
     "photonmapper/**.hpp",    "photonmapper/**.cpp",
 }
 

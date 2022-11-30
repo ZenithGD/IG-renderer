@@ -1,12 +1,14 @@
 #pragma once
 
+#include <material/BRDF.hpp>
+
 #include <math/vector3.hpp>
 #include <color/color.hpp>
 
 #include <cmath>
 #include <tuple>
 
-class BRDF {
+class FresnelBRDF : public BRDF{
 public:
     RGB diffuse, specular, refraction;
     double probDiffuse, probSpecular, probRefraction;
@@ -25,7 +27,7 @@ public:
      * @param r The refractive coefficient
      * @param ri The refraction index 
      */
-    BRDF(const RGB d = RGB(), const RGB s = RGB(), const RGB r = RGB(), const double ri = 1) 
+    FresnelBRDF(const RGB d = RGB(), const RGB s = RGB(), const RGB r = RGB(), const double ri = 1) 
         : diffuse(d), 
           specular(s), 
           refraction(r),
@@ -46,7 +48,7 @@ public:
      * @param pr The probability of a refraction event on a ray bounce
      * @param ri The refraction index 
      */
-    BRDF(const RGB d, const RGB s, const RGB r, 
+    FresnelBRDF(const RGB d, const RGB s, const RGB r, 
          const double pd, const double ps, const double pr, const double ri) 
         : diffuse(d), 
           specular(s), 
@@ -66,7 +68,7 @@ public:
      * @param n The normal on the surface in which x lies
      * @return RGB The BRDF's result
      */
-    RGB eval(const Vector3 x, const Vector3 omegaI, const Vector3 omega, const Vector3 n) const;
+    RGB eval(const Vector3 x, const Vector3 omegaI, const Vector3 omega, const Vector3 n) const override;
     
     /**
      * @brief Sample the BRDF, return an outbound ray direction and the BRDF's value
@@ -76,7 +78,7 @@ public:
      * @param n The normal on the surface in which x lies
      * @return tuple<Vector3, RGB> 
      */
-    tuple<Vector3, RGB> sample(const Vector3 omega0, const Vector3 x, const Vector3 n);
+    tuple<Vector3, RGB> sample(const Vector3 omega0, const Vector3 x, const Vector3 n) const override;
 
 private:
 
@@ -132,5 +134,5 @@ private:
      * @param t A value between 0 and 1
      * @return EventType The event type
      */
-    EventType russianRoulette(double t);
+    EventType russianRoulette(double t) const;
 };

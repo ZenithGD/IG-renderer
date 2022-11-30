@@ -1,10 +1,11 @@
 #pragma once
 
 #include <map>
+#include <memory>
 
 #include <math/vector3.hpp>
 #include <color/color.hpp>
-#include <scene/BRDF.hpp>
+#include <material/BRDF.hpp>
 
 /**
  * @brief Struct that carries general intersection info.
@@ -23,7 +24,7 @@ struct Intersection {
     std::multimap<double, Vector3, std::less<double>> intersections;
 
     // BRDF of closest object
-    BRDF brdf;
+    shared_ptr<BRDF> brdf;
 
     /**
      * @brief Return closest value of intersection

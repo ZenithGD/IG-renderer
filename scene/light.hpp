@@ -8,6 +8,7 @@ using namespace std;
 class Light {
 public:
     RGB power;
+    int count = 0;
 
     /**
      * @brief Construct a new Light object
