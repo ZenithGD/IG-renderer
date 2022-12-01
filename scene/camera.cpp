@@ -9,7 +9,7 @@ list<Ray> Camera::perPixel(unsigned int x, unsigned int y, unsigned int n) const
 
     std::default_random_engine generator;
     uniform_real_distribution<double> rnd(0, 1);
-    uniform_real_distribution<double> rndDepth(0, 0.1);
+    uniform_real_distribution<double> rndDepth(0, 0.02);
 
     for(int i = 0; i < n; i++){
 
