@@ -133,22 +133,22 @@ double angle (Vector3 dir1, Vector3 n){
 pathtracer/pathtracing.cpp:144:29: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
                     contrib = contrib + pathTraceRay(sc, r, 0);
                             ^
-scene/sceneSamples.hpp:26:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:27:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
     auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
                      ^
-scene/sceneSamples.hpp:34:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:35:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
     auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
                ^
-scene/sceneSamples.hpp:38:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:39:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
     auto sR4 = make_shared<Sphere>(Vector3( 0.3, 0, 0.6), 0.3, BRDFR);
              ^
-scene/sceneSamples.hpp:83:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:84:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
     auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
                      ^
-scene/sceneSamples.hpp:91:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:92:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
     auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
                ^
-scene/sceneSamples.hpp:95:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:96:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
     auto sR4 = make_shared<Sphere>(Vector3( 0.3, 0, 0.6), 0.3, BRDFR);
              ^
 photonmapper/photonmapping.cpp:54:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
@@ -160,6 +160,9 @@ photonmapper/photonmapping.cpp:111:25: style: Consider using std::accumulate alg
 photonmapper/photonmapping.cpp:51:17: style: Variable 'lights' is assigned a value that is never used. [unreadVariable]
     auto lights = sc.lights.size();
                 ^
+renderer.cpp:21:9: style: The scope of the variable 'c' can be reduced. [variableScope]
+    int c, digit_optind = 0;
+        ^
 scene/scene.hpp:33:22: performance: Function parameter 's' should be passed by const reference. [passedByValue]
     Scene(SceneProps s, Camera c) : cam(c), _scprops(s) {};
                      ^
@@ -175,9 +178,6 @@ void ppm(const string path) {
 tonemapper.cpp:28:23: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
 void bmp(const string path) {
                       ^
-math/vector3.cpp:39:0: style: The function 'angle' is never used. [unusedFunction]
-
-^
 math/coordinate.cpp:77:0: style: The function 'changeBasis' is never used. [unusedFunction]
 
 ^
@@ -185,6 +185,9 @@ math/misc.cpp:7:0: style: The function 'clampLow' is never used. [unusedFunction
 
 ^
 image/tonemapping.cpp:62:0: style: The function 'gammaClamp' is never used. [unusedFunction]
+
+^
+renderer.cpp:10:0: style: The function 'getSceneProps' is never used. [unusedFunction]
 
 ^
 math/vector3.cpp:14:0: style: The function 'projection' is never used. [unusedFunction]
