@@ -11,7 +11,6 @@
 class FresnelBRDF : public BRDF{
 public:
     RGB diffuse, specular, refraction;
-    double probDiffuse, probSpecular, probRefraction;
 
     double refractionIndex;
 
@@ -19,45 +18,16 @@ public:
      * @brief Construct a new BRDF object and assign the probability 
      * for each event after a ray bounce automatically.
      * 
-     * The probability for any given event will be given by the maximum value
-     * of its colour channels.
-     * 
-     * @param d The diffuse coefficient
      * @param s The specular coefficient
      * @param r The refractive coefficient
      * @param ri The refraction index 
      */
-    FresnelBRDF(const RGB d = RGB(), const RGB s = RGB(), const RGB r = RGB(), const double ri = 1) 
-        : diffuse(d), 
+    FresnelBRDF(const RGB s = RGB(), const RGB r = RGB(), const double ri = 1)
+        : BRDF(false),
           specular(s), 
           refraction(r),
-          probDiffuse(maxChannel(diffuse)), 
-          probSpecular(maxChannel(specular)), 
-          probRefraction(maxChannel(refraction)), 
           refractionIndex(ri)
-    {};
-
-    /**
-     * @brief Construct a new BRDF object and manually assign event probabilities
-     * 
-     * @param d The diffuse coefficient
-     * @param s The specular coefficient
-     * @param r The refractive coefficient
-     * @param pd The probability of a diffuse event on a ray bounce
-     * @param ps The probability of a specular event on a ray bounce
-     * @param pr The probability of a refraction event on a ray bounce
-     * @param ri The refraction index 
-     */
-    FresnelBRDF(const RGB d, const RGB s, const RGB r, 
-         const double pd, const double ps, const double pr, const double ri) 
-        : diffuse(d), 
-          specular(s), 
-          refraction(r),
-          probDiffuse(pd), 
-          probSpecular(ps), 
-          probRefraction(pr), 
-          refractionIndex(ri) 
-    {};
+        {};
 
     /**
      * @brief Evaluate the BRDF on a point based on input and output directions
@@ -92,22 +62,11 @@ private:
      *  $ n_1 \cdot sin \theta_1 = n_2 \cdot sin \theta_2 $
      */
     enum EventType {
-        DIFFUSE = 0,
-        SPECULAR,
+        SPECULAR = 0,
         REFRACTION,
         ABSORPTION
     };
 
-    /**
-     * @brief Sample an outbound direction for a diffuse surface
-     * 
-     * @param omega0 The inbound direction
-     * @param x The intersection point
-     * @param n The normal
-     * @return Vector3 
-     */
-    Vector3 sampleDiffuse(const Vector3 omega0, const Vector3 x, const Vector3 n) const;
-    
     /**
      * @brief Sample an outbound direction for a reflective surface
      * 
@@ -132,7 +91,8 @@ private:
      * @brief Return the event type given a random value between 0 and 1.
      * 
      * @param t A value between 0 and 1
+     * @param pref The reflection probability
      * @return EventType The event type
      */
-    EventType russianRoulette(double t) const;
+    EventType russianRoulette(double t, double prefl) const;
 };

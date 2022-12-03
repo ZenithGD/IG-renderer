@@ -26,7 +26,8 @@ public:
      * @param ri The refraction index 
      */
     PhongBRDF(const RGB d = RGB(), const RGB s = RGB(), double al = 1) 
-        : diffuse(d), 
+        : BRDF(false),
+          diffuse(d), 
           specular(s),
           probPhong(maxChannel(diffuse) + maxChannel(specular)),
           alpha(al)
@@ -45,7 +46,8 @@ public:
      */
     PhongBRDF(const RGB d, const RGB s,
          const double pph, double al) 
-        : diffuse(d), 
+        : BRDF(false),
+          diffuse(d), 
           specular(s),
           probPhong(pph),
           alpha(al)

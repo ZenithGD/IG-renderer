@@ -7,6 +7,7 @@
 #include <core/core.hpp>
 #include <material/SimpleBRDF.hpp>
 #include <material/PhongBRDF.hpp>
+#include <material/FresnelBRDF.hpp>
 
 #include <image/tonemapping.hpp>
 
@@ -78,8 +79,8 @@ Scene cornellMatVariations(const SceneProps& props) {
 
     auto BRDFPL = make_shared<SimpleBRDF>(RGB(1, 0, 0));
     auto BRDFPR = make_shared<SimpleBRDF>(RGB(0, 1, 0));
-    auto BRDFL = make_shared<PhongBRDF>(RGB(0.4, 0.65, 0.7), RGB(0.2, 0.2, 0.2), 0.5);
-    auto BRDFR = make_shared<PhongBRDF>(RGB(0.7, 0.8, 0.2), RGB(0.3, 0.3, 0.3), 0.05);
+    auto BRDFL = make_shared<FresnelBRDF>(RGB(1, 1, 1), RGB(1, 1, 1), 1.5);
+    auto BRDFR = make_shared<FresnelBRDF>(RGB(1, 1, 1), RGB(1, 1, 1), 1.5);
     auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
     auto gray = make_shared<SimpleBRDF>(RGB(0.7, 0.7, 0.7));
 

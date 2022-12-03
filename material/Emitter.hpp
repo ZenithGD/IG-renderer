@@ -1,13 +1,26 @@
 #pragma once
 
+#include <material/BRDF.hpp>
+
 #include <math/vector3.hpp>
 #include <color/color.hpp>
-#include <tuple>
-#include <functional>
 
-class BRDF {
+#include <cmath>
+#include <tuple>
+
+class Emitter : public BRDF{
 public:
-    bool emitter;
+    RGB emission;
+
+    /**
+     * @brief Construct a new Emitter object
+     * 
+     * @param e Emission value
+     */
+    Emitter(const RGB e = RGB())
+        : BRDF(true),
+          emission(e)
+        {};
 
     /**
      * @brief Evaluate the BRDF on a point based on input and output directions
@@ -18,19 +31,15 @@ public:
      * @param n The normal on the surface in which x lies
      * @return RGB The BRDF's result
      */
-    virtual RGB eval(const Vector3 x, const Vector3 omegaI, 
-        const Vector3 omega, const Vector3 n) const = 0;
-
+    RGB eval(const Vector3 x, const Vector3 omegaI, const Vector3 omega, const Vector3 n) const override;
+    
     /**
      * @brief Sample the BRDF, return an outbound ray direction and the BRDF's value
      * 
      * @param omega0 The input ray's direction
      * @param x The point in which the BRDF is evaluated
      * @param n The normal on the surface in which x lies
-     * @return tuple<Vector3, RGB> 
+     * @return tuple
      */
-    virtual optional<tuple<Vector3, RGB>> sample(const Vector3 omega0, 
-        const Vector3 x, const Vector3 n) const = 0;
-
-    BRDF(bool emits) : emitter(emits) {}
+    optional<tuple<Vector3, RGB>> sample(const Vector3 omega0, const Vector3 x, const Vector3 n) const override;
 };

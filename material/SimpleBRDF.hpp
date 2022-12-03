@@ -28,7 +28,8 @@ public:
      * @param ri The refraction index 
      */
     SimpleBRDF(const RGB d = RGB(), const RGB s = RGB(), const RGB r = RGB(), const double ri = 1) 
-        : diffuse(d), 
+        : BRDF(false),
+          diffuse(d), 
           specular(s), 
           refraction(r),
           probDiffuse(maxChannel(diffuse)), 
@@ -50,7 +51,8 @@ public:
      */
     SimpleBRDF(const RGB d, const RGB s, const RGB r, 
          const double pd, const double ps, const double pr, const double ri) 
-        : diffuse(d), 
+        : BRDF(false),
+          diffuse(d), 
           specular(s), 
           refraction(r),
           probDiffuse(pd), 
