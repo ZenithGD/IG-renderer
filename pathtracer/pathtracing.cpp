@@ -51,7 +51,6 @@ RGB nextEventEstimation(const Scene& sc, const Vector3 origin,
 
         double geometryContrib = abs(dot(it.closestNormal(), normalize(directRayDir)));
 
-        // TODO: more general BRDF object
         RGB materialContrib = it.brdf->eval(r(it.closest()), obsDirection, r.direction, 
             closest.closestNormal());
 
@@ -102,8 +101,11 @@ RGB pathTraceRay(const Scene& sc, const Ray& r, unsigned int n) {
         
         contrib = contrib + nextEventEstimation(sc, r(closest.closest()), r.direction, closest);
 
-        auto [ omega, li ] = closest.brdf->sample(normalize(r.direction), r(closest.closest()), normalize(closest.closestNormal()));
+        auto result = closest.brdf->sample(normalize(r.direction), r(closest.closest()), normalize(closest.closestNormal()));
         
+        if ( !result.has_value() ) return RGB();
+
+        auto [ omega, li ] = result.value();
         Ray out(r(closest.closest()), omega);
 
         contrib = contrib + li * pathTraceRay(sc, out, n + 1);

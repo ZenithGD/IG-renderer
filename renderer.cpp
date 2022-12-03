@@ -11,12 +11,12 @@ int main() {
     SceneProps props {
         .viewportWidth = 300,
         .viewportHeight = 300,
-        .antialiasingFactor = 256,
+        .antialiasingFactor = 32,
         .threads = std::thread::hardware_concurrency(),
         .bounces = 10
     };
 
-    Scene sc = cornellDiffuse(props);
+    Scene sc = cornellMatVariations(props);
 
     Image img(props.viewportWidth, props.viewportHeight);
     

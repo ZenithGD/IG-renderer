@@ -3,6 +3,7 @@
 #include <math/vector3.hpp>
 #include <color/color.hpp>
 #include <tuple>
+#include <functional>
 
 class BRDF {
 public:
@@ -26,6 +27,6 @@ public:
      * @param n The normal on the surface in which x lies
      * @return tuple<Vector3, RGB> 
      */
-    virtual tuple<Vector3, RGB> sample(const Vector3 omega0, 
+    virtual optional<tuple<Vector3, RGB>> sample(const Vector3 omega0, 
         const Vector3 x, const Vector3 n) const = 0;
 };

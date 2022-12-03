@@ -8,12 +8,10 @@
 #include <cmath>
 #include <tuple>
 
-class SimpleBRDF : public BRDF{
+class PhongBRDF : public BRDF {
 public:
-    RGB diffuse, specular, refraction;
-    double probDiffuse, probSpecular, probRefraction;
-
-    double refractionIndex;
+    RGB diffuse, specular;
+    double probPhong, alpha;
 
     /**
      * @brief Construct a new BRDF object and assign the probability 
@@ -27,14 +25,11 @@ public:
      * @param r The refractive coefficient
      * @param ri The refraction index 
      */
-    SimpleBRDF(const RGB d = RGB(), const RGB s = RGB(), const RGB r = RGB(), const double ri = 1) 
+    PhongBRDF(const RGB d = RGB(), const RGB s = RGB(), double al = 1) 
         : diffuse(d), 
-          specular(s), 
-          refraction(r),
-          probDiffuse(maxChannel(diffuse)), 
-          probSpecular(maxChannel(specular)), 
-          probRefraction(maxChannel(refraction)), 
-          refractionIndex(ri) 
+          specular(s),
+          probPhong(maxChannel(diffuse) + maxChannel(specular)),
+          alpha(al)
     {};
 
     /**
@@ -48,15 +43,12 @@ public:
      * @param pr The probability of a refraction event on a ray bounce
      * @param ri The refraction index 
      */
-    SimpleBRDF(const RGB d, const RGB s, const RGB r, 
-         const double pd, const double ps, const double pr, const double ri) 
+    PhongBRDF(const RGB d, const RGB s,
+         const double pph, double al) 
         : diffuse(d), 
-          specular(s), 
-          refraction(r),
-          probDiffuse(pd), 
-          probSpecular(ps), 
-          probRefraction(pr), 
-          refractionIndex(ri) 
+          specular(s),
+          probPhong(pph),
+          alpha(al)
     {};
 
     /**
@@ -92,9 +84,7 @@ private:
      *  $ n_1 \cdot sin \theta_1 = n_2 \cdot sin \theta_2 $
      */
     enum EventType {
-        DIFFUSE = 0,
-        SPECULAR,
-        REFRACTION,
+        PHONG = 0,
         ABSORPTION
     };
 
@@ -117,16 +107,6 @@ private:
      * @return Vector3 
      */
     Vector3 sampleSpecular(const Vector3 omega0, const Vector3 x, const Vector3 n) const;
-    
-    /**
-     * @brief Sample an outbound direction for a refractive surface
-     * 
-     * @param omega0 The inbound direction
-     * @param x The intersection point
-     * @param n The normal
-     * @return Vector3 
-     */
-    Vector3 sampleRefraction(const Vector3 omega0, const Vector3 x, const Vector3 n) const;
     
     /**
      * @brief Return the event type given a random value between 0 and 1.

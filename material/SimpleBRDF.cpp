@@ -9,9 +9,9 @@ RGB SimpleBRDF::eval(const Vector3 x, const Vector3 omegaI, const Vector3 omega,
     Vector3 specDir = sampleSpecular(omega, x, n);
     Vector3 refDir = sampleRefraction(omega, x, n);
     
-    RGB dif = probDiffuse > 0 ? diffuse / M_PI : RGB();
-    RGB spec = probSpecular > 0 ? specular * (delta(omegaI, specDir)) : RGB();
-    RGB ref = probRefraction > 0 ? refraction * (delta(omegaI, refDir)) : RGB();
+    RGB dif = probDiffuse > 0 ? diffuse / M_PI: RGB();
+    RGB spec = probSpecular > 0 ? specular * (delta(omegaI, specDir)) / dot(n, omegaI) : RGB();
+    RGB ref = probRefraction > 0 ? refraction * (delta(omegaI, refDir))  / dot(n, omegaI) : RGB();
     
     return dif + spec + ref;
 }
@@ -82,7 +82,7 @@ SimpleBRDF::EventType SimpleBRDF::russianRoulette(double t) const {
     }
 }
 
-tuple<Vector3, RGB> SimpleBRDF::sample(const Vector3 omega0, const Vector3 x, const Vector3 n) const{
+optional<tuple<Vector3, RGB>> SimpleBRDF::sample(const Vector3 omega0, const Vector3 x, const Vector3 n) const{
     std::random_device rand_dev;
     uniform_real_distribution<double> distribution(0.0,1.0);
     default_random_engine generator(rand_dev());
@@ -103,8 +103,8 @@ tuple<Vector3, RGB> SimpleBRDF::sample(const Vector3 omega0, const Vector3 x, co
         sampleDir = sampleRefraction(omega0, x, n);
         break;
     default:
-        return { Vector3(), RGB() };
+        return {};
     }
 
-    return { sampleDir, eval(x, sampleDir, omega0, n) };
+    return make_optional<tuple<Vector3, RGB>>(sampleDir, eval(x, sampleDir, omega0, n));
 }

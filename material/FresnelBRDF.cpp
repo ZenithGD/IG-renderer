@@ -82,7 +82,7 @@ FresnelBRDF::EventType FresnelBRDF::russianRoulette(double t) const {
     }
 }
 
-tuple<Vector3, RGB> FresnelBRDF::sample(const Vector3 omega0, const Vector3 x, const Vector3 n) const{
+optional<tuple<Vector3, RGB>> FresnelBRDF::sample(const Vector3 omega0, const Vector3 x, const Vector3 n) const{
     std::random_device rand_dev;
     uniform_real_distribution<double> distribution(0.0,1.0);
     default_random_engine generator(rand_dev());
@@ -103,8 +103,8 @@ tuple<Vector3, RGB> FresnelBRDF::sample(const Vector3 omega0, const Vector3 x, c
         sampleDir = sampleRefraction(omega0, x, n);
         break;
     default:
-        return { Vector3(), RGB() };
+        return {};
     }
 
-    return { sampleDir, eval(x, sampleDir, omega0, n) };
+    return make_optional<tuple<Vector3, RGB>>(sampleDir, eval(x, sampleDir, omega0, n));
 }

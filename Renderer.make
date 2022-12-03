@@ -77,6 +77,7 @@ OBJECTS := \
 	$(OBJDIR)/image.o \
 	$(OBJDIR)/tonemapping.o \
 	$(OBJDIR)/FresnelBRDF.o \
+	$(OBJDIR)/PhongBRDF.o \
 	$(OBJDIR)/SimpleBRDF.o \
 	$(OBJDIR)/coordinate.o \
 	$(OBJDIR)/mat4.o \
@@ -179,6 +180,9 @@ $(OBJDIR)/tonemapping.o: image/tonemapping.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/FresnelBRDF.o: material/FresnelBRDF.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/PhongBRDF.o: material/PhongBRDF.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/SimpleBRDF.o: material/SimpleBRDF.cpp

@@ -34,7 +34,7 @@ public:
           probDiffuse(maxChannel(diffuse)), 
           probSpecular(maxChannel(specular)), 
           probRefraction(maxChannel(refraction)), 
-          refractionIndex(ri) 
+          refractionIndex(ri)
     {};
 
     /**
@@ -76,9 +76,9 @@ public:
      * @param omega0 The input ray's direction
      * @param x The point in which the BRDF is evaluated
      * @param n The normal on the surface in which x lies
-     * @return tuple<Vector3, RGB> 
+     * @return tuple
      */
-    tuple<Vector3, RGB> sample(const Vector3 omega0, const Vector3 x, const Vector3 n) const override;
+    optional<tuple<Vector3, RGB>> sample(const Vector3 omega0, const Vector3 x, const Vector3 n) const override;
 
 private:
 
