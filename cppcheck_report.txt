@@ -133,33 +133,24 @@ double angle (Vector3 dir1, Vector3 n){
 pathtracer/pathtracing.cpp:142:29: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
                     contrib = contrib + pathTraceRay(sc, r, 0);
                             ^
-photonmapper/photonmapping.cpp:48:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+scene/sceneSamples.hpp:25:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
+    auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
+                     ^
+scene/sceneSamples.hpp:33:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
+    auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
+               ^
+scene/sceneSamples.hpp:37:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
+    auto sR4 = make_shared<Sphere>(Vector3( 0.3, 0, 0.6), 0.3, BRDFR);
+             ^
+photonmapper/photonmapping.cpp:54:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
         luminanceTotal += l->power.getLuminance();
                        ^
-photonmapper/photonmapping.cpp:45:17: style: Variable 'lights' is assigned a value that is never used. [unreadVariable]
+photonmapper/photonmapping.cpp:111:25: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+                contrib = contrib + nearbyPhotons(r, sc, pmap);
+                        ^
+photonmapper/photonmapping.cpp:51:17: style: Variable 'lights' is assigned a value that is never used. [unreadVariable]
     auto lights = sc.lights.size();
                 ^
-photonmapper/photonmapping.cpp:81:33: style: Variable 'nearestPhotons' is assigned a value that is never used. [unreadVariable]
-            auto nearestPhotons = pmap.nearest_neighbors(r(closest.closest()), 100, 0.1);
-                                ^
-geometry/plane.hpp:18:12: style:inconclusive: Member variable 'Plane::c' is in the wrong place in the initializer list. [initializerList]
-    double c;
-           ^
-geometry/plane.hpp:23:64: note: Member variable 'Plane::c' is in the wrong place in the initializer list.
-          normal(cross(_pointB - _pointA, _pointC - _pointA)), c(-dot(_pointA, normal)) {}
-                                                               ^
-geometry/plane.hpp:18:12: note: Member variable 'Plane::c' is in the wrong place in the initializer list.
-    double c;
-           ^
-geometry/triangle.hpp:40:12: style:inconclusive: Member variable 'Triangle::c' is in the wrong place in the initializer list. [initializerList]
-    double c;
-           ^
-geometry/triangle.hpp:29:60: note: Member variable 'Triangle::c' is in the wrong place in the initializer list.
-          normal(cross(pointB - pointA, pointC - pointA)), c(-dot(pointA, normal)) {}
-                                                           ^
-geometry/triangle.hpp:40:12: note: Member variable 'Triangle::c' is in the wrong place in the initializer list.
-    double c;
-           ^
 scene/scene.hpp:33:22: performance: Function parameter 's' should be passed by const reference. [passedByValue]
     Scene(SceneProps s, Camera c) : cam(c), _scprops(s) {};
                      ^
@@ -185,12 +176,6 @@ math/misc.cpp:7:0: style: The function 'clampLow' is never used. [unusedFunction
 
 ^
 image/tonemapping.cpp:62:0: style: The function 'gammaClamp' is never used. [unusedFunction]
-
-^
-photonmapper/photonmapping.cpp:59:0: style: The function 'nearbyPhotons' is never used. [unusedFunction]
-
-^
-photonmapper/photonmapping.cpp:85:0: style: The function 'photonMapping' is never used. [unusedFunction]
 
 ^
 math/vector3.cpp:14:0: style: The function 'projection' is never used. [unusedFunction]
