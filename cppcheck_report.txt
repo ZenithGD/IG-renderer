@@ -130,16 +130,25 @@ double angle (Vector3 dir1, Vector3 n){
 math/vector3.cpp:39:37: performance: Function parameter 'n' should be passed by const reference. [passedByValue]
 double angle (Vector3 dir1, Vector3 n){
                                     ^
-pathtracer/pathtracing.cpp:142:29: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+pathtracer/pathtracing.cpp:144:29: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
                     contrib = contrib + pathTraceRay(sc, r, 0);
                             ^
-scene/sceneSamples.hpp:25:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:26:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
     auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
                      ^
-scene/sceneSamples.hpp:33:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:34:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
     auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
                ^
-scene/sceneSamples.hpp:37:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:38:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
+    auto sR4 = make_shared<Sphere>(Vector3( 0.3, 0, 0.6), 0.3, BRDFR);
+             ^
+scene/sceneSamples.hpp:83:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
+    auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
+                     ^
+scene/sceneSamples.hpp:91:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
+    auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
+               ^
+scene/sceneSamples.hpp:95:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
     auto sR4 = make_shared<Sphere>(Vector3( 0.3, 0, 0.6), 0.3, BRDFR);
              ^
 photonmapper/photonmapping.cpp:54:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
