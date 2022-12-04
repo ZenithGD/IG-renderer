@@ -171,3 +171,5 @@ double delta(Vector3 dir, Vector3 v);
  * @return double 
  */
 double angle(Vector3 dir, Vector3 n);
+
+inline double modulus(const Vector3& v) { return v.modulus(); }

@@ -40,3 +40,8 @@ Intersection Cylinder::intersection(const Ray& ray, double minT, double maxT) {
 
     return inter;
 }
+
+tuple<double, double> Cylinder::getUVCoords(const Vector3& point) const {
+    // TODO
+    return make_tuple(0,0);
+}

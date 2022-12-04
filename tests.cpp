@@ -37,7 +37,7 @@ bool testSampleReflection() {
 
     auto it = sp.intersection(r, 0, INFINITY);
 
-    auto [ omega, c ] = b.sample(normalize(in), r(it.closest()), it.closestNormal());
+    auto [ omega, c ] = b.sample(normalize(in), r(it.closest()), it);
 
     Ray r2(r(it.closest()), omega);
 

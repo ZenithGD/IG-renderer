@@ -76,9 +76,11 @@ OBJECTS := \
 	$(OBJDIR)/triangle.o \
 	$(OBJDIR)/image.o \
 	$(OBJDIR)/tonemapping.o \
+	$(OBJDIR)/Emitter.o \
 	$(OBJDIR)/FresnelBRDF.o \
 	$(OBJDIR)/PhongBRDF.o \
 	$(OBJDIR)/SimpleBRDF.o \
+	$(OBJDIR)/TextureBRDF.o \
 	$(OBJDIR)/coordinate.o \
 	$(OBJDIR)/mat4.o \
 	$(OBJDIR)/misc.o \
@@ -182,6 +184,9 @@ $(OBJDIR)/image.o: image/image.cpp
 $(OBJDIR)/tonemapping.o: image/tonemapping.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Emitter.o: material/Emitter.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/FresnelBRDF.o: material/FresnelBRDF.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -189,6 +194,9 @@ $(OBJDIR)/PhongBRDF.o: material/PhongBRDF.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/SimpleBRDF.o: material/SimpleBRDF.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/TextureBRDF.o: material/TextureBRDF.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/coordinate.o: math/coordinate.cpp

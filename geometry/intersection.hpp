@@ -7,6 +7,9 @@
 #include <color/color.hpp>
 #include <material/BRDF.hpp>
 
+// Forward declaration of BRDF because of circular includes.
+class BRDF;
+
 /**
  * @brief Struct that carries general intersection info.
  * 
@@ -25,6 +28,11 @@ struct Intersection {
 
     // BRDF of closest object
     shared_ptr<BRDF> brdf;
+
+    // intersection UV coordinates.
+    // There's only need to store the first intersection, since the albedo of a texture
+    // only contributes to the BRDF and not to the BTDF.
+    double u, v;
 
     /**
      * @brief Return closest value of intersection

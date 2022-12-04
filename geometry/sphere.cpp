@@ -39,6 +39,21 @@ Intersection Sphere::intersection(const Ray& r, double minT, double maxT) {
 
     inter.intersects = true;
     inter.brdf = brdf;
+    auto [ u, v ] = getUVCoords(r(inter.closest()));
+
+    inter.u = u; 
+    inter.v = v;
 
     return inter;
+} 
+
+tuple<double, double> Sphere::getUVCoords(const Vector3& point) const {
+
+    // Get radius from center to point and compute inclination and azimuth
+    // Adapted from https://raytracing.github.io/books/RayTracingTheNextWeek.html#imagetexturemapping/storingtextureimagedata
+
+    double phi = atan2(point.z, -point.x) + M_PI;
+    double th  = acos(-point.y);
+
+    return make_tuple(phi, th);
 }

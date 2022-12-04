@@ -31,7 +31,7 @@ public:
      * @param n The normal on the surface in which x lies
      * @return RGB The BRDF's result
      */
-    RGB eval(const Vector3 x, const Vector3 omegaI, const Vector3 omega, const Vector3 n) const override;
+    RGB eval(const Vector3& x, const Vector3& omegaI, const Vector3& omega, const Intersection& it) const override;
     
     /**
      * @brief Sample the BRDF, return an outbound ray direction and the BRDF's value
@@ -41,5 +41,5 @@ public:
      * @param n The normal on the surface in which x lies
      * @return tuple
      */
-    optional<tuple<Vector3, RGB>> sample(const Vector3 omega0, const Vector3 x, const Vector3 n) const override;
+    optional<tuple<Vector3, RGB>> sample(const Vector3& omega0, const Vector3& x, const Intersection& it) const override;
 };

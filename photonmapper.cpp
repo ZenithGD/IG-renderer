@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
     SceneProps props {
         .viewportWidth = 300,
         .viewportHeight = 300,
-        .antialiasingFactor = 1,
+        .antialiasingFactor = 2,
         .threads = std::thread::hardware_concurrency(),
         .bounces = 10
     };
@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
 
     cout << "Tonemapping image..." << flush;
 
-    Image tmImg = tonemapping::equalize(img);
+    Image tmImg = tonemapping::gamma(img, 2.2);
 
     cout << "Writing image... " << flush;
 

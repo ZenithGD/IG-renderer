@@ -1,6 +1,9 @@
 #pragma once
 
+#include <memory>
+
 #include <material/BRDF.hpp>
+#include <texture/texture.hpp>
 
 #include <math/vector3.hpp>
 #include <color/color.hpp>
@@ -8,9 +11,11 @@
 #include <cmath>
 #include <tuple>
 
-class FresnelBRDF : public BRDF{
+class TextureBRDF : public BRDF{
 public:
+    shared_ptr<Texture> albedo;
     RGB specular, refraction;
+    double probDiffuse, probSpecular, probRefraction;
 
     double refractionIndex;
 
@@ -18,16 +23,47 @@ public:
      * @brief Construct a new BRDF object and assign the probability 
      * for each event after a ray bounce automatically.
      * 
+     * The probability for any given event will be given by the maximum value
+     * of its colour channels.
+     * 
+     * @param d The diffuse coefficient
      * @param s The specular coefficient
      * @param r The refractive coefficient
      * @param ri The refraction index 
      */
-    FresnelBRDF(const RGB& s = RGB(), const RGB& r = RGB(), const double ri = 1)
+    TextureBRDF(const shared_ptr<Texture> a, double ap, const RGB& s = RGB(), const RGB& r = RGB(), const double ri = 1) 
         : BRDF(false),
+          albedo(a), 
           specular(s), 
           refraction(r),
-          refractionIndex(ri)
-        {};
+          probDiffuse(ap), 
+          probSpecular(maxChannel(specular)), 
+          probRefraction(maxChannel(refraction)), 
+          refractionIndex(ri) 
+    {};
+
+    /**
+     * @brief Construct a new BRDF object and manually assign event probabilities
+     * 
+     * @param a The albedo
+     * @param s The specular coefficient
+     * @param r The refractive coefficient
+     * @param pa The probability of a diffuse event on a ray bounce
+     * @param ps The probability of a specular event on a ray bounce
+     * @param pr The probability of a refraction event on a ray bounce
+     * @param ri The refraction index 
+     */
+    TextureBRDF(const shared_ptr<Texture> a, const RGB& s, const RGB& r, 
+         const double pa, const double ps, const double pr, const double ri) 
+        : BRDF(false),
+          albedo(a), 
+          specular(s), 
+          refraction(r),
+          probDiffuse(pa), 
+          probSpecular(ps), 
+          probRefraction(pr), 
+          refractionIndex(ri) 
+    {};
 
     /**
      * @brief Evaluate the BRDF on a point based on input and output directions
@@ -46,7 +82,7 @@ public:
      * @param omega0 The input ray's direction
      * @param x The point in which the BRDF is evaluated
      * @param n The normal on the surface in which x lies
-     * @return tuple
+     * @return tuple<Vector3, RGB> 
      */
     optional<tuple<Vector3, RGB>> sample(const Vector3& omega0, const Vector3& x, const Intersection& it) const override;
 
@@ -62,11 +98,22 @@ private:
      *  $ n_1 \cdot sin \theta_1 = n_2 \cdot sin \theta_2 $
      */
     enum EventType {
-        SPECULAR = 0,
+        DIFFUSE = 0,
+        SPECULAR,
         REFRACTION,
         ABSORPTION
     };
 
+    /**
+     * @brief Sample an outbound direction for a diffuse surface
+     * 
+     * @param omega0 The inbound direction
+     * @param x The intersection point
+     * @param n The normal
+     * @return Vector3 
+     */
+    Vector3 sampleDiffuse(const Vector3& omega0, const Vector3& x, const Vector3& it) const;
+    
     /**
      * @brief Sample an outbound direction for a reflective surface
      * 
@@ -75,7 +122,7 @@ private:
      * @param n The normal
      * @return Vector3 
      */
-    Vector3 sampleSpecular(const Vector3& omega0, const Vector3& x, const Vector3& n) const;
+    Vector3 sampleSpecular(const Vector3& omega0, const Vector3& x, const Vector3& it) const;
     
     /**
      * @brief Sample an outbound direction for a refractive surface
@@ -85,14 +132,13 @@ private:
      * @param n The normal
      * @return Vector3 
      */
-    Vector3 sampleRefraction(const Vector3& omega0, const Vector3& x, const Vector3& n) const;
+    Vector3 sampleRefraction(const Vector3& omega0, const Vector3& x, const Vector3& it) const;
     
     /**
      * @brief Return the event type given a random value between 0 and 1.
      * 
      * @param t A value between 0 and 1
-     * @param pref The reflection probability
      * @return EventType The event type
      */
-    EventType russianRoulette(double t, double prefl) const;
+    EventType russianRoulette(double t) const;
 };

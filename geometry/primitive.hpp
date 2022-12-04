@@ -12,6 +12,8 @@
  */
 class Primitive {
 public:
+    // TODO : maybe separate brdf from actual primitive, useful for BVH to avoid
+    // new box class (might be a bit cumbersome)
     shared_ptr<BRDF> brdf;
 
     /**

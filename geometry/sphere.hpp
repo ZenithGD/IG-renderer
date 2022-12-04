@@ -32,5 +32,7 @@ public:
     * 
     */
     Intersection intersection(const Ray& r, double minT, double maxT) override;
+private:
+    tuple<double, double> getUVCoords(const Vector3& point) const;
 };
 

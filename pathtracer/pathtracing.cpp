@@ -51,8 +51,8 @@ RGB nextEventEstimation(const Scene& sc, const Vector3 origin,
 
         double geometryContrib = abs(dot(it.closestNormal(), normalize(directRayDir)));
 
-        RGB materialContrib = it.brdf->eval(r(it.closest()), obsDirection, r.direction, 
-            closest.closestNormal());
+        RGB materialContrib = it.brdf->eval(r(it.closest()), 
+            obsDirection, r.direction, closest);
 
         RGB lightContrib = l->power / dot(directRayDir, directRayDir) * materialContrib * geometryContrib;
 
@@ -98,17 +98,23 @@ RGB pathTraceRay(const Scene& sc, const Ray& r, unsigned int n) {
     
     // trace direct light ray
     if( closest.intersects ) {
-        
-        contrib = contrib + nextEventEstimation(sc, r(closest.closest()), r.direction, closest);
+        if ( closest.brdf->emitter ) {
+            // The object is an emitter, just add the emission value
+            return closest.brdf->eval(Vector3(), Vector3(), Vector3(), Intersection{});
+        } else {
 
-        auto result = closest.brdf->sample(normalize(r.direction), r(closest.closest()), normalize(closest.closestNormal()));
-        
-        if ( !result.has_value() ) return RGB();
+            auto result = closest.brdf->sample(normalize(r.direction), r(closest.closest()), closest);
+            
+            // Check if ray was absorbed
+            if ( !result.has_value() ) return RGB();
 
-        auto [ omega, li ] = result.value();
-        Ray out(r(closest.closest()), omega);
+            auto [ omega, li ] = result.value();
+            Ray out(r(closest.closest()), omega);
 
-        contrib = contrib + li * pathTraceRay(sc, out, n + 1);
+            contrib = contrib 
+                + nextEventEstimation(sc, r(closest.closest()), r.direction, closest) 
+                + li * pathTraceRay(sc, out, n + 1);
+        }
     }
 
     //cout << "contrib final del bounce: " << n << "," << contrib << endl;

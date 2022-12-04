@@ -15,7 +15,7 @@ using namespace std;
  */
 class Triangle : public Primitive {
 public:
-    Vector3 pointA, pointB, pointC;
+    Vector3 pointA, pointB, pointC, uAxis, vAxis;
 
     /**
      * @brief Construct a new Triangle object
@@ -24,9 +24,15 @@ public:
      * @param _pointB Triangle's second vertex
      * @param _pointC Triangle's third vertex
      */
-    Triangle(Vector3 _pointA, Vector3 _pointB, Vector3 _pointC, const shared_ptr<BRDF>& brdf)
-        : Primitive(brdf), pointA(_pointA), pointB(_pointB), pointC(_pointC), 
-          normal(cross(pointB - pointA, pointC - pointA)), c(-dot(pointA, normal)) {}
+    Triangle(const Vector3& _pointA, const Vector3& _pointB, const Vector3& _pointC, const shared_ptr<BRDF>& brdf)
+        : Primitive(brdf),
+          normal(cross(_pointB - _pointA, _pointC - _pointB)),
+          c(-dot(_pointA, normal)),
+          pointA(_pointA),
+          pointB(_pointB),
+          pointC(_pointC),
+          uAxis(_pointB - _pointA),
+          vAxis(_pointC - _pointA) {}
 
     /**
      * @brief Function of intersection with a Ray
@@ -35,8 +41,10 @@ public:
      * @return PlaneIntersection 
      */
     Intersection intersection(const Ray& r, double minT, double maxT) override;
-
 private:
+
+    tuple<double, double> getUVCoords(const Vector3& point) const;
+    
     double c;
     Vector3 normal;
     bool insideOutsideTest(Vector3 point) const;

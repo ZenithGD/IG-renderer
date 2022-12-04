@@ -2,8 +2,13 @@
 
 #include <math/vector3.hpp>
 #include <color/color.hpp>
+#include <geometry/intersection.hpp>
+
 #include <tuple>
 #include <functional>
+
+// Forward declaration of Intersection because of circular includes.
+struct Intersection;
 
 class BRDF {
 public:
@@ -18,8 +23,8 @@ public:
      * @param n The normal on the surface in which x lies
      * @return RGB The BRDF's result
      */
-    virtual RGB eval(const Vector3 x, const Vector3 omegaI, 
-        const Vector3 omega, const Vector3 n) const = 0;
+    virtual RGB eval(const Vector3& x, const Vector3& omegaI, 
+        const Vector3& omega, const Intersection& it) const = 0;
 
     /**
      * @brief Sample the BRDF, return an outbound ray direction and the BRDF's value
@@ -29,8 +34,8 @@ public:
      * @param n The normal on the surface in which x lies
      * @return tuple<Vector3, RGB> 
      */
-    virtual optional<tuple<Vector3, RGB>> sample(const Vector3 omega0, 
-        const Vector3 x, const Vector3 n) const = 0;
+    virtual optional<tuple<Vector3, RGB>> sample(const Vector3& omega0, 
+        const Vector3& x, const Intersection& it) const = 0;
 
     BRDF(bool emits) : emitter(emits) {}
 };

@@ -25,7 +25,7 @@ public:
      * @param r The refractive coefficient
      * @param ri The refraction index 
      */
-    PhongBRDF(const RGB d = RGB(), const RGB s = RGB(), double al = 1) 
+    PhongBRDF(const RGB& d = RGB(), const RGB& s = RGB(), double al = 1) 
         : BRDF(false),
           diffuse(d), 
           specular(s),
@@ -44,7 +44,7 @@ public:
      * @param pr The probability of a refraction event on a ray bounce
      * @param ri The refraction index 
      */
-    PhongBRDF(const RGB d, const RGB s,
+    PhongBRDF(const RGB& d, const RGB& s,
          const double pph, double al) 
         : BRDF(false),
           diffuse(d), 
@@ -62,7 +62,7 @@ public:
      * @param n The normal on the surface in which x lies
      * @return RGB The BRDF's result
      */
-    RGB eval(const Vector3 x, const Vector3 omegaI, const Vector3 omega, const Vector3 n) const override;
+    RGB eval(const Vector3& x, const Vector3& omegaI, const Vector3& omega, const Intersection& it) const override;
     
     /**
      * @brief Sample the BRDF, return an outbound ray direction and the BRDF's value
@@ -72,7 +72,7 @@ public:
      * @param n The normal on the surface in which x lies
      * @return tuple<Vector3, RGB> 
      */
-    optional<tuple<Vector3, RGB>> sample(const Vector3 omega0, const Vector3 x, const Vector3 n) const override;
+    optional<tuple<Vector3, RGB>> sample(const Vector3& omega0, const Vector3& x, const Intersection& it) const override;
 
 private:
 
@@ -98,7 +98,7 @@ private:
      * @param n The normal
      * @return Vector3 
      */
-    Vector3 sampleDiffuse(const Vector3 omega0, const Vector3 x, const Vector3 n) const;
+    Vector3 sampleDiffuse(const Vector3& omega0, const Vector3& x, const Vector3& n) const;
     
     /**
      * @brief Sample an outbound direction for a reflective surface
@@ -108,7 +108,7 @@ private:
      * @param n The normal
      * @return Vector3 
      */
-    Vector3 sampleSpecular(const Vector3 omega0, const Vector3 x, const Vector3 n) const;
+    Vector3 sampleSpecular(const Vector3& omega0, const Vector3& x, const Vector3& n) const;
     
     /**
      * @brief Return the event type given a random value between 0 and 1.

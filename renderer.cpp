@@ -14,7 +14,7 @@ SceneProps getSceneProps(int argc, char **argv)
     SceneProps props{
         .viewportWidth = 256,
         .viewportHeight = 256,
-        .antialiasingFactor = 10,
+        .antialiasingFactor = 32,
         .threads = thread::hardware_concurrency(),
         .bounces = 10};
 
@@ -90,14 +90,15 @@ int main(int argc, char **argv)
         .viewportHeight = 256,
         .antialiasingFactor = 32,
         .threads = thread::hardware_concurrency(),
-        .bounces = 10};
+        .bounces = 100 
+    };
 
-    Scene sc = cornellMatVariations(props);
+    Scene sc = cornellDiffuse(props);
 
     Image img(sc.getProps().viewportWidth, sc.getProps().viewportHeight);
 
     cout << "Rendering... " << flush;
-    auto ms = measureTime<std::chrono::milliseconds>(
+    auto ms = measureTime<std::chrono::seconds>(
         [&]()
         {
             img = sc.drawScene(
@@ -118,5 +119,5 @@ int main(int argc, char **argv)
     auto msimg = measureTime<std::chrono::milliseconds>([&]()
                                                         { tmImg.writeToBMP("test.bmp"); });
 
-    cout << "done (" << msimg << " ms)." << endl;
+    cout << "done (" << msimg << " s)." << endl;
 }
