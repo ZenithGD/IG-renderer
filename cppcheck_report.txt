@@ -16,6 +16,33 @@ image/tonemapping.cpp:171:34: note: Assuming condition is false
 image/tonemapping.cpp:183:67: note: Uninitialized variable: v1
                 double newLuminance = clampHigh(prevLuminance / ( v1 + 1 ), 1);
                                                                   ^
+material/TextureBRDF.cpp:20:92: style:inconclusive: Function 'sampleDiffuse' argument 3 names different: declaration 'it' definition 'n'. [funcArgNamesDifferent]
+Vector3 TextureBRDF::sampleDiffuse(const Vector3& omega0, const Vector3& x, const Vector3& n) const {
+                                                                                           ^
+material/TextureBRDF.hpp:115:83: note: Function 'sampleDiffuse' argument 3 names different: declaration 'it' definition 'n'.
+    Vector3 sampleDiffuse(const Vector3& omega0, const Vector3& x, const Vector3& it) const;
+                                                                                  ^
+material/TextureBRDF.cpp:20:92: note: Function 'sampleDiffuse' argument 3 names different: declaration 'it' definition 'n'.
+Vector3 TextureBRDF::sampleDiffuse(const Vector3& omega0, const Vector3& x, const Vector3& n) const {
+                                                                                           ^
+material/TextureBRDF.cpp:43:93: style:inconclusive: Function 'sampleSpecular' argument 3 names different: declaration 'it' definition 'n'. [funcArgNamesDifferent]
+Vector3 TextureBRDF::sampleSpecular(const Vector3& omega0, const Vector3& x, const Vector3& n) const {
+                                                                                            ^
+material/TextureBRDF.hpp:125:84: note: Function 'sampleSpecular' argument 3 names different: declaration 'it' definition 'n'.
+    Vector3 sampleSpecular(const Vector3& omega0, const Vector3& x, const Vector3& it) const;
+                                                                                   ^
+material/TextureBRDF.cpp:43:93: note: Function 'sampleSpecular' argument 3 names different: declaration 'it' definition 'n'.
+Vector3 TextureBRDF::sampleSpecular(const Vector3& omega0, const Vector3& x, const Vector3& n) const {
+                                                                                            ^
+material/TextureBRDF.cpp:48:95: style:inconclusive: Function 'sampleRefraction' argument 3 names different: declaration 'it' definition 'n'. [funcArgNamesDifferent]
+Vector3 TextureBRDF::sampleRefraction(const Vector3& omega0, const Vector3& x, const Vector3& n) const {
+                                                                                              ^
+material/TextureBRDF.hpp:135:86: note: Function 'sampleRefraction' argument 3 names different: declaration 'it' definition 'n'.
+    Vector3 sampleRefraction(const Vector3& omega0, const Vector3& x, const Vector3& it) const;
+                                                                                     ^
+material/TextureBRDF.cpp:48:95: note: Function 'sampleRefraction' argument 3 names different: declaration 'it' definition 'n'.
+Vector3 TextureBRDF::sampleRefraction(const Vector3& omega0, const Vector3& x, const Vector3& n) const {
+                                                                                              ^
 math/mat4.hpp:24:5: style: Class 'Mat4' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
     Mat4(double m[4][4]);
     ^
@@ -130,34 +157,46 @@ double angle (Vector3 dir1, Vector3 n){
 math/vector3.cpp:39:37: performance: Function parameter 'n' should be passed by const reference. [passedByValue]
 double angle (Vector3 dir1, Vector3 n){
                                     ^
-pathtracer/pathtracing.cpp:144:29: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+pathtracer/pathtracing.cpp:150:29: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
                     contrib = contrib + pathTraceRay(sc, r, 0);
                             ^
-scene/sceneSamples.hpp:27:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:32:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
     auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
                      ^
-scene/sceneSamples.hpp:35:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:39:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
     auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
                ^
-scene/sceneSamples.hpp:39:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:45:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
     auto sR4 = make_shared<Sphere>(Vector3( 0.3, 0, 0.6), 0.3, BRDFR);
              ^
-scene/sceneSamples.hpp:84:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:90:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
     auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
                      ^
-scene/sceneSamples.hpp:92:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:99:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
     auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
                ^
-scene/sceneSamples.hpp:96:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:103:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
     auto sR4 = make_shared<Sphere>(Vector3( 0.3, 0, 0.6), 0.3, BRDFR);
              ^
-photonmapper/photonmapping.cpp:54:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+scene/sceneSamples.hpp:114:17: style: Variable 'light' is assigned a value that is never used. [unreadVariable]
+    auto light  = make_shared<PointLight>(Vector3(0.0, 0.5, 0), RGB(1,1,1));
+                ^
+scene/sceneSamples.hpp:148:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
+    auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
+                     ^
+scene/sceneSamples.hpp:158:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
+    auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), texture);
+               ^
+scene/sceneSamples.hpp:162:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
+    auto sR4 = make_shared<Sphere>(Vector3( 0.3, 0, 0.6), 0.3, BRDFR);
+             ^
+photonmapper/photonmapping.cpp:61:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
         luminanceTotal += l->power.getLuminance();
                        ^
-photonmapper/photonmapping.cpp:111:25: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+photonmapper/photonmapping.cpp:118:25: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
                 contrib = contrib + nearbyPhotons(r, sc, pmap);
                         ^
-photonmapper/photonmapping.cpp:51:17: style: Variable 'lights' is assigned a value that is never used. [unreadVariable]
+photonmapper/photonmapping.cpp:58:17: style: Variable 'lights' is assigned a value that is never used. [unreadVariable]
     auto lights = sc.lights.size();
                 ^
 renderer.cpp:21:9: style: The scope of the variable 'c' can be reduced. [variableScope]
@@ -194,6 +233,9 @@ math/vector3.cpp:14:0: style: The function 'projection' is never used. [unusedFu
 
 ^
 image/image.cpp:185:0: style: The function 'readBMP' is never used. [unusedFunction]
+
+^
+photonmapper/photonmapping.cpp:104:0: style: The function 'renderPhotonMap' is never used. [unusedFunction]
 
 ^
 math/coordinate.cpp:21:0: style: The function 'rotationX' is never used. [unusedFunction]
