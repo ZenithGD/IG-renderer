@@ -15,15 +15,15 @@ using namespace std;
  */
 class Plane : public Primitive {
 public:
-    double c;
     Vector3 normal, uAxis, vAxis;
     
     Plane(Vector3 _pointA, Vector3 _pointB, Vector3 _pointC, const shared_ptr<BRDF>& brdf)
         : Primitive(brdf),
           normal(cross(_pointB - _pointA, _pointC - _pointA)),
-          c(-dot(_pointA, normal)),
           uAxis(_pointB - _pointA),
-          vAxis(_pointC - _pointA) {}
+          vAxis(_pointC - _pointA),
+          c(-dot(_pointA, normal)) 
+    {}
 
     /**
      * @brief Construct a new Plane with values
@@ -32,10 +32,11 @@ public:
      */
     Plane(double _c, Vector3 _normal, const shared_ptr<BRDF>& brdf) 
         : Primitive(brdf),
-          normal(_normal), 
-          c(_c), 
+          normal(_normal),
           uAxis(perpendicular(normal)), 
-          vAxis(cross(normal, uAxis)) {}
+          vAxis(cross(normal, uAxis)),
+          c(_c)
+    {}
 
     /**
     * @brief Function of intersection with a Ray
@@ -45,6 +46,8 @@ public:
     Intersection intersection(const Ray& r, double minT, double maxT) override;
 private:
     tuple<double, double> getUVCoords(const Vector3& point) const;
+
+    double c;
 };
 
 

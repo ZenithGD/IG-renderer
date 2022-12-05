@@ -32,8 +32,8 @@ Vector3 TextureBRDF::sampleDiffuse(const Vector3& omega0, const Vector3& x, cons
         cos(invTheta)).normalized();
 
     Vector3 perp = perpendicular(n);
-    Coordinate global2Local(cross(perp, n), perp, n, x, 1);
-    Coordinate dir(Vector3(1,0,0), Vector3(0,1,0), Vector3(0,0,1), omega, 0);
+    Coordinate global2Local(perp, cross(perp, n), n, x, 1);
+    Coordinate dir(Vector3(1, 0, 0), Vector3(0,1,0), Vector3(0,0,1), omega, 0);
 
     Coordinate local2Global = inverseTransformation(global2Local);
 

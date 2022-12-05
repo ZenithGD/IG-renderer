@@ -90,10 +90,10 @@ int main(int argc, char **argv)
         .viewportHeight = 256,
         .antialiasingFactor = 32,
         .threads = thread::hardware_concurrency(),
-        .bounces = 100 
+        .bounces = 10
     };
 
-    Scene sc = cornellDiffuse(props);
+    Scene sc = cornellTextured(props);
 
     Image img(sc.getProps().viewportWidth, sc.getProps().viewportHeight);
 

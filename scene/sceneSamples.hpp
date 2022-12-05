@@ -42,7 +42,7 @@ Scene cornellDiffuse(const SceneProps& props) {
 
     auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, BRDFL);
     auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, -0.25), 0.3, BRDFR);
-    auto sR4 = make_shared<Sphere>(Vector3( 0.3, 0, 0.6), 0.3, BRDFR);
+    auto sR4 = make_shared<Sphere>(Vector3(0, -0.2, 0.5), 0.1, BRDFR);
 
     /*
     auto s1 = make_shared<Sphere>(Vector3(0.0, 0.3, 0.5), 0.4, RGB(1, 0, 0.5));
@@ -69,7 +69,7 @@ Scene cornellDiffuse(const SceneProps& props) {
 
     sc.addLight(light);
     //sc.addLight(light2);
-    sc.addPrimitive(tri);
+    //sc.addPrimitive(tri);
 
     return sc;
 }
@@ -88,7 +88,7 @@ Scene cornellMatVariations(const SceneProps& props) {
     auto BRDFL = make_shared<FresnelBRDF>(RGB(1, 1, 1), RGB(1, 1, 1), 1.5);
     auto BRDFR = make_shared<FresnelBRDF>(RGB(1, 1, 1), RGB(1, 1, 1), 1.5);
     auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
-    auto gray = make_shared<SimpleBRDF>(RGB(0.7, 0.7, 0.7));
+    auto gray = make_shared<SimpleBRDF>(RGB(0.5, 0.5, 0.5));
     auto emission = make_shared<Emitter>(RGB(1,1,1));
 
     auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), BRDFPL);
@@ -147,7 +147,7 @@ Scene cornellTextured(const SceneProps& props) {
     auto BRDFR = make_shared<FresnelBRDF>(RGB(1, 0.7, 0.8), RGB(1, 1, 1), 1.5);
     auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
     
-    auto tex = make_shared<Checkerboard>(RGB(1, 1, 1), RGB(0.2, 0.2, 0.2), 0.1, 0.1);
+    auto tex = make_shared<Checkerboard>(RGB(1, 1, 1), RGB(0.2, 0.2, 0.2), 0.2, 0.2);
     auto texture = make_shared<TextureBRDF>(tex, 1);
     
     auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), BRDFPL);
