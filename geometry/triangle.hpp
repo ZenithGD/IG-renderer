@@ -15,7 +15,7 @@ using namespace std;
  */
 class Triangle : public Primitive {
 public:
-    Vector3 pointA, pointB, pointC, uAxis, vAxis;
+    Vector3 normal, pointA, pointB, pointC;
 
     /**
      * @brief Construct a new Triangle object
@@ -26,11 +26,11 @@ public:
      */
     Triangle(const Vector3& _pointA, const Vector3& _pointB, const Vector3& _pointC, const shared_ptr<BRDF>& brdf)
         : Primitive(brdf),
-          normal(cross(_pointB - _pointA, _pointC - _pointB)),
-          c(-dot(_pointA, normal)),
+          normal(cross(_pointB - _pointA, _pointC - _pointA)),
           pointA(_pointA),
           pointB(_pointB),
           pointC(_pointC),
+          c(-dot(_pointA, normal)),
           uAxis(_pointB - _pointA),
           vAxis(_pointC - _pointA) {}
 
@@ -44,8 +44,8 @@ public:
 private:
 
     tuple<double, double> getUVCoords(const Vector3& point) const;
-    
+
     double c;
-    Vector3 normal;
+    Vector3 uAxis, vAxis;
     bool insideOutsideTest(Vector3 point) const;
 };

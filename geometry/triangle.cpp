@@ -12,7 +12,7 @@ bool Triangle::insideOutsideTest(Vector3 point) const {
     Vector3 C2 = point - pointC; 
 
     //cout << normal << ", " << c << endl;
-/*
+    /*
     cout << "point : " << point << endl;
     if ( dot(normal, cross(edge0, C0)) > 0.0 )
         cout << "C0: " << dot(normal, cross(edge0, C0)) << endl;
@@ -22,7 +22,7 @@ bool Triangle::insideOutsideTest(Vector3 point) const {
 
     if ( dot(normal, cross(edge2, C2)) > 0.0 )
         cout << "C2: " << dot(normal, cross(edge2, C2)) << endl;
-        */
+    */
 
     bool a = 
         dot(normal, cross(edge0, C0)) > 0.0 && 
