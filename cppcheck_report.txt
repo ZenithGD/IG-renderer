@@ -1,3 +1,12 @@
+image/image.hpp:78:10: performance:inconclusive: Technically the member function 'Image::writeToEXR' can be static (but you may consider moving to unnamed namespace). [functionStatic]
+    void writeToEXR(const string& path) const;
+         ^
+image/image.cpp:287:13: note: Technically the member function 'Image::writeToEXR' can be static (but you may consider moving to unnamed namespace).
+void Image::writeToEXR(const string& path) const {
+            ^
+image/image.hpp:78:10: note: Technically the member function 'Image::writeToEXR' can be static (but you may consider moving to unnamed namespace).
+    void writeToEXR(const string& path) const;
+         ^
 image/image.hpp:31:63: performance: Function parameter 'data' should be passed by const reference. [passedByValue]
     Image(unsigned int w, unsigned int h, vector<vector<RGB>> data, double max)
                                                               ^
@@ -25,22 +34,22 @@ material/TextureBRDF.hpp:115:83: note: Function 'sampleDiffuse' argument 3 names
 material/TextureBRDF.cpp:20:92: note: Function 'sampleDiffuse' argument 3 names different: declaration 'it' definition 'n'.
 Vector3 TextureBRDF::sampleDiffuse(const Vector3& omega0, const Vector3& x, const Vector3& n) const {
                                                                                            ^
-material/TextureBRDF.cpp:43:93: style:inconclusive: Function 'sampleSpecular' argument 3 names different: declaration 'it' definition 'n'. [funcArgNamesDifferent]
+material/TextureBRDF.cpp:40:93: style:inconclusive: Function 'sampleSpecular' argument 3 names different: declaration 'it' definition 'n'. [funcArgNamesDifferent]
 Vector3 TextureBRDF::sampleSpecular(const Vector3& omega0, const Vector3& x, const Vector3& n) const {
                                                                                             ^
 material/TextureBRDF.hpp:125:84: note: Function 'sampleSpecular' argument 3 names different: declaration 'it' definition 'n'.
     Vector3 sampleSpecular(const Vector3& omega0, const Vector3& x, const Vector3& it) const;
                                                                                    ^
-material/TextureBRDF.cpp:43:93: note: Function 'sampleSpecular' argument 3 names different: declaration 'it' definition 'n'.
+material/TextureBRDF.cpp:40:93: note: Function 'sampleSpecular' argument 3 names different: declaration 'it' definition 'n'.
 Vector3 TextureBRDF::sampleSpecular(const Vector3& omega0, const Vector3& x, const Vector3& n) const {
                                                                                             ^
-material/TextureBRDF.cpp:48:95: style:inconclusive: Function 'sampleRefraction' argument 3 names different: declaration 'it' definition 'n'. [funcArgNamesDifferent]
+material/TextureBRDF.cpp:45:95: style:inconclusive: Function 'sampleRefraction' argument 3 names different: declaration 'it' definition 'n'. [funcArgNamesDifferent]
 Vector3 TextureBRDF::sampleRefraction(const Vector3& omega0, const Vector3& x, const Vector3& n) const {
                                                                                               ^
 material/TextureBRDF.hpp:135:86: note: Function 'sampleRefraction' argument 3 names different: declaration 'it' definition 'n'.
     Vector3 sampleRefraction(const Vector3& omega0, const Vector3& x, const Vector3& it) const;
                                                                                      ^
-material/TextureBRDF.cpp:48:95: note: Function 'sampleRefraction' argument 3 names different: declaration 'it' definition 'n'.
+material/TextureBRDF.cpp:45:95: note: Function 'sampleRefraction' argument 3 names different: declaration 'it' definition 'n'.
 Vector3 TextureBRDF::sampleRefraction(const Vector3& omega0, const Vector3& x, const Vector3& n) const {
                                                                                               ^
 math/mat4.hpp:24:5: style: Class 'Mat4' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
@@ -118,6 +127,9 @@ Mat4 Mat4::operator-(const Mat4 that) const {
 math/mat4.cpp:37:33: performance: Function parameter 'that' should be passed by const reference. [passedByValue]
 Mat4 Mat4::operator*(const Mat4 that) const{
                                 ^
+math/misc.cpp:17:5: performance: Variable 'generator' is assigned in constructor body. Consider performing initialization in initialization list. [useInitializationList]
+    generator = std::default_random_engine(rand_dev());
+    ^
 math/vector3.cpp:39:23: style:inconclusive: Function 'angle' argument 1 names different: declaration 'dir' definition 'dir1'. [funcArgNamesDifferent]
 double angle (Vector3 dir1, Vector3 n){
                       ^
@@ -188,16 +200,19 @@ scene/sceneSamples.hpp:148:22: style: Variable 'fullReflect' is assigned a value
     auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
                      ^
 scene/sceneSamples.hpp:158:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
-    auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), texture);
+    auto pBack = make_shared<Plane> (4, Vector3(0, 0, 1), texture);
                ^
 scene/sceneSamples.hpp:162:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
     auto sR4 = make_shared<Sphere>(Vector3( 0.3, 0, 0.6), 0.3, BRDFR);
              ^
+scene/sceneSamples.hpp:210:13: style: Variable 'pL' is assigned a value that is never used. [unreadVariable]
+    auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), texture1);
+            ^
 photonmapper/photonmapping.cpp:61:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
         luminanceTotal += l->power.getLuminance();
                        ^
 photonmapper/photonmapping.cpp:118:25: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
-                contrib = contrib + nearbyPhotons(r, sc, pmap);
+                contrib = contrib + closestPhoton(r, sc, pmap);
                         ^
 photonmapper/photonmapping.cpp:58:17: style: Variable 'lights' is assigned a value that is never used. [unreadVariable]
     auto lights = sc.lights.size();
@@ -205,8 +220,8 @@ photonmapper/photonmapping.cpp:58:17: style: Variable 'lights' is assigned a val
 renderer.cpp:21:9: style: The scope of the variable 'c' can be reduced. [variableScope]
     int c, digit_optind = 0;
         ^
-scene/scene.hpp:33:22: performance: Function parameter 's' should be passed by const reference. [passedByValue]
-    Scene(SceneProps s, Camera c) : cam(c), _scprops(s) {};
+scene/scene.hpp:34:22: performance: Function parameter 's' should be passed by const reference. [passedByValue]
+    Scene(SceneProps s, Camera c, const shared_ptr<Texture<RGB>> tex = nullptr) : cam(c), _scprops(s), _envMap(tex) {};
                      ^
 tests/testsuite.hpp:15:5: style: Class 'TestSuite' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
     TestSuite(std::initializer_list<Test> tests) : _tests(tests) {}
@@ -223,10 +238,13 @@ void bmp(const string path) {
 math/coordinate.cpp:77:0: style: The function 'changeBasis' is never used. [unusedFunction]
 
 ^
-math/misc.cpp:7:0: style: The function 'clampLow' is never used. [unusedFunction]
+math/misc.cpp:9:0: style: The function 'clampLow' is never used. [unusedFunction]
 
 ^
 image/tonemapping.cpp:62:0: style: The function 'gammaClamp' is never used. [unusedFunction]
+
+^
+photonmapper/photonmapping.cpp:256:0: style: The function 'getPhotonMap' is never used. [unusedFunction]
 
 ^
 renderer.cpp:10:0: style: The function 'getSceneProps' is never used. [unusedFunction]
@@ -235,10 +253,10 @@ renderer.cpp:10:0: style: The function 'getSceneProps' is never used. [unusedFun
 math/vector3.cpp:14:0: style: The function 'projection' is never used. [unusedFunction]
 
 ^
-image/image.cpp:185:0: style: The function 'readBMP' is never used. [unusedFunction]
+image/image.cpp:187:0: style: The function 'readBMP' is never used. [unusedFunction]
 
 ^
-photonmapper/photonmapping.cpp:104:0: style: The function 'renderPhotonMap' is never used. [unusedFunction]
+image/image.cpp:290:0: style: The function 'readEXR' is never used. [unusedFunction]
 
 ^
 math/coordinate.cpp:21:0: style: The function 'rotationX' is never used. [unusedFunction]
@@ -254,6 +272,9 @@ math/coordinate.cpp:10:0: style: The function 'translation' is never used. [unus
 
 ^
 math/mat4.cpp:92:0: style: The function 'transpose' is never used. [unusedFunction]
+
+^
+image/image.cpp:287:0: style: The function 'writeToEXR' is never used. [unusedFunction]
 
 ^
 nofile:0:0: information: Cppcheck cannot find all the include files (use --check-config for details) [missingIncludeSystem]
