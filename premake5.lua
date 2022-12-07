@@ -8,7 +8,7 @@ function setupProject(name, mainFile, folders)
         targetdir "bin/${cfg.buildcfg}"
 
         -- add project include dirs here
-        includedirs { "." }
+        includedirs { ".", "vendor" }
 
         cppdialect "C++17"
 
@@ -35,6 +35,10 @@ local rendererFiles = {
     "math/**.hpp",          "math/**.cpp",
     "scene/**.hpp",         "scene/**.cpp",
     "material/**.hpp",      "material/**.cpp",
+    "vendor/tinyexr/tinyexr.h",
+    "vendor/tinyexr/deps/miniz/miniz.c",
+    "vendor/tinyexr/deps/miniz/miniz.c",
+
     "pathtracer/**.hpp",    "pathtracer/**.cpp",
 }
 
@@ -47,6 +51,10 @@ local photonMapperFiles = {
     "math/**.hpp",          "math/**.cpp",
     "scene/**.hpp",         "scene/**.cpp",
     "material/**.hpp",         "material/**.cpp",
+    "vendor/tinyexr/tinyexr.h",
+    "vendor/tinyexr/deps/miniz/miniz.c",
+    "vendor/tinyexr/deps/miniz/miniz.c",
+
     "photonmapper/**.hpp",    "photonmapper/**.cpp",
 }
 

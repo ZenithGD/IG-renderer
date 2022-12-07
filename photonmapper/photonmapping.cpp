@@ -40,7 +40,7 @@ void photonTraceRay(const Scene& sc, const Ray& r, LightPhotonPair& t,
                 Ray out(r(closest.closest()), omega);
 
                 Photon p(r(closest.closest()), omega, 
-                    4 * M_PI * get<0>(t)->power.getLuminance() * abs(dot(normalize(closest.closestNormal()), normalize(r.direction))), closest.closestNormal());
+                    4 * M_PI * get<0>(t)->power.getLuminance(), closest.closestNormal());
 
                 // Add photons to light source
                 get<1>(t).push_back(p);
@@ -73,7 +73,7 @@ void photonTrace(const Scene& sc, vector<LightPhotonPair>& lightPhotons,
     }
 }
 
-RGB nearbyPhotons(const Ray& r, const Scene& sc, const PhotonMap& pmap){
+RGB closestPhoton(const Ray& r, const Scene& sc, const PhotonMap& pmap){
     Intersection closest {
         .intersects = false,
     };
@@ -115,7 +115,7 @@ Image renderPhotonMap(const Scene& sc, const PhotonMap& pmap) {
             auto rays = sc.cam.perPixel(j, i, sc.getProps().antialiasingFactor);
 
             for ( const Ray& r : rays ) {
-                contrib = contrib + nearbyPhotons(r, sc, pmap);
+                contrib = contrib + closestPhoton(r, sc, pmap);
             }
             img.imageData[i][j] = contrib / (double)rays.size() * 4000; 
             progress = double( i * img.width + j ) / double(img.height * img.width);
@@ -132,7 +132,7 @@ Image renderPhotonMap(const Scene& sc, const PhotonMap& pmap) {
 RGB densityEstimation(const Vector3& x, const Intersection& it, const vector<const Photon*>& closestPhotons) {
     RGB color = RGB();
     double rk = -INFINITY;
-    for (auto photon : closestPhotons){
+    for (auto photon : closestPhotons) {
         auto a = x - photon->position_;
         rk = max(a.modulus(), rk);
     }
@@ -185,7 +185,7 @@ Image render(const Scene& sc, const PhotonMap& pmap) {
                 // trace direct light ray
                 if( closest.intersects ) {
 
-                    auto nearestPhotons = pmap.nearest_neighbors(r(closest.closest()), 25);
+                    auto nearestPhotons = pmap.nearest_neighbors(r(closest.closest()), 100);
 
                     if ( !nearestPhotons.empty() ) {
                         contrib = contrib + densityEstimation(r(closest.closest()), closest, nearestPhotons);
@@ -250,5 +250,49 @@ Image photonMapping(const Scene& sc, const unsigned int total, const unsigned in
 
     return L;
 
+}
+
+
+Image getPhotonMap(const Scene& sc, const unsigned int total, const unsigned int maxPhotons) {
+    
+    auto lights = sc.lights.size();
+    vector<LightPhotonPair> lightPhotons(lights);
+    transform(sc.lights.begin(), sc.lights.end(), lightPhotons.begin(), [](shared_ptr<Light> l) -> LightPhotonPair {
+        return make_tuple(l, list<Photon>());
+    });
+    
+    while ( true ){
+        photonTrace(sc, lightPhotons, total, maxPhotons);
+        
+        int totalPhotons = 0;
+        for ( auto& t : lightPhotons ) {
+            totalPhotons += get<0>(t)->count;
+        }
+
+        if ( totalPhotons >= maxPhotons ) 
+            break;
+    }
+
+    // Normalize every photon by the number of photons emitted by the light
+    for ( auto& t : lightPhotons ) {
+        for ( auto& p : get<1>(t) ) {
+            if ( get<0>(t)->count > 0 )
+                p.flux /= get<0>(t)->count;
+        }
+    }
+
+
+    list<Photon> photons;
+    for ( auto& t : lightPhotons ) {
+        copy(get<1>(t).begin(), get<1>(t).end(), back_insert_iterator<list<Photon>>(photons));
+    }
+
+    cout << "Generating photon map...";
+    // Photon Map
+    PhotonMap pmap(photons, PhotonAxisPosition());
+    cout << "done." << endl;
+
+    // render photon map directly
+    return renderPhotonMap(sc, pmap);
 }
 

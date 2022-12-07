@@ -16,7 +16,7 @@ ifeq ($(config),debug)
   TARGET = $(TARGETDIR)/PhotonMapper
   OBJDIR = obj/Debug/PhotonMapper
   DEFINES += -DDEBUG
-  INCLUDES += -I.
+  INCLUDES += -I. -Ivendor
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g
@@ -43,7 +43,7 @@ ifeq ($(config),release)
   TARGET = $(TARGETDIR)/PhotonMapper
   OBJDIR = obj/Release/PhotonMapper
   DEFINES +=
-  INCLUDES += -I.
+  INCLUDES += -I. -Ivendor
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O2
@@ -91,6 +91,7 @@ OBJECTS := \
 	$(OBJDIR)/camera.o \
 	$(OBJDIR)/light.o \
 	$(OBJDIR)/scene.o \
+	$(OBJDIR)/miniz.o \
 
 RESOURCES := \
 
@@ -227,6 +228,9 @@ $(OBJDIR)/light.o: scene/light.cpp
 $(OBJDIR)/scene.o: scene/scene.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/miniz.o: vendor/tinyexr/deps/miniz/miniz.c
+	@echo $(notdir $<)
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 -include $(OBJECTS:%.o=%.d)
 ifneq (,$(PCH))

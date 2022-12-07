@@ -2,7 +2,7 @@
 #include <texture/solidColour.hpp>
 #include <memory>
 
-class Checkerboard : public Texture {
+class Checkerboard : public Texture<RGB> {
 public:
 
     Checkerboard(const RGB& c1, const RGB& c2, double x = 1, double y = 1) 
@@ -13,7 +13,7 @@ public:
         {}
 
     RGB sample(const double u, const double v, const Vector3& p) const override {
-        auto sines = sin(u / xsize)*sin(v / ysize);
+        auto sines = sin(2 * M_PI * u / xsize)*sin(2 * M_PI * v / ysize);
         if (sines < 0)
             return t1->sample(u, v, p);
         else

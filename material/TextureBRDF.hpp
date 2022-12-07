@@ -13,7 +13,7 @@
 
 class TextureBRDF : public BRDF{
 public:
-    shared_ptr<Texture> albedo;
+    shared_ptr<Texture<RGB>> albedo;
     RGB specular, refraction;
     double probDiffuse, probSpecular, probRefraction;
 
@@ -31,7 +31,7 @@ public:
      * @param r The refractive coefficient
      * @param ri The refraction index 
      */
-    TextureBRDF(const shared_ptr<Texture> a, double ap, const RGB& s = RGB(), const RGB& r = RGB(), const double ri = 1) 
+    TextureBRDF(const shared_ptr<Texture<RGB>> a, double ap, const RGB& s = RGB(), const RGB& r = RGB(), const double ri = 1) 
         : BRDF(false),
           albedo(a), 
           specular(s), 
@@ -53,7 +53,7 @@ public:
      * @param pr The probability of a refraction event on a ray bounce
      * @param ri The refraction index 
      */
-    TextureBRDF(const shared_ptr<Texture> a, const RGB& s, const RGB& r, 
+    TextureBRDF(const shared_ptr<Texture<RGB>> a, const RGB& s, const RGB& r, 
          const double pa, const double ps, const double pr, const double ri) 
         : BRDF(false),
           albedo(a), 

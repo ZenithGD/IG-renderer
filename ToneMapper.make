@@ -16,7 +16,7 @@ ifeq ($(config),debug)
   TARGET = $(TARGETDIR)/ToneMapper
   OBJDIR = obj/Debug/ToneMapper
   DEFINES += -DDEBUG
-  INCLUDES += -I.
+  INCLUDES += -I. -Ivendor
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g
@@ -43,7 +43,7 @@ ifeq ($(config),release)
   TARGET = $(TARGETDIR)/ToneMapper
   OBJDIR = obj/Release/ToneMapper
   DEFINES +=
-  INCLUDES += -I.
+  INCLUDES += -I. -Ivendor
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O2

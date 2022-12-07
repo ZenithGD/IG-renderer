@@ -8,6 +8,7 @@
 #include <image/image.hpp>
 #include <scene/camera.hpp>
 #include <scene/light.hpp>
+#include <texture/texture.hpp>
 
 using namespace std;
 
@@ -30,7 +31,7 @@ public:
      * @param s The scene properties
      * @param c The main camera object
      */
-    Scene(SceneProps s, Camera c) : cam(c), _scprops(s) {};
+    Scene(SceneProps s, Camera c, const shared_ptr<Texture<RGB>> tex = nullptr) : cam(c), _scprops(s), _envMap(tex) {};
 
     Camera cam;
 
@@ -65,7 +66,17 @@ public:
      * @param method The rendering method
      * @return Image The rendered image
      */
-    inline Image drawScene(RenderMethod method) { return method(*this); }
+    inline Image drawScene(const RenderMethod& method) { return method(*this); }
+
+    /**
+     * @brief Get value from the enviroment map
+     * 
+     * @param direction The outgoing ray direction
+     * @return RGB The sampled colour
+     */
+    RGB environment(const Vector3& direction) const;
+    
 private:
     SceneProps _scprops;
+    shared_ptr<Texture<RGB>> _envMap;
 };

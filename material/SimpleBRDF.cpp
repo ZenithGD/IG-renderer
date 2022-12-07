@@ -17,13 +17,10 @@ RGB SimpleBRDF::eval(const Vector3& x, const Vector3& omegaI, const Vector3& ome
 }
 
 Vector3 SimpleBRDF::sampleDiffuse(const Vector3& omega0, const Vector3& x, const Vector3& n) const {
-    std::random_device rand_dev;
-    uniform_real_distribution<double> distribution(0.0,1.0);
-    default_random_engine generator(rand_dev());
-    auto dice = std::bind ( distribution, generator );
+    RandomGenerator rng(0, 1);
     
-    double invTheta = acos(sqrt(1.0 - dice()));
-    double invPhi = 2.0 * M_PI * dice();
+    double invTheta = acos(sqrt(1.0 - rng()));
+    double invPhi = 2.0 * M_PI * rng();
 
     Vector3 omega = Vector3(
         sin(invTheta) * cos(invPhi),
@@ -84,13 +81,11 @@ SimpleBRDF::EventType SimpleBRDF::russianRoulette(double t) const {
 
 optional<tuple<Vector3, RGB>> SimpleBRDF::sample(const Vector3& omega0, const Vector3& x, const Intersection& it) const{
     Vector3 n = it.closestNormal();
-    std::random_device rand_dev;
-    uniform_real_distribution<double> distribution(0.0,1.0);
-    default_random_engine generator(rand_dev());
-    auto dice = std::bind ( distribution, generator );
+    
+    RandomGenerator rng(0, 1);
     
     // Russian roulette
-    double r = dice();
+    double r = rng();
     Vector3 sampleDir;
     switch (russianRoulette(r))
     {

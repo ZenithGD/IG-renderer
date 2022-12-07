@@ -49,16 +49,14 @@ RGB nextEventEstimation(const Scene& sc, const Vector3 origin,
             }
         }
 
-        double geometryContrib = abs(dot(it.closestNormal(), normalize(directRayDir)));
-
-        RGB materialContrib = it.brdf->eval(r(it.closest()), 
-            obsDirection, r.direction, closest);
-
-        RGB lightContrib = l->power / dot(directRayDir, directRayDir) * materialContrib * geometryContrib;
-
-        // Once we know if the ray intersects something, compute distance to light source
+        // If the shadow ray doesn't intersect with anything, add contribution
         if (!closest.intersects)
         {
+            double geometryContrib = abs(dot(it.closestNormal(), normalize(directRayDir)));
+
+            RGB materialContrib = it.brdf->eval(r(it.closest()), obsDirection, r.direction, it);
+
+            RGB lightContrib = l->power / dot(directRayDir, directRayDir) * materialContrib * geometryContrib;
             totalContrib = totalContrib + lightContrib;
         }
     }
@@ -115,6 +113,8 @@ RGB pathTraceRay(const Scene& sc, const Ray& r, unsigned int n) {
                 + nextEventEstimation(sc, r(closest.closest()), r.direction, closest) 
                 + li * pathTraceRay(sc, out, n + 1);
         }
+    } else {
+        return sc.environment(r.direction);
     }
 
     //cout << "contrib final del bounce: " << n << "," << contrib << endl;

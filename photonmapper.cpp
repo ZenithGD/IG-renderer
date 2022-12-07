@@ -21,15 +21,25 @@ int main(int argc, char** argv) {
 
     Image img(props.viewportWidth, props.viewportHeight);
     
+    
     cout << "Rendering... " << flush;
     auto ms = measureTime<std::chrono::milliseconds>( 
         [&](){ img = sc.drawScene(
             [&](const Scene& sc) -> Image { 
-                return photonMapping(sc, 100000, 100000); 
+                return photonMapping(sc, 250000, 250000); 
             }
         );
     });
-
+    /*
+    cout << "Rendering photon map... " << flush;
+    auto ms = measureTime<std::chrono::milliseconds>( 
+        [&](){ img = sc.drawScene(
+            [&](const Scene& sc) -> Image { 
+                return getPhotonMap(sc, 1000000, 1000000); 
+            }
+        );
+    });
+    */
     cout << "done (" << ms << " ms)." << endl;
 
     cout << "Tonemapping image..." << flush;

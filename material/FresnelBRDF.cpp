@@ -1,5 +1,6 @@
 #include "FresnelBRDF.hpp"
 #include <math/coordinate.hpp>
+#include <math/misc.hpp>
 
 #include <functional>
 #include <random>
@@ -67,10 +68,7 @@ double fresnelCoef(double r0, double r1, double thi, double tht) {
 
 optional<tuple<Vector3, RGB>> FresnelBRDF::sample(const Vector3& omega0, const Vector3& x, const Intersection& it) const{
     Vector3 n = it.closestNormal();
-    std::random_device rand_dev;
-    uniform_real_distribution<double> distribution(0.0,1.0);
-    default_random_engine generator(rand_dev());
-    auto dice = std::bind ( distribution, generator );
+    RandomGenerator rng(0, 1);
     
     // Compute reflection probability based on fresnel coefficients
     bool frontFace = dot(omega0, n) < 0; 
@@ -81,7 +79,7 @@ optional<tuple<Vector3, RGB>> FresnelBRDF::sample(const Vector3& omega0, const V
             refDir  = sampleRefraction(omega0, x, n);
 
     // Russian roulette
-    double r = dice();
+    double r = rng();
     Vector3 sampleDir;
     switch (russianRoulette(r, fresnelCoef(r0, r1, angle(ax, specDir), angle(ax, refDir))))
     {

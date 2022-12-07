@@ -1,6 +1,6 @@
 #include <texture/texture.hpp>
 
-class SolidColour : public Texture {
+class SolidColour : public Texture<RGB> {
 public:
 
     SolidColour(const RGB& r) : colour(r) {}

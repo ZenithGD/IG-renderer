@@ -16,3 +16,11 @@ void Scene::addLight(const shared_ptr<Light> l)
 {
     lights.push_back(l);
 }
+
+RGB Scene::environment(const Vector3& direction) const {
+
+    double phi = atan2(direction.z, -direction.x) + M_PI;
+    double th  = acos(-direction.y);
+
+    return _envMap->sample(phi, th, Vector3());
+}

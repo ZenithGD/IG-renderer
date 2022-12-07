@@ -88,12 +88,12 @@ int main(int argc, char **argv)
     SceneProps props{
         .viewportWidth = 256,
         .viewportHeight = 256,
-        .antialiasingFactor = 32,
+        .antialiasingFactor = 64,
         .threads = thread::hardware_concurrency(),
-        .bounces = 10
+        .bounces = 100
     };
 
-    Scene sc = cornellTextured(props);
+    Scene sc = cornellEnvMap(props);
 
     Image img(sc.getProps().viewportWidth, sc.getProps().viewportHeight);
 
@@ -116,8 +116,8 @@ int main(int argc, char **argv)
 
     cout << "Writing image... " << flush;
 
-    auto msimg = measureTime<std::chrono::milliseconds>([&]()
-                                                        { tmImg.writeToBMP("test.bmp"); });
+    auto msimg = measureTime<std::chrono::milliseconds>(
+        [&](){ tmImg.writeToBMP("test.bmp"); });
 
     cout << "done (" << msimg << " s)." << endl;
 }

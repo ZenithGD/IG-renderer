@@ -45,7 +45,7 @@ struct Image {
     /**
      * @brief Read PPM image.
      * The memory value for any value v read from the file will be computed as
-     * $v \cdot \dfrac{max}{res}
+     * $v \cdot \dfrac{max}{res}$.
      * @param path 
      * @return Image 
      */
@@ -63,12 +63,26 @@ struct Image {
     void writeToBMP(const string& path) const;
 
     /**
-     * @brief 
+     * @brief Read BMP image.
      * 
-     * @param path 
+     * @param path The image path
      * @return Image 
      */
     static Image readBMP(const string& path);
+
+    // EXR (HDR) read-write
+
+    /**
+     * @brief Write image to the EXR file specified by path. 
+     */
+    void writeToEXR(const string& path) const;
+
+    /**
+     * @brief Read EXR image.
+     * @param path 
+     * @return Image 
+     */
+    static Image readEXR(const string& path);
 
     friend ostream& operator<<(ostream& os, const Image& image);
 

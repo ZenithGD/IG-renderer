@@ -42,6 +42,27 @@ Generate the project using Premake:
 premake5 vs2022
 ```
 
+> **Note** If you're working on VSCode, please update your `.vscode/c_cpp_properties.json` and include the following on your `includePath` to avoid annoying error highlighting:
+```json
+{
+    "configurations": [
+        {
+            ...
+            "includePath": [
+                ...
+                "${workspaceFolder}/vendor/"
+            ],
+            ...
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu17",
+            "cppStandard": "c++17",
+            ...
+        }
+    ],
+    "version": 4
+}
+```
+
 ## Other 
 Please refer to the [Premake Docs](https://premake.github.io/docs/Using-Premake/) if you need another action for your custom environment.
 
@@ -61,7 +82,7 @@ Please refer to the [Premake Docs](https://premake.github.io/docs/Using-Premake/
 
 ### Parallel rendering
 This renderer allows parallel rendering on the CPU, deferring tasks on a queue so threads can process them and return the result back.
-The number of threads can be chosed by hand but it is recommended to allow the maximum number of threads for peak performance.
+The number of threads can be chosen by hand but it is recommended to allow the maximum number of threads for peak performance.
 
 ## Funny mistakes
 

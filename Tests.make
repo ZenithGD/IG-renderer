@@ -16,7 +16,7 @@ ifeq ($(config),debug)
   TARGET = $(TARGETDIR)/Tests
   OBJDIR = obj/Debug/Tests
   DEFINES += -DDEBUG
-  INCLUDES += -I.
+  INCLUDES += -I. -Ivendor
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g
@@ -43,7 +43,7 @@ ifeq ($(config),release)
   TARGET = $(TARGETDIR)/Tests
   OBJDIR = obj/Release/Tests
   DEFINES +=
-  INCLUDES += -I.
+  INCLUDES += -I. -Ivendor
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O2
@@ -93,6 +93,12 @@ OBJECTS := \
 	$(OBJDIR)/scene.o \
 	$(OBJDIR)/testsuite.o \
 	$(OBJDIR)/tests.o \
+	$(OBJDIR)/Win32OpenGLWindow.o \
+	$(OBJDIR)/Win32Window.o \
+	$(OBJDIR)/X11OpenGLWindow.o \
+	$(OBJDIR)/nfd_win.o \
+	$(OBJDIR)/exrcat.o \
+	$(OBJDIR)/exrwritetest.o \
 
 RESOURCES := \
 
@@ -233,6 +239,24 @@ $(OBJDIR)/testsuite.o: tests/testsuite.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/tests.o: tests.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Win32OpenGLWindow.o: vendor/tinyexr/examples/exrview/OpenGLWindow/Win32OpenGLWindow.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Win32Window.o: vendor/tinyexr/examples/exrview/OpenGLWindow/Win32Window.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/X11OpenGLWindow.o: vendor/tinyexr/examples/exrview/OpenGLWindow/X11OpenGLWindow.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/nfd_win.o: vendor/tinyexr/examples/exrview/ThirdPartyLibs/nativefiledialog/src/nfd_win.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/exrcat.o: vendor/tinyexr/test/exrcat/exrcat.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/exrwritetest.o: vendor/tinyexr/test/exrwrite/exrwritetest.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
