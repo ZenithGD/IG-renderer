@@ -166,8 +166,11 @@ scene/sceneSamples.hpp:32:22: style: Variable 'fullReflect' is assigned a value 
 scene/sceneSamples.hpp:39:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
     auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
                ^
+scene/sceneSamples.hpp:41:14: style: Variable 'tri' is assigned a value that is never used. [unreadVariable]
+    auto tri = make_shared<Triangle>(Vector3(0, -0.2, 0.5), Vector3(-0.5, -0.7, 0.25), Vector3(0.5, -0.7, -0.25), BRDFPR);
+             ^
 scene/sceneSamples.hpp:45:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
-    auto sR4 = make_shared<Sphere>(Vector3( 0.3, 0, 0.6), 0.3, BRDFR);
+    auto sR4 = make_shared<Sphere>(Vector3(0, -0.2, 0.5), 0.1, BRDFR);
              ^
 scene/sceneSamples.hpp:90:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
     auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
@@ -208,7 +211,7 @@ scene/scene.hpp:33:22: performance: Function parameter 's' should be passed by c
 tests/testsuite.hpp:15:5: style: Class 'TestSuite' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
     TestSuite(std::initializer_list<Test> tests) : _tests(tests) {}
     ^
-tests.cpp:110:15: style: Variable 'okCSG' is assigned a value that is never used. [unreadVariable]
+tests.cpp:118:15: style: Variable 'okCSG' is assigned a value that is never used. [unreadVariable]
     int okCSG = tCSG.runSuite();
               ^
 tonemapper.cpp:13:23: performance: Function parameter 'path' should be passed by const reference. [passedByValue]
