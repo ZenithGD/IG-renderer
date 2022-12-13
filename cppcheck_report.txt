@@ -169,7 +169,7 @@ double angle (Vector3 dir1, Vector3 n){
 math/vector3.cpp:39:37: performance: Function parameter 'n' should be passed by const reference. [passedByValue]
 double angle (Vector3 dir1, Vector3 n){
                                     ^
-pathtracer/pathtracing.cpp:150:29: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+pathtracer/pathtracing.cpp:153:29: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
                     contrib = contrib + pathTraceRay(sc, r, 0);
                             ^
 scene/sceneSamples.hpp:32:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
@@ -208,13 +208,13 @@ scene/sceneSamples.hpp:162:14: style: Variable 'sR4' is assigned a value that is
 scene/sceneSamples.hpp:210:13: style: Variable 'pL' is assigned a value that is never used. [unreadVariable]
     auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), texture1);
             ^
-photonmapper/photonmapping.cpp:61:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+photonmapper/photonmapping.cpp:67:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
         luminanceTotal += l->power.getLuminance();
                        ^
-photonmapper/photonmapping.cpp:118:25: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+photonmapper/photonmapping.cpp:124:25: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
                 contrib = contrib + closestPhoton(r, sc, pmap);
                         ^
-photonmapper/photonmapping.cpp:58:17: style: Variable 'lights' is assigned a value that is never used. [unreadVariable]
+photonmapper/photonmapping.cpp:64:17: style: Variable 'lights' is assigned a value that is never used. [unreadVariable]
     auto lights = sc.lights.size();
                 ^
 renderer.cpp:21:9: style: The scope of the variable 'c' can be reduced. [variableScope]
@@ -244,7 +244,7 @@ math/misc.cpp:9:0: style: The function 'clampLow' is never used. [unusedFunction
 image/tonemapping.cpp:62:0: style: The function 'gammaClamp' is never used. [unusedFunction]
 
 ^
-photonmapper/photonmapping.cpp:256:0: style: The function 'getPhotonMap' is never used. [unusedFunction]
+photonmapper/photonmapping.cpp:292:0: style: The function 'getPhotonMap' is never used. [unusedFunction]
 
 ^
 renderer.cpp:10:0: style: The function 'getSceneProps' is never used. [unusedFunction]
