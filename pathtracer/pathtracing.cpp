@@ -76,7 +76,7 @@ RGB pathTraceRay(const Scene& sc, const Ray& r, unsigned int n) {
     
     //cout << "bounce " << n << endl;
     if( n > sc.getProps().bounces ) {
-        return RGB();
+        throw std::runtime_error("what the hell");
     }
     
     RGB contrib;
@@ -110,8 +110,11 @@ RGB pathTraceRay(const Scene& sc, const Ray& r, unsigned int n) {
             Ray out(r(closest.closest()), omega);
 
             contrib = contrib 
-                + nextEventEstimation(sc, r(closest.closest()), r.direction, closest) 
-                + li * pathTraceRay(sc, out, n + 1);
+                + nextEventEstimation(sc, r(closest.closest()), r.direction, closest);
+                
+            if ( n < sc.getProps().bounces ) {
+                contrib = contrib + li * pathTraceRay(sc, out, n + 1);
+            }
         }
     } else {
         return sc.environment(r.direction);

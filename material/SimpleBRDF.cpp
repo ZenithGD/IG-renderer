@@ -9,9 +9,9 @@ RGB SimpleBRDF::eval(const Vector3& x, const Vector3& omegaI, const Vector3& ome
     Vector3 specDir = sampleSpecular(omega, x, n);
     Vector3 refDir = sampleRefraction(omega, x, n);
     
-    RGB dif = probDiffuse > 0 ? diffuse / M_PI: RGB();
-    RGB spec = probSpecular > 0 ? specular * (delta(omegaI, specDir)) / dot(n, omegaI) : RGB();
-    RGB ref = probRefraction > 0 ? refraction * (delta(omegaI, refDir))  / dot(n, omegaI) : RGB();
+    RGB dif = probDiffuse > 0 ? diffuse / M_PI / probDiffuse: RGB();
+    RGB spec = probSpecular > 0 ? specular * (delta(omegaI, specDir)) / dot(n, omegaI) / probSpecular: RGB();
+    RGB ref = probRefraction > 0 ? refraction * (delta(omegaI, refDir)) / dot(n, omegaI) / probRefraction : RGB();
     
     return dif + spec + ref;
 }

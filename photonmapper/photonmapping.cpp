@@ -3,6 +3,7 @@
 #include <photonmapper/photonmapping.hpp>
 #include <photonmapper/photon.hpp>
 #include <acceleration/kdtree.hpp>
+#include <acceleration/threadpool.hpp>
 #include <color/color.hpp>
 
 using PhotonMap = nn::KDTree<Photon, 3, PhotonAxisPosition>;
@@ -26,6 +27,9 @@ void photonTraceRay(const Scene& sc, const Ray& r, LightPhotonPair& t,
             closestT = inter.closest();
         }
     }
+
+    // Photon initial energy
+    RGB energy = get<0>(t)->power * 4 * M_PI;
     
     // trace direct light ray
     if( closest.intersects ) {
@@ -40,7 +44,9 @@ void photonTraceRay(const Scene& sc, const Ray& r, LightPhotonPair& t,
                 Ray out(r(closest.closest()), omega);
 
                 Photon p(r(closest.closest()), omega, 
-                    4 * M_PI * get<0>(t)->power.getLuminance(), closest.closestNormal());
+                    energy, closest.closestNormal());
+
+                energy = energy * li * 2 * M_PI;
 
                 // Add photons to light source
                 get<1>(t).push_back(p);
@@ -94,7 +100,7 @@ RGB closestPhoton(const Ray& r, const Scene& sc, const PhotonMap& pmap){
         auto nearestPhotons = pmap.nearest_neighbors(r(closest.closest()), 1, 0.01);
 
         if ( !nearestPhotons.empty() ) {
-            return RGB(nearestPhotons[0]->flux, nearestPhotons[0]->flux, nearestPhotons[0]->flux);
+            return nearestPhotons[0]->flux;
         }
     }
 
@@ -153,51 +159,80 @@ RGB densityEstimation(const Vector3& x, const Intersection& it, const vector<con
     return color;
 }
 
+struct PixelResult
+{
+    unsigned int x, y;
+    RGB contribution;
+};
+
 Image render(const Scene& sc, const PhotonMap& pmap) {
+
+    // task function should have pixel position and rays as arguments
+    using TaskFn = std::function<PixelResult(void)>;
+
+    Threadpool<TaskFn, PixelResult> tp(sc.getProps().threads);
 
     Image img(sc.getProps().viewportWidth, sc.getProps().viewportHeight);
 
-    double nextval = 0.0, progress;
     for (unsigned int i = 0; i < img.height; i++)
     {
         for (unsigned int j = 0; j < img.width; j++)
         {
-            RGB contrib = RGB();
+            tp.enqueueTask([&, i, j]() -> PixelResult
+            {
+                RGB contrib = RGB();
 
-            auto rays = sc.cam.perPixel(j, i, sc.getProps().antialiasingFactor);
+                auto rays = sc.cam.perPixel(j, i, sc.getProps().antialiasingFactor);
 
-            for ( const Ray& r : rays ) {
+                for ( const Ray& r : rays ) {
 
-                Intersection closest {
-                    .intersects = false,
-                };
+                    Intersection closest {
+                        .intersects = false,
+                    };
 
-                double closestT = INFINITY;
-                for ( auto p : sc.primitives ) {
+                    double closestT = INFINITY;
+                    for ( auto p : sc.primitives ) {
 
-                    Intersection inter = p->intersection(r, 0);
-                    if ( inter.intersects && inter.closest() < closestT ){
-                        closest = inter;
-                        closestT = inter.closest();
+                        Intersection inter = p->intersection(r, 0);
+                        if ( inter.intersects && inter.closest() < closestT ){
+                            closest = inter;
+                            closestT = inter.closest();
+                        }
+                    }
+                    
+                    // trace direct light ray
+                    if( closest.intersects ) {
+
+                        auto nearestPhotons = pmap.nearest_neighbors(r(closest.closest()), 500);
+
+                        if ( !nearestPhotons.empty() ) {
+                            contrib = contrib + densityEstimation(r(closest.closest()), closest, nearestPhotons);
+                        }
                     }
                 }
-                
-                // trace direct light ray
-                if( closest.intersects ) {
+                return PixelResult{ .x = j, .y = i, .contribution = contrib / (double)rays.size() }; 
+            });
+        }
+    }
 
-                    auto nearestPhotons = pmap.nearest_neighbors(r(closest.closest()), 100);
+    double maxValue = 0;
+    double nextval = 0;
 
-                    if ( !nearestPhotons.empty() ) {
-                        contrib = contrib + densityEstimation(r(closest.closest()), closest, nearestPhotons);
-                    }
-                }
-            }
-            img.imageData[i][j] = contrib / (double)rays.size(); 
-            progress = double( i * img.width + j ) / double(img.height * img.width);
+    for (unsigned int i = 0; i < img.height; i++)
+    {
+        for (unsigned int j = 0; j < img.width; j++)
+        {
+            double progress = double( i * img.width + j ) / double(img.height * img.width);
             if ( progress >= nextval ) {
-                nextval += 0.01;
+                nextval += 0.005;
                 cout << setprecision(3) << progress << " % .. " << flush;
             }
+
+            PixelResult res = tp.getResult();
+            img.imageData[res.y][res.x] = res.contribution;
+            //cout << "i = " << i << ", j = " << j << endl;
+
+            img.maxNumber = max({img.maxNumber, res.contribution.red, res.contribution.green, res.contribution.blue});
         }
     }
 
@@ -227,8 +262,9 @@ Image photonMapping(const Scene& sc, const unsigned int total, const unsigned in
     // Normalize every photon by the number of photons emitted by the light
     for ( auto& t : lightPhotons ) {
         for ( auto& p : get<1>(t) ) {
-            if ( get<0>(t)->count > 0 )
-                p.flux /= get<0>(t)->count;
+            if ( get<0>(t)->count > 0 ) {
+                p.flux = p.flux / (double)get<0>(t)->count;
+            }
         }
     }
 
@@ -276,8 +312,9 @@ Image getPhotonMap(const Scene& sc, const unsigned int total, const unsigned int
     // Normalize every photon by the number of photons emitted by the light
     for ( auto& t : lightPhotons ) {
         for ( auto& p : get<1>(t) ) {
-            if ( get<0>(t)->count > 0 )
-                p.flux /= get<0>(t)->count;
+            if ( get<0>(t)->count > 0 ) {
+                p.flux = p.flux / (double)get<0>(t)->count;
+            }
         }
     }
 

@@ -19,6 +19,8 @@ void Scene::addLight(const shared_ptr<Light> l)
 
 RGB Scene::environment(const Vector3& direction) const {
 
+    if ( !_envMap ) return RGB();
+    
     double phi = atan2(direction.z, -direction.x) + M_PI;
     double th  = acos(-direction.y);
 
