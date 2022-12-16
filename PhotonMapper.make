@@ -85,6 +85,7 @@ OBJECTS := \
 	$(OBJDIR)/mat4.o \
 	$(OBJDIR)/misc.o \
 	$(OBJDIR)/vector3.o \
+	$(OBJDIR)/pathtracing.o \
 	$(OBJDIR)/photon.o \
 	$(OBJDIR)/photonmapping.o \
 	$(OBJDIR)/photonmapper.o \
@@ -208,6 +209,9 @@ $(OBJDIR)/misc.o: math/misc.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/vector3.o: math/vector3.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/pathtracing.o: pathtracer/pathtracing.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/photon.o: photonmapper/photon.cpp

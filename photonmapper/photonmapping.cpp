@@ -1,3 +1,4 @@
+#include <iostream>
 #include <iomanip>
 #include <cmath>
 #include <photonmapper/photonmapping.hpp>
@@ -5,13 +6,20 @@
 #include <acceleration/kdtree.hpp>
 #include <acceleration/threadpool.hpp>
 #include <color/color.hpp>
+#include <pathtracer/pathtracing.hpp>
 
 using PhotonMap = nn::KDTree<Photon, 3, PhotonAxisPosition>;
 using LightPhotonPair = tuple<shared_ptr<Light>, list<Photon>>;
 
-void photonTraceRay(const Scene& sc, const Ray& r, LightPhotonPair& t,
+struct PixelResult
+{
+    unsigned int x, y;
+    RGB contribution;
+};
+
+void photonTraceRay(const Scene& sc, const Ray& r, LightPhotonPair& t, const RGB& energy,
     const unsigned int photons, const unsigned int total, const unsigned int bounces) {
-    
+
     if ( bounces >= sc.getProps().bounces ) return;
 
     Intersection closest {
@@ -27,9 +35,6 @@ void photonTraceRay(const Scene& sc, const Ray& r, LightPhotonPair& t,
             closestT = inter.closest();
         }
     }
-
-    // Photon initial energy
-    RGB energy = get<0>(t)->power * 4 * M_PI;
     
     // trace direct light ray
     if( closest.intersects ) {
@@ -40,19 +45,26 @@ void photonTraceRay(const Scene& sc, const Ray& r, LightPhotonPair& t,
             // Check if ray was absorbed
             if ( result.has_value() ) {
 
-                auto [ omega, li ] = result.value();
+                auto [ omega, li, isDelta ] = result.value();
                 Ray out(r(closest.closest()), omega);
 
-                Photon p(r(closest.closest()), omega, 
+                RGB outEnergy;
+
+                if ( !isDelta) {
+                    Photon p(r(closest.closest()), omega, 
                     energy, closest.closestNormal());
 
-                energy = energy * li * 2 * M_PI;
+                    outEnergy = energy * li;
 
-                // Add photons to light source
-                get<1>(t).push_back(p);
-                get<0>(t)->count++;
-                
-                photonTraceRay(sc, out, t, photons, total, bounces + 1);
+                    // bounce > 0
+                    if ( bounces > 0 ) {
+                        // Add photons to light source
+                        get<1>(t).push_back(p);
+                        get<0>(t)->count++;
+                    }
+                }
+
+                photonTraceRay(sc, out, t, outEnergy, photons, total, bounces + 1);
             }
         }
     }
@@ -69,73 +81,20 @@ void photonTrace(const Scene& sc, vector<LightPhotonPair>& lightPhotons,
 
     for ( auto& t : lightPhotons ) {
 
+        // Photon initial energy
+        RGB energy = get<0>(t)->power * 4 * M_PI;
+
         int times = photons * (get<0>(t)->power.getLuminance() / luminanceTotal); 
     
         if ( get<0>(t)->count < times ) {
             Ray r = get<0>(t)->sample();
 
-            photonTraceRay(sc, r, t, photons, total, 0);
+            photonTraceRay(sc, r, t, energy, photons, total, 0);
         }
     }
 }
 
-RGB closestPhoton(const Ray& r, const Scene& sc, const PhotonMap& pmap){
-    Intersection closest {
-        .intersects = false,
-    };
-
-    double closestT = INFINITY;
-    for ( auto p : sc.primitives ) {
-
-        Intersection inter = p->intersection(r, 0);
-        if ( inter.intersects && inter.closest() < closestT ){
-            closest = inter;
-            closestT = inter.closest();
-        }
-    }
-    
-    // trace direct light ray
-    if( closest.intersects ) {
-
-        auto nearestPhotons = pmap.nearest_neighbors(r(closest.closest()), 1, 0.01);
-
-        if ( !nearestPhotons.empty() ) {
-            return nearestPhotons[0]->flux;
-        }
-    }
-
-    return RGB();
-}
-
-Image renderPhotonMap(const Scene& sc, const PhotonMap& pmap) {
-
-    Image img(sc.getProps().viewportWidth, sc.getProps().viewportHeight);
-
-    double nextval = 0.0, progress;
-    for (unsigned int i = 0; i < img.height; i++)
-    {
-        for (unsigned int j = 0; j < img.width; j++)
-        {
-            RGB contrib = RGB();
-
-            auto rays = sc.cam.perPixel(j, i, sc.getProps().antialiasingFactor);
-
-            for ( const Ray& r : rays ) {
-                contrib = contrib + closestPhoton(r, sc, pmap);
-            }
-            img.imageData[i][j] = contrib / (double)rays.size() * 4000; 
-            progress = double( i * img.width + j ) / double(img.height * img.width);
-            if ( progress >= nextval ) {
-                nextval += 0.01;
-                cout << setprecision(3) << progress << " % .. " << flush;
-            }
-        }
-    }
-
-    return img;
-}
-
-RGB densityEstimation(const Vector3& x, const Intersection& it, const vector<const Photon*>& closestPhotons) {
+RGB densityEstimation(const Vector3& x, const Vector3& inDir,  const Intersection& it, const vector<const Photon*>& closestPhotons) {
     RGB color = RGB();
     double rk = -INFINITY;
     for (auto photon : closestPhotons) {
@@ -145,25 +104,13 @@ RGB densityEstimation(const Vector3& x, const Intersection& it, const vector<con
 
     for (auto photon : closestPhotons){
         
-        auto result = it.brdf->sample(photon->inDirection, x, it);
+        auto result = it.brdf->eval(x, inDir, photon->inDirection, it) / M_PI;
             
-        // Check if ray was absorbed
-        if ( result.has_value() ) {
-
-            auto [ omega, li ] = result.value();
-            
-            color = color + li * (photon->flux / (M_PI * rk * rk));
-        }
+        color = color + result * (photon->flux / (M_PI * rk * rk));
     }
 
     return color;
 }
-
-struct PixelResult
-{
-    unsigned int x, y;
-    RGB contribution;
-};
 
 Image render(const Scene& sc, const PhotonMap& pmap) {
 
@@ -184,29 +131,46 @@ Image render(const Scene& sc, const PhotonMap& pmap) {
 
                 auto rays = sc.cam.perPixel(j, i, sc.getProps().antialiasingFactor);
 
-                for ( const Ray& r : rays ) {
+                for ( const Ray& ray : rays ) {
 
-                    Intersection closest {
-                        .intersects = false,
-                    };
+                    Ray r = ray;
+                    while ( true ) {
 
-                    double closestT = INFINITY;
-                    for ( auto p : sc.primitives ) {
+                        Intersection closest {
+                            .intersects = false,
+                        };
 
-                        Intersection inter = p->intersection(r, 0);
-                        if ( inter.intersects && inter.closest() < closestT ){
-                            closest = inter;
-                            closestT = inter.closest();
+                        double closestT = INFINITY;
+                        for ( auto p : sc.primitives ) {
+
+                            Intersection inter = p->intersection(r, 0);
+                            if ( inter.intersects && inter.closest() < closestT ){
+                                closest = inter;
+                                closestT = inter.closest();
+                            }
                         }
-                    }
-                    
-                    // trace direct light ray
-                    if( closest.intersects ) {
+                        
+                        // trace direct light ray
+                        if( closest.intersects ) {
 
-                        auto nearestPhotons = pmap.nearest_neighbors(r(closest.closest()), 500);
+                            auto nearestPhotons = pmap.nearest_neighbors(r(closest.closest()), 100);
+                            
+                            auto interaction = closest.brdf->sample(r.direction, r(closest.closest()), closest);
+                            
+                            if ( interaction.has_value() ) {
 
-                        if ( !nearestPhotons.empty() ) {
-                            contrib = contrib + densityEstimation(r(closest.closest()), closest, nearestPhotons);
+                                auto [ outDirection, radiance, isDelta ] = interaction.value();
+                                if ( isDelta ) {
+                                    r = Ray(r(closest.closest()), outDirection);       
+                                } else {
+                                    if ( !nearestPhotons.empty() ) {
+                                        contrib = contrib 
+                                        + nextEventEstimation(sc, r(closest.closest()), r.direction, closest) / M_PI
+                                        + densityEstimation(r(closest.closest()), r.direction, closest, nearestPhotons);
+                                    }
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
@@ -225,12 +189,12 @@ Image render(const Scene& sc, const PhotonMap& pmap) {
             double progress = double( i * img.width + j ) / double(img.height * img.width);
             if ( progress >= nextval ) {
                 nextval += 0.005;
-                cout << setprecision(3) << progress << " % .. " << flush;
+                std::cout << setprecision(3) << progress << " % .. " << flush;
             }
 
             PixelResult res = tp.getResult();
             img.imageData[res.y][res.x] = res.contribution;
-            //cout << "i = " << i << ", j = " << j << endl;
+            //std::cout << "i = " << i << ", j = " << j << std::endl;
 
             img.maxNumber = max({img.maxNumber, res.contribution.red, res.contribution.green, res.contribution.blue});
         }
@@ -255,9 +219,12 @@ Image photonMapping(const Scene& sc, const unsigned int total, const unsigned in
             totalPhotons += get<0>(t)->count;
         }
 
-        if ( totalPhotons >= maxPhotons ) 
+        if ( totalPhotons >= maxPhotons ) {
+            cout << "Photons : " << totalPhotons << endl;
             break;
+        }
     }
+    
 
     // Normalize every photon by the number of photons emitted by the light
     for ( auto& t : lightPhotons ) {
@@ -274,10 +241,10 @@ Image photonMapping(const Scene& sc, const unsigned int total, const unsigned in
         copy(get<1>(t).begin(), get<1>(t).end(), back_insert_iterator<list<Photon>>(photons));
     }
 
-    cout << "Generating photon map...";
+    std::cout << "Generating photon map...";
     // Photon Map
     PhotonMap pmap(photons, PhotonAxisPosition());
-    cout << "done." << endl;
+    std::cout << "done." << std::endl;
 
     // Density estimation
     auto L = render(sc, photons);
@@ -324,12 +291,13 @@ Image getPhotonMap(const Scene& sc, const unsigned int total, const unsigned int
         copy(get<1>(t).begin(), get<1>(t).end(), back_insert_iterator<list<Photon>>(photons));
     }
 
-    cout << "Generating photon map...";
+    std::cout << "Generating photon map...";
     // Photon Map
     PhotonMap pmap(photons, PhotonAxisPosition());
-    cout << "done." << endl;
+    std::cout << "done." << std::endl;
 
     // render photon map directly
-    return renderPhotonMap(sc, pmap);
+    return render(sc, pmap);
 }
+
 

@@ -4,6 +4,6 @@ RGB Emitter::eval(const Vector3& x, const Vector3& omegaI, const Vector3& omega,
     return emission;
 }
 
-optional<tuple<Vector3, RGB>> Emitter::sample(const Vector3& omega0, const Vector3& x, const Intersection& it) const {
-    return make_optional<tuple<Vector3, RGB>>(Vector3(), emission);
+optional<BRDFInteraction> Emitter::sample(const Vector3& omega0, const Vector3& x, const Intersection& it) const {
+    return make_optional<BRDFInteraction>(Vector3(), emission, false);
 }

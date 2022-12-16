@@ -80,27 +80,31 @@ TextureBRDF::EventType TextureBRDF::russianRoulette(double t) const {
     }
 }
 
-optional<tuple<Vector3, RGB>> TextureBRDF::sample(const Vector3& omega0, const Vector3& x, const Intersection& it) const{
+optional<BRDFInteraction> TextureBRDF::sample(const Vector3& omega0, const Vector3& x, const Intersection& it) const{
     Vector3 n = it.closestNormal();
     RandomGenerator rng(0, 1);
     
     // Russian roulette
     double r = rng();
     Vector3 sampleDir;
+    bool isDelta;
     switch (russianRoulette(r))
     {
     case DIFFUSE:
         sampleDir = sampleDiffuse(omega0, x, n);
+        isDelta = false;
         break;
     case SPECULAR:
         sampleDir = sampleSpecular(omega0, x, n);
+        isDelta = true;
         break;
     case REFRACTION:
         sampleDir = sampleRefraction(omega0, x, n);
+        isDelta = true;
         break;
     default:
         return {};
     }
 
-    return make_optional<tuple<Vector3, RGB>>(sampleDir, eval(x, sampleDir, omega0, it));
+    return make_optional<BRDFInteraction>(sampleDir, eval(x, sampleDir, omega0, it), isDelta);
 }

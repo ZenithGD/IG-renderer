@@ -66,7 +66,7 @@ double fresnelCoef(double r0, double r1, double thi, double tht) {
     return ( par * par + perp * perp ) / 2;
 }
 
-optional<tuple<Vector3, RGB>> FresnelBRDF::sample(const Vector3& omega0, const Vector3& x, const Intersection& it) const{
+optional<BRDFInteraction> FresnelBRDF::sample(const Vector3& omega0, const Vector3& x, const Intersection& it) const{
     Vector3 n = it.closestNormal();
     RandomGenerator rng(0, 1);
     
@@ -93,5 +93,5 @@ optional<tuple<Vector3, RGB>> FresnelBRDF::sample(const Vector3& omega0, const V
         return {};
     }
 
-    return make_optional<tuple<Vector3, RGB>>(sampleDir, eval(x, sampleDir, omega0, it));
+    return make_optional<BRDFInteraction>(sampleDir, eval(x, sampleDir, omega0, it), true);
 }

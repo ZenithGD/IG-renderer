@@ -84,7 +84,7 @@ public:
      * @param n The normal on the surface in which x lies
      * @return tuple<Vector3, RGB> 
      */
-    optional<tuple<Vector3, RGB>> sample(const Vector3& omega0, const Vector3& x, const Intersection& it) const override;
+    optional<BRDFInteraction> sample(const Vector3& omega0, const Vector3& x, const Intersection& it) const override;
 
 private:
 

@@ -19,7 +19,7 @@
  * @return RGB The direct light contribution
  */
 RGB nextEventEstimation(const Scene& sc, const Vector3 origin, 
-    const Vector3 obsDirection, const Intersection it) {
+    const Vector3& obsDirection, const Intersection& it) {
     RGB totalContrib;
     for (auto l : sc.lights)
     {
@@ -54,7 +54,7 @@ RGB nextEventEstimation(const Scene& sc, const Vector3 origin,
         {
             double geometryContrib = abs(dot(it.closestNormal(), normalize(directRayDir)));
 
-            RGB materialContrib = it.brdf->eval(r(it.closest()), obsDirection, r.direction, it);
+            RGB materialContrib = it.brdf->eval(r(it.closest()), obsDirection, r.direction, it) / M_PI;
 
             RGB lightContrib = l->power / dot(directRayDir, directRayDir) * materialContrib * geometryContrib;
             totalContrib = totalContrib + lightContrib;
@@ -106,7 +106,7 @@ RGB pathTraceRay(const Scene& sc, const Ray& r, unsigned int n) {
             // Check if ray was absorbed
             if ( !result.has_value() ) return RGB();
 
-            auto [ omega, li ] = result.value();
+            auto [ omega, li, isDelta ] = result.value();
             Ray out(r(closest.closest()), omega);
 
             contrib = contrib 

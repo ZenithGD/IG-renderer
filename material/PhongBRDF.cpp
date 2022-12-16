@@ -42,7 +42,7 @@ PhongBRDF::EventType PhongBRDF::russianRoulette(double t) const {
     }
 }
 
-optional<tuple<Vector3, RGB>> PhongBRDF::sample(const Vector3& omega0, const Vector3& x, const Intersection& it) const{
+optional<BRDFInteraction> PhongBRDF::sample(const Vector3& omega0, const Vector3& x, const Intersection& it) const{
     RandomGenerator rng(0, 1);
     
     // Russian roulette
@@ -57,5 +57,5 @@ optional<tuple<Vector3, RGB>> PhongBRDF::sample(const Vector3& omega0, const Vec
         return {};
     }
 
-    return make_optional<tuple<Vector3, RGB>>(sampleDir, eval(x, sampleDir, omega0, it));
+    return make_optional<BRDFInteraction>(sampleDir, eval(x, sampleDir, omega0, it), false);
 }

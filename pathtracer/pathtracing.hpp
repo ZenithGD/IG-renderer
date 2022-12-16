@@ -5,6 +5,9 @@
 
 using namespace std;
 
+RGB nextEventEstimation(const Scene& sc, const Vector3 origin, 
+    const Vector3& obsDirection, const Intersection& it);
+
 /**
  * @brief Render the scene onto an image with the path tracing algorithm.
  * 

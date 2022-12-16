@@ -55,6 +55,7 @@ local photonMapperFiles = {
     "vendor/tinyexr/deps/miniz/miniz.c",
     "vendor/tinyexr/deps/miniz/miniz.c",
 
+    "pathtracer/**.hpp",    "pathtracer/**.cpp",
     "photonmapper/**.hpp",    "photonmapper/**.cpp",
 }
 

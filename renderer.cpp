@@ -88,7 +88,7 @@ int main(int argc, char **argv)
     SceneProps props{
         .viewportWidth = 256,
         .viewportHeight = 256,
-        .antialiasingFactor = 64,
+        .antialiasingFactor = 128,
         .threads = thread::hardware_concurrency(),
         .bounces = 100
     };
