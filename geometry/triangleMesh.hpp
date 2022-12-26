@@ -13,39 +13,12 @@ using namespace std;
  * @brief Class for representing Triangle
  * 
  */
-class Triangle : public Primitive {
+class TriangleMesh : public Primitive {
 public:
-    Vector3 normal, pointA, pointB, pointC;
+    void addVertex(const Vector3& v);
+    void addTriangle(const unsigned int)
 
-    /**
-     * @brief Construct a new Triangle object
-     * 
-     * @param _pointA Triangle's first vertex
-     * @param _pointB Triangle's second vertex
-     * @param _pointC Triangle's third vertex
-     */
-    Triangle(const Vector3& _pointA, const Vector3& _pointB, const Vector3& _pointC, const shared_ptr<BRDF>& brdf)
-        : Primitive(brdf),
-          normal(cross(_pointB - _pointA, _pointC - _pointA)),
-          pointA(_pointA),
-          pointB(_pointB),
-          pointC(_pointC),
-          c(-dot(_pointA, normal)),
-          uAxis(_pointB - _pointA),
-          vAxis(_pointC - _pointA) {}
-
-    /**
-     * @brief Function of intersection with a Ray
-     * 
-     * @param p The value of the Ray that we want to prove if it intersect with the triangle
-     * @return PlaneIntersection 
-     */
-    Intersection intersection(const Ray& r, double minT, double maxT) override;
 private:
-
-    tuple<double, double> getUVCoords(const Vector3& point) const;
-
-    double c;
-    Vector3 uAxis, vAxis;
-    bool insideOutsideTest(Vector3 point) const;
+    vector<Vector3> _vertices;
+    vector<unsigned int> _indices;
 };

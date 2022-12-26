@@ -9,9 +9,9 @@ RGB SimpleBRDF::eval(const Vector3& x, const Vector3& omegaI, const Vector3& ome
     Vector3 specDir = sampleSpecular(omega, x, n);
     Vector3 refDir = sampleRefraction(omega, x, n);
     
-    RGB dif = probDiffuse > 0 ? diffuse / probDiffuse: RGB();
-    RGB spec = probSpecular > 0 ? specular * (delta(omegaI, specDir)) / dot(n, omegaI) / probSpecular: RGB();
-    RGB ref = probRefraction > 0 ? refraction * (delta(omegaI, refDir)) / dot(n, omegaI) / probRefraction : RGB();
+    RGB dif = probDiffuse > 0 ? diffuse / (probDiffuse * M_PI) : RGB();
+    RGB spec = probSpecular > 0 ? specular * (delta(omegaI, specDir)) / probSpecular: RGB();
+    RGB ref = probRefraction > 0 ? refraction * (delta(omegaI, refDir)) / probRefraction: RGB();
     
     return dif + spec + ref;
 }
@@ -87,19 +87,24 @@ optional<BRDFInteraction> SimpleBRDF::sample(const Vector3& omega0, const Vector
     // Russian roulette
     double r = rng();
     Vector3 outDirection;
+    RGB color;
     bool isDelta;
     switch (russianRoulette(r))
     {
     case DIFFUSE:
         outDirection = sampleDiffuse(omega0, x, n);
+        // * M_PI because of  uniform cos sampling
+        color = eval(x, outDirection, omega0, it) * M_PI;
         isDelta = false;
         break;
     case SPECULAR:
         outDirection = sampleSpecular(omega0, x, n);
+        color = eval(x, outDirection, omega0, it);
         isDelta = true;
         break;
     case REFRACTION:
         outDirection = sampleRefraction(omega0, x, n);
+        color = eval(x, outDirection, omega0, it);
         isDelta = true;
         break;
     default:
@@ -108,7 +113,7 @@ optional<BRDFInteraction> SimpleBRDF::sample(const Vector3& omega0, const Vector
 
     return make_optional<BRDFInteraction>(
         outDirection,
-        eval(x, outDirection, omega0, it),
+        color,
         isDelta
     );
 }

@@ -28,11 +28,11 @@ Vector3 TextureBRDF::sampleDiffuse(const Vector3& omega0, const Vector3& x, cons
         sin(invTheta) * sin(invPhi),
         cos(invTheta)).normalized();
 
-    Vector3 perp = perpendicular(n);
-    Coordinate global2Local(perp, cross(perp, n), n, x, 1);
-    Coordinate dir(Vector3(1, 0, 0), Vector3(0,1,0), Vector3(0,0,1), omega, 0);
-
-    Coordinate local2Global = inverseTransformation(global2Local);
+    Vector3 v1 = perpendicular(n);
+    Vector3 v2 = cross(v1, n);
+    Vector3 v3 = cross(v2, n);
+    Coordinate local2Global(v2, v3, n, x, 1);
+    Coordinate dir(Vector3(1,0,0), Vector3(0,1,0), Vector3(0,0,1), omega, 0);
 
     return local2Global(dir).getPosition();
 }

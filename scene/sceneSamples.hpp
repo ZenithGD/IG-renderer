@@ -13,6 +13,7 @@
 #include <material/TextureBRDF.hpp>
 
 #include <texture/checkerBoard.hpp>
+#include <texture/imageTexture.hpp>
 
 #include <image/tonemapping.hpp>
 
@@ -85,16 +86,15 @@ Scene cornellMatVariations(const SceneProps& props) {
 
     auto BRDFPL = make_shared<SimpleBRDF>(RGB(1, 0, 0));
     auto BRDFPR = make_shared<SimpleBRDF>(RGB(0, 1, 0));
-    auto BRDFL = make_shared<FresnelBRDF>(RGB(1, 1, 1), RGB(1, 1, 1), 1.5);
-    auto BRDFR = make_shared<FresnelBRDF>(RGB(1, 1, 1), RGB(1, 1, 1), 1.5);
-    auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
+    auto BRDFL = make_shared<SimpleBRDF>(RGB(), RGB(1,1,1), RGB());
+    auto BRDFR = make_shared<SimpleBRDF>(RGB(), RGB(), RGB(1, 1, 1), 1.5);
     auto gray = make_shared<SimpleBRDF>(RGB(0.5, 0.5, 0.5));
     auto emission = make_shared<Emitter>(RGB(1,1,1));
 
     auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), BRDFPL);
     auto pR = make_shared<Plane> (1, Vector3(-1, 0, 0), BRDFPR);
     auto pF = make_shared<Plane> (1, Vector3(0, 1, 0), gray);
-    auto pC = make_shared<Plane> (1, Vector3(0, -1, 0), emission);
+    auto pC = make_shared<Plane> (1, Vector3(0, -1, 0), gray);
     auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), gray);
     auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
 
@@ -125,7 +125,7 @@ Scene cornellMatVariations(const SceneProps& props) {
     //sc.addPrimitive(sR4);
     //sc.addPrimitive(sR2);
 
-    //sc.addLight(light);
+    sc.addLight(light);
     //sc.addLight(light2);
     //sc.addPrimitive(sTri);
 
@@ -195,27 +195,28 @@ Scene cornellTextured(const SceneProps& props) {
 Scene cornellEnvMap(const SceneProps& props) {
 
     Camera cam(
-        Vector3(-1,0,0), Vector3(0, 1, 0), Vector3(0, 0, 3), Vector3(0, 0, -3.5), 
+        Vector3(-2,0,0), Vector3(0, 1, 0), Vector3(0, 0, 3), Vector3(0, 0, -3.5), 
         props.viewportWidth, props.viewportHeight
     );
 
-    auto tex1 = make_shared<Checkerboard>(RGB(0.4,0.4,0.4), RGB(0.7, 0.7, 0.7), 0.2, 0.2);
-    auto texture1 = make_shared<TextureBRDF>(tex1, 1);
+    auto img = Image::readPPM("assets/envmaps/belfast_sunset.ppm");
+    auto tex1 = make_shared<ImageTexture>(img);
     
     auto tex2 = make_shared<Checkerboard>(RGB(1, 0, 1) , RGB(1, 1, 1), 0.2, 0.2);
+    auto texture2 = make_shared<TextureBRDF>(tex2, 1);
 
-    auto sphereBRDF = make_shared<PhongBRDF>(RGB(1, 0.5, 1), RGB(1, 0.7, 1), 1.5);
+    auto sphereBRDF = make_shared<SimpleBRDF>(RGB(0, 0, 0), RGB(0.9, 0.9, 0.9), RGB(0.1, 0.1, 0.1), 1.5);
  
-    auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), texture1);
-    auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), texture1);
-    auto pF = make_shared<Plane> (1, Vector3(0, 1, 0), texture1);
-    auto sL = make_shared<Sphere>(Vector3(0, -0.7, 0.25), 0.3, sphereBRDF);
-
-    Scene sc(props, cam, tex2);
+    auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), texture2);
+    auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), texture2);
+    auto pF = make_shared<Plane> (1, Vector3(0, 1, 0), texture2);
+    auto sL = make_shared<Sphere>(Vector3(0, -0.5, 0.25), 0.5, sphereBRDF);
+    //auto mirror = make_shared<Triangle>(Vector3());
+    Scene sc(props, cam, tex1);
 
     //sc.addPrimitive(pL);
     sc.addPrimitive(pF);
-    sc.addPrimitive(pB);
+    //sc.addPrimitive(pB);
     sc.addPrimitive(sL);
 
     return sc;

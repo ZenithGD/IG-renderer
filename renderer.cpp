@@ -88,12 +88,12 @@ int main(int argc, char **argv)
     SceneProps props{
         .viewportWidth = 256,
         .viewportHeight = 256,
-        .antialiasingFactor = 128,
+        .antialiasingFactor = 64,
         .threads = thread::hardware_concurrency(),
         .bounces = 100
     };
 
-    Scene sc = cornellDiffuse(props);
+    Scene sc = cornellMatVariations(props);
 
     Image img(sc.getProps().viewportWidth, sc.getProps().viewportHeight);
 

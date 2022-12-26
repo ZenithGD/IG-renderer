@@ -10,6 +10,10 @@ double clampLow(double val, double bound) {
     return val < bound ? bound : val;
 }
 
+double clampInterval(double val, double lo, double hi) {
+    return clampLow(clampHigh(val, hi), lo);
+}
+
 RandomGenerator::RandomGenerator(double lo, double hi) 
     : distribution(lo, hi) {
 

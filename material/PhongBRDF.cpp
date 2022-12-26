@@ -13,6 +13,7 @@ RGB PhongBRDF::eval(const Vector3& x, const Vector3& omegaI, const Vector3& omeg
 
 Vector3 PhongBRDF::sampleDiffuse(const Vector3& omega0, const Vector3& x, const Vector3& n) const {
     RandomGenerator rng(0, 1);
+    
     double invTheta = acos(sqrt(1.0 - rng()));
     double invPhi = 2.0 * M_PI * rng();
 
@@ -21,11 +22,11 @@ Vector3 PhongBRDF::sampleDiffuse(const Vector3& omega0, const Vector3& x, const 
         sin(invTheta) * sin(invPhi),
         cos(invTheta)).normalized();
 
-    Vector3 perp = perpendicular(n);
-    Coordinate global2Local(cross(perp, n), perp, n, x, 1);
+    Vector3 v1 = perpendicular(n);
+    Vector3 v2 = cross(v1, n);
+    Vector3 v3 = cross(v2, n);
+    Coordinate local2Global(v2, v3, n, x, 1);
     Coordinate dir(Vector3(1,0,0), Vector3(0,1,0), Vector3(0,0,1), omega, 0);
-
-    Coordinate local2Global = inverseTransformation(global2Local);
 
     return local2Global(dir).getPosition();
 }

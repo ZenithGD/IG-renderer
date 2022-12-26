@@ -44,13 +44,12 @@ Image Image::readPPM(const string& path){
 
     istringstream is(line);
     is >> width >> height;
-    
 
     double resolution;
 
     f >> resolution;
 
-    if ( !maxCommentFound ) maxNumber = resolution;
+    if ( !maxCommentFound ) maxNumber = 1;
 
     vector<vector<RGB>> data(height, vector<RGB>(width));
     double red,green,blue;
@@ -69,6 +68,8 @@ Image Image::readPPM(const string& path){
     }
 
     Image im(width, height, data, maxNumber);
+
+    cout << im << endl;
 
     return im;
 }
@@ -292,6 +293,6 @@ Image Image::readEXR(const string& path) {
 }
 
 ostream& operator<<(ostream& os, const Image& image){
-    os << "Image { w:"<< image.width << ", h:" << image.height << " }" << endl;
+    os << "Image { w:" << image.width << ", h:" << image.height << ", max:" << image.maxNumber << " }" << endl;
     return os;
 }

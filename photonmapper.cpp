@@ -10,14 +10,14 @@ using namespace std;
 int main(int argc, char** argv) {
     
     SceneProps props {
-        .viewportWidth = 300,
-        .viewportHeight = 300,
-        .antialiasingFactor = 2,
+        .viewportWidth = 256,
+        .viewportHeight = 256,
+        .antialiasingFactor = 20,
         .threads = std::thread::hardware_concurrency(),
         .bounces = 10
     };
 
-    Scene sc = cornellDiffuse(props);
+    Scene sc = cornellMatVariations(props);
 
     Image img(props.viewportWidth, props.viewportHeight);
     
@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
     auto ms = measureTime<std::chrono::milliseconds>( 
         [&](){ img = sc.drawScene(
             [&](const Scene& sc) -> Image { 
-                return photonMapping(sc, 100000, 100000); 
+                return photonMapping(sc, 50000, 50000); 
             }
         );
     });
@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
 
     cout << "Tonemapping image..." << flush;
 
-    Image tmImg = tonemapping::gamma(img, 2.2);
+    Image tmImg = tonemapping::gammaClamp(img, 1, 2.2);
 
     cout << "Writing image... " << flush;
 
