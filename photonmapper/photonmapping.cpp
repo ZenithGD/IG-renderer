@@ -128,10 +128,8 @@ RGB traceRay(const Ray& r, const Scene& sc, const PhotonMap& pmap) {
     
     // trace direct light ray
     if( closest.intersects ) {
-
-        auto nearestPhotons = pmap.nearest_neighbors(r(closest.closest()), 100);
         
-        auto interaction = closest.brdf->sample(r.direction, r(closest.closest()), closest);
+        auto interaction = closest.brdf->sample(normalize(r.direction), r(closest.closest()), closest);
         
         if ( interaction.has_value() ) {
 
@@ -142,7 +140,9 @@ RGB traceRay(const Ray& r, const Scene& sc, const PhotonMap& pmap) {
                 // Recursively trace ray
                 return traceRay(outRay, sc, pmap);
             }
-            
+
+            // Non-delta interaction, density estimation on the intersection point
+            auto nearestPhotons = pmap.nearest_neighbors(r(closest.closest()), 50);
         
             if ( !nearestPhotons.empty() ) {
                 //+ nextEventEstimation(sc, r(closest.closest()), r.direction, closest)
