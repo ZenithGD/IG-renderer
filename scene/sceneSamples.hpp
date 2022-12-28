@@ -86,8 +86,8 @@ Scene cornellMatVariations(const SceneProps& props) {
 
     auto BRDFPL = make_shared<SimpleBRDF>(RGB(1, 0, 0));
     auto BRDFPR = make_shared<SimpleBRDF>(RGB(0, 1, 0));
-    auto BRDFL = make_shared<SimpleBRDF>(RGB(), RGB(1,1,1), RGB());
-    auto BRDFR = make_shared<SimpleBRDF>(RGB(), RGB(), RGB(1, 1, 1), 1.5);
+    auto BRDFL = make_shared<SimpleBRDF>(RGB(0.1, 0.4, 0.5), RGB(0.5,0.5,0.5), RGB());
+    auto BRDFR = make_shared<SimpleBRDF>(RGB(), RGB(0.2, 0.2, 0.2), RGB(0.8, 0.8, 0.8), 1.5);
     auto gray = make_shared<SimpleBRDF>(RGB(0.5, 0.5, 0.5));
     auto emission = make_shared<Emitter>(RGB(1,1,1));
 
