@@ -241,6 +241,9 @@ math/coordinate.cpp:77:0: style: The function 'changeBasis' is never used. [unus
 math/misc.cpp:13:0: style: The function 'clampInterval' is never used. [unusedFunction]
 
 ^
+image/tonemapping.cpp:62:0: style: The function 'gammaClamp' is never used. [unusedFunction]
+
+^
 renderer.cpp:10:0: style: The function 'getSceneProps' is never used. [unusedFunction]
 
 ^
