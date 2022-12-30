@@ -251,7 +251,7 @@ Scene cornellEnvMap(const SceneProps& props) {
 Scene pyramidScene(const SceneProps& props) {
 
     Camera cam(
-        Vector3(-2,0,0), Vector3(0, 1, 0), Vector3(0, 0, 3), Vector3(0, 0, -3.5), 
+        Vector3(-1,0,0), Vector3(0, 1, 0), Vector3(0, 0, 3), Vector3(0, 0, -3.5), 
         props.viewportWidth, props.viewportHeight
     );
 
@@ -259,6 +259,7 @@ Scene pyramidScene(const SceneProps& props) {
 
     auto BRDFPL = make_shared<SimpleBRDF>(RGB(1, 0, 0));
     auto BRDFPR = make_shared<SimpleBRDF>(RGB(0, 1, 0));
+    auto BRDP = make_shared<SimpleBRDF>(RGB(0, 0, 1));
     auto BRDFL = make_shared<SimpleBRDF>(RGB(0.6, 0.75, 0.8));
     auto BRDFR = make_shared<SimpleBRDF>(RGB(0.6, 0.7, 0.2));
     auto gray = make_shared<SimpleBRDF>(RGB(0.7, 0.7, 0.7));
@@ -273,7 +274,7 @@ Scene pyramidScene(const SceneProps& props) {
     vector<Vector2> uvCords;
     vector<unsigned int> index;
 
-    Vector3 v0(0, 0.2, 0.5), v1(-0.5, -0.7, 0.25), v2(0.5, -0.7, -0.25), v3(0, -0.7, 0.75);
+    Vector3 v0(0, 0.2, 0.5), v1(-0.5, -0.7, 0.25), v2(0.5, -0.7, -0.25), v3(1, -0.7, 0.75);
 
     vertices.push_back(v0);
     vertices.push_back(v1);
@@ -307,11 +308,8 @@ Scene pyramidScene(const SceneProps& props) {
     uvCords.push_back(Vector2(0.5, 1));
 
 
-    auto img = Image::readPPM("assets/kitten.ppm");
-    auto tex1 = make_shared<ImageTexture>(img);
-    auto brdfKitten = make_shared<TextureBRDF>(tex1, 1);
 
-    auto tri = make_shared<TriangleMesh>(vertices, index, normals, uvCords, brdfKitten);
+    auto tri = make_shared<TriangleMesh>(vertices, index, normals, uvCords, BRDP);
 
     auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, BRDFL);
     auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, -0.25), 0.3, BRDFR);
