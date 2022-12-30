@@ -30,7 +30,6 @@ Scene cornellDiffuse(const SceneProps& props) {
     auto BRDFPR = make_shared<SimpleBRDF>(RGB(0, 1, 0));
     auto BRDFL = make_shared<SimpleBRDF>(RGB(0.6, 0.75, 0.8));
     auto BRDFR = make_shared<SimpleBRDF>(RGB(0.6, 0.7, 0.2));
-    auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
     auto gray = make_shared<SimpleBRDF>(RGB(0.7, 0.7, 0.7));
     auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), BRDFPL);
     auto pR = make_shared<Plane> (1, Vector3(-1, 0, 0), BRDFPR);
@@ -39,7 +38,33 @@ Scene cornellDiffuse(const SceneProps& props) {
     auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), gray);
     auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
 
-    auto tri = make_shared<Triangle>(Vector3(0, -0.2, 0.5), Vector3(-0.5, -0.7, 0.25), Vector3(0.5, -0.7, -0.25), BRDFPR);
+    Vector3 v0(0, 0.2, 0.5), v1(-0.5, -0.7, 0.25), v2(0.5, -0.7, -0.25);
+
+    auto normal = cross(v1 - v0, v2 - v0).normalized();
+
+    VertexInfo vi0{
+        .pos = v0,
+        .normal = normal,
+        .uv = Vector2(0.5, 0)
+    };
+
+    VertexInfo vi1{
+        .pos = v1,
+        .normal = normal,
+        .uv = Vector2(0, 1)
+    };
+
+    VertexInfo vi2{
+        .pos = v2,
+        .normal = normal,
+        .uv = Vector2(1, 1)
+    };
+
+    auto img = Image::readPPM("assets/kitten.ppm");
+    auto tex1 = make_shared<ImageTexture>(img);
+    auto brdfKitten = make_shared<TextureBRDF>(tex1, 1);
+
+    auto tri = make_shared<Triangle>(vi0, vi1, vi2, brdfKitten);
 
     auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, BRDFL);
     auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, -0.25), 0.3, BRDFR);
@@ -63,14 +88,14 @@ Scene cornellDiffuse(const SceneProps& props) {
     sc.addPrimitive(pC);
     sc.addPrimitive(pB);
     //sc.addPrimitive(pBack);
-    sc.addPrimitive(sL);
-    sc.addPrimitive(sR);
+    //sc.addPrimitive(sL);
+    //sc.addPrimitive(sR);
     //sc.addPrimitive(sR4);
     //sc.addPrimitive(sR2);
 
     sc.addLight(light);
     //sc.addLight(light2);
-    //sc.addPrimitive(tri);
+    sc.addPrimitive(tri);
 
     return sc;
 }
@@ -87,7 +112,7 @@ Scene cornellMatVariations(const SceneProps& props) {
     auto BRDFPL = make_shared<SimpleBRDF>(RGB(1, 0, 0));
     auto BRDFPR = make_shared<SimpleBRDF>(RGB(0, 1, 0));
     auto BRDFL = make_shared<SimpleBRDF>(RGB(0.1, 0.4, 0.5), RGB(0.5,0.5,0.5), RGB());
-    auto BRDFR = make_shared<SimpleBRDF>(RGB(), RGB(0.2, 0.2, 0.2), RGB(0.8, 0.8, 0.8), 1.5);
+    auto BRDFR = make_shared<FresnelBRDF>(RGB(1,1,1), RGB(1, 1, 1), 1.5);
     auto gray = make_shared<SimpleBRDF>(RGB(0.5, 0.5, 0.5));
     auto emission = make_shared<Emitter>(RGB(1,1,1));
 

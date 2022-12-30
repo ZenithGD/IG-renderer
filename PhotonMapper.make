@@ -74,6 +74,7 @@ OBJECTS := \
 	$(OBJDIR)/ray.o \
 	$(OBJDIR)/sphere.o \
 	$(OBJDIR)/triangle.o \
+	$(OBJDIR)/triangleMesh.o \
 	$(OBJDIR)/image.o \
 	$(OBJDIR)/tonemapping.o \
 	$(OBJDIR)/Emitter.o \
@@ -82,8 +83,10 @@ OBJECTS := \
 	$(OBJDIR)/SimpleBRDF.o \
 	$(OBJDIR)/TextureBRDF.o \
 	$(OBJDIR)/coordinate.o \
+	$(OBJDIR)/interpolation.o \
 	$(OBJDIR)/mat4.o \
 	$(OBJDIR)/misc.o \
+	$(OBJDIR)/vector2.o \
 	$(OBJDIR)/vector3.o \
 	$(OBJDIR)/pathtracing.o \
 	$(OBJDIR)/photon.o \
@@ -178,6 +181,9 @@ $(OBJDIR)/sphere.o: geometry/sphere.cpp
 $(OBJDIR)/triangle.o: geometry/triangle.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/triangleMesh.o: geometry/triangleMesh.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/image.o: image/image.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -202,10 +208,16 @@ $(OBJDIR)/TextureBRDF.o: material/TextureBRDF.cpp
 $(OBJDIR)/coordinate.o: math/coordinate.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/interpolation.o: math/interpolation.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/mat4.o: math/mat4.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/misc.o: math/misc.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/vector2.o: math/vector2.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/vector3.o: math/vector3.cpp

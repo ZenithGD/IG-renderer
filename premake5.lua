@@ -12,6 +12,8 @@ function setupProject(name, mainFile, folders)
 
         cppdialect "C++17"
 
+        -- warnings "all"
+
         -- files here
         files { mainFile, table.unpack(folders) }
 
