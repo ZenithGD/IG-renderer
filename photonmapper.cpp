@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
         .bounces = 10
     };
 
-    Scene sc = cornellMatVariations(props);
+    Scene sc = cornellDiffuse(props);
 
     Image img(props.viewportWidth, props.viewportHeight);
     
