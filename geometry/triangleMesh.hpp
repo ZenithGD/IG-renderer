@@ -33,6 +33,8 @@ public:
         }
     }
 
+    Intersection intersection(const Ray& r, double minT, double maxT) override;
+
 private:
     vector<shared_ptr<Triangle>> _triangles;
 };
