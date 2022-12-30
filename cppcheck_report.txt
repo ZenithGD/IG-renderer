@@ -172,40 +172,40 @@ double angle (Vector3 dir1, Vector3 n){
 pathtracer/pathtracing.cpp:153:29: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
                     contrib = contrib + pathTraceRay(sc, r, 0);
                             ^
-scene/sceneSamples.hpp:33:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
-    auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
-                     ^
-scene/sceneSamples.hpp:40:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:39:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
     auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
                ^
-scene/sceneSamples.hpp:42:14: style: Variable 'tri' is assigned a value that is never used. [unreadVariable]
-    auto tri = make_shared<Triangle>(Vector3(0, -0.2, 0.5), Vector3(-0.5, -0.7, 0.25), Vector3(0.5, -0.7, -0.25), BRDFPR);
-             ^
-scene/sceneSamples.hpp:46:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:69:13: style: Variable 'sL' is assigned a value that is never used. [unreadVariable]
+    auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, BRDFL);
+            ^
+scene/sceneSamples.hpp:70:13: style: Variable 'sR' is assigned a value that is never used. [unreadVariable]
+    auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, -0.25), 0.3, BRDFR);
+            ^
+scene/sceneSamples.hpp:71:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
     auto sR4 = make_shared<Sphere>(Vector3(0, -0.2, 0.5), 0.1, BRDFR);
              ^
-scene/sceneSamples.hpp:92:19: style: Variable 'emission' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:117:19: style: Variable 'emission' is assigned a value that is never used. [unreadVariable]
     auto emission = make_shared<Emitter>(RGB(1,1,1));
                   ^
-scene/sceneSamples.hpp:99:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:124:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
     auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
                ^
-scene/sceneSamples.hpp:103:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:128:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
     auto sR4 = make_shared<Sphere>(Vector3( 0.3, 0, 0.6), 0.3, BRDFR);
              ^
-scene/sceneSamples.hpp:148:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:173:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
     auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
                      ^
-scene/sceneSamples.hpp:158:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:183:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
     auto pBack = make_shared<Plane> (4, Vector3(0, 0, 1), texture);
                ^
-scene/sceneSamples.hpp:162:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:187:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
     auto sR4 = make_shared<Sphere>(Vector3( 0.3, 0, 0.6), 0.3, BRDFR);
              ^
-scene/sceneSamples.hpp:210:13: style: Variable 'pB' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:235:13: style: Variable 'pB' is assigned a value that is never used. [unreadVariable]
     auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), texture2);
             ^
-scene/sceneSamples.hpp:211:13: style: Variable 'pL' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:236:13: style: Variable 'pL' is assigned a value that is never used. [unreadVariable]
     auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), texture2);
             ^
 photonmapper/photonmapping.cpp:78:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
