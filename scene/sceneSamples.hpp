@@ -272,45 +272,44 @@ Scene pyramidScene(const SceneProps& props) {
     auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
 
     vector<Vector3> normals, vertices;
-    vector<Vector2> uvCords;
+    vector<Vector2> uvCoords;
     vector<unsigned int> index;
 
-    Vector3 v0(0, 0.2, 0.5), v1(-0.5, -0.7, 0.25), v2(0.5, -0.7, -0.25), v3(1, -0.7, 0.75);
+    Vector3 v0(-0.5, 0.2, 0.5), v1(-0.5, -0.7, 0.25), v2(0.5, -0.7, -0.25), v3(0.5, 0.2, 0.5);
 
     vertices.push_back(v0);
     vertices.push_back(v1);
     vertices.push_back(v2);
     vertices.push_back(v3);
 
-    normals.push_back(cross(v1 - v0, v2 - v0).normalized());
-    normals.push_back(cross(v0 - v1, v3 - v1).normalized());
-    normals.push_back(cross(v0 - v2, v3 - v2).normalized());
-    normals.push_back(cross(v1 - v3, v2 - v3).normalized());
-
+    // face 0, front
+    Vector3 face0 = cross(v1 - v0, v2 - v0).normalized();
     index.push_back(0);
+    normals.push_back(face0);
     index.push_back(1);
+    normals.push_back(face0);
     index.push_back(2);
+    normals.push_back(face0);
 
-    index.push_back(1);
+    // face 1, back
+    Vector3 face1 = cross(v2 - v0, v3 - v0).normalized();
     index.push_back(0);
-    index.push_back(3);
-
+    normals.push_back(face1);
     index.push_back(2);
-    index.push_back(0);
+    normals.push_back(face1);
     index.push_back(3);
+    normals.push_back(face1);
 
-    index.push_back(3);
-    index.push_back(1);
-    index.push_back(2);
+    uvCoords.push_back(Vector2(0, 0));
+    uvCoords.push_back(Vector2(0, 1));
+    uvCoords.push_back(Vector2(1, 1));
+    uvCoords.push_back(Vector2(1, 0));
 
-    uvCords.push_back(Vector2(0.5, 0));
-    uvCords.push_back(Vector2(0, 1));
-    uvCords.push_back(Vector2(1, 1));
-    uvCords.push_back(Vector2(0.5, 1));
+    auto img = Image::readPPM("assets/wmt.ppm");
+    auto tex1 = make_shared<ImageTexture>(img);
+    auto brdfImg = make_shared<TextureBRDF>(tex1, 1);
 
-
-
-    auto tri = make_shared<TriangleMesh>(vertices, index, normals, uvCords, BRDP);
+    auto tri = make_shared<TriangleMesh>(vertices, index, normals, uvCoords, brdfImg);
 
     auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, BRDFL);
     auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, -0.25), 0.3, BRDFR);

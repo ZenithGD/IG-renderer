@@ -2,18 +2,19 @@
 
 Intersection TriangleMesh::intersection(const Ray &r, double minT, double maxT)
 {
-    Intersection inter;
-    Intersection result = _triangles[0] -> intersection(r,minT,maxT);
+    Intersection closest {
+        .intersects = false
+    };
+    double closestT = INFINITY;
 
-    for(int i = 1; i < _triangles.size(); i++){
-        inter = _triangles[i] -> intersection(r,minT,maxT);
+    for(int i = 0; i < _triangles.size(); i++){
+        Intersection inter = _triangles[i] -> intersection(r,minT,maxT);
 
-        if(inter.intersects){
-           if(result.closest() > inter.closest()){
-                result = inter;
-           }
+        if(inter.intersects && inter.closest() < closestT ){
+            closest = inter;
+            closestT = inter.closest();
         }
     }
 
-    return result;
+    return closest;
 }
