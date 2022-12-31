@@ -32,6 +32,9 @@ double clampLow(double val, double bound);
  */
 double clampInterval(double val, double lo, double hi);
 
+inline int positiveModulo(int a, int n) {
+    return (a % n + n) % n;
+}
 
 class RandomGenerator {
     public:

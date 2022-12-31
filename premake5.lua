@@ -37,6 +37,8 @@ local rendererFiles = {
     "math/**.hpp",          "math/**.cpp",
     "scene/**.hpp",         "scene/**.cpp",
     "material/**.hpp",      "material/**.cpp",
+    "procedural/**.hpp",    "procedural/**.cpp",
+
     "vendor/tinyexr/tinyexr.h",
     "vendor/tinyexr/deps/miniz/miniz.c",
     "vendor/tinyexr/deps/miniz/miniz.c",
@@ -52,7 +54,9 @@ local photonMapperFiles = {
     "image/**.hpp",         "image/**.cpp",
     "math/**.hpp",          "math/**.cpp",
     "scene/**.hpp",         "scene/**.cpp",
-    "material/**.hpp",         "material/**.cpp",
+    "material/**.hpp",      "material/**.cpp",
+    "procedural/**.hpp",    "procedural/**.cpp",
+    
     "vendor/tinyexr/tinyexr.h",
     "vendor/tinyexr/deps/miniz/miniz.c",
     "vendor/tinyexr/deps/miniz/miniz.c",

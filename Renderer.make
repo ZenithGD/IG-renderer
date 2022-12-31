@@ -89,6 +89,7 @@ OBJECTS := \
 	$(OBJDIR)/vector2.o \
 	$(OBJDIR)/vector3.o \
 	$(OBJDIR)/pathtracing.o \
+	$(OBJDIR)/noise.o \
 	$(OBJDIR)/renderer.o \
 	$(OBJDIR)/camera.o \
 	$(OBJDIR)/light.o \
@@ -222,6 +223,9 @@ $(OBJDIR)/vector3.o: math/vector3.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/pathtracing.o: pathtracer/pathtracing.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/noise.o: procedural/noise.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/renderer.o: renderer.cpp

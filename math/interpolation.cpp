@@ -8,3 +8,11 @@ Vector3 barInterpolation(
 
     return v0 * u + v1 * v + v2 * w;
 }
+
+RGB colorLerp(const RGB& ca, const RGB& cb, double t) {
+    return RGB(
+        lerp(ca.red, cb.red, t),
+        lerp(ca.green, cb.green, t),
+        lerp(ca.blue, cb.blue, t)
+    );
+}

@@ -14,6 +14,7 @@
 #include <material/TextureBRDF.hpp>
 
 #include <texture/checkerBoard.hpp>
+#include <texture/noiseTexture.hpp>
 #include <texture/imageTexture.hpp>
 
 #include <image/tonemapping.hpp>
@@ -341,6 +342,50 @@ Scene pyramidScene(const SceneProps& props) {
     sc.addLight(light);
     //sc.addLight(light2);
     sc.addPrimitive(tri);
+
+    return sc;
+}
+
+
+Scene cornellNoise(const SceneProps& props) {
+
+    Camera cam(
+        Vector3(-1,0,0), Vector3(0, 1, 0), Vector3(0, 0, 3), Vector3(0, 0, -3.5), 
+        props.viewportWidth, props.viewportHeight
+    );
+
+    Scene sc(props, cam);
+
+    auto BRDFPL = make_shared<SimpleBRDF>(RGB(1, 0, 0));
+    auto BRDFPR = make_shared<SimpleBRDF>(RGB(0, 1, 0));
+    auto BRDFL = make_shared<SimpleBRDF>(RGB(0.6, 0.75, 0.8));
+    auto BRDFR = make_shared<SimpleBRDF>(RGB(0.6, 0.7, 0.2));
+    auto gray = make_shared<SimpleBRDF>(RGB(0.7, 0.7, 0.7));
+    
+    auto noise = make_shared<FractalNoise>(16, 5, 1, 1);
+    auto tex = make_shared<NoiseTexture>(noise, RGB(0,0,0), RGB(0,1,1));
+    auto texture = make_shared<TextureBRDF>(tex, 1);
+
+    auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), BRDFPL);
+    auto pR = make_shared<Plane> (1, Vector3(-1, 0, 0), BRDFPR);
+    auto pF = make_shared<Plane> (1, Vector3(0, 1, 0), gray);
+    auto pC = make_shared<Plane> (1, Vector3(0, -1, 0), gray);
+    auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), texture);
+
+    auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, BRDFL);
+    auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, -0.25), 0.3, BRDFR);
+    auto light  = make_shared<PointLight>(Vector3(0.0, 0.5, 0), RGB(1,1,1));
+
+    sc.addPrimitive(pL);
+    sc.addPrimitive(pR);
+    sc.addPrimitive(pF);
+    sc.addPrimitive(pC);
+    sc.addPrimitive(pB);
+
+    sc.addPrimitive(sL);
+    sc.addPrimitive(sR);
+
+    sc.addLight(light);
 
     return sc;
 }

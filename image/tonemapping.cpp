@@ -126,10 +126,10 @@ namespace tonemapping {
         double conv = 0;
 
         // round up
-        int kernelSize = (int)(scale * alpha + 1);
+        int kernelSize = ceil(scale * alpha);
 
-        for ( unsigned int i = std::max(0, (int)y - kernelSize + 1); i < std::min(y + kernelSize, image.height); i++ )  {
-            for ( unsigned int j = std::max(0, (int)x - kernelSize + 1); j < std::min(x + kernelSize, image.width); j++ ) {
+        for ( unsigned int i = std::max(0.0, ceil(y - kernelSize)); i < std::min(y + kernelSize, image.height); i++ )  {
+            for ( unsigned int j = std::max(0.0, ceil(x - kernelSize)); j < std::min(x + kernelSize, image.width); j++ ) {
                 conv += image.imageData[i][j].getLuminance() * gaussian(j - x, i - y, alpha, scale);
             }
         }

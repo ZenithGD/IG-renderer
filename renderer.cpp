@@ -93,7 +93,7 @@ int main(int argc, char **argv)
         .bounces = 100
     };
 
-    Scene sc = pyramidScene(props);
+    Scene sc = cornellNoise(props);
 
     Image img(sc.getProps().viewportWidth, sc.getProps().viewportHeight);
 

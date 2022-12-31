@@ -91,6 +91,7 @@ OBJECTS := \
 	$(OBJDIR)/pathtracing.o \
 	$(OBJDIR)/photon.o \
 	$(OBJDIR)/photonmapping.o \
+	$(OBJDIR)/noise.o \
 	$(OBJDIR)/camera.o \
 	$(OBJDIR)/light.o \
 	$(OBJDIR)/scene.o \
@@ -236,6 +237,9 @@ $(OBJDIR)/photon.o: photonmapper/photon.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/photonmapping.o: photonmapper/photonmapping.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/noise.o: procedural/noise.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/camera.o: scene/camera.cpp
