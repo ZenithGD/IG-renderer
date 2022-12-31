@@ -223,6 +223,12 @@ scene/sceneSamples.hpp:316:13: style: Variable 'sR' is assigned a value that is 
 scene/sceneSamples.hpp:317:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
     auto sR4 = make_shared<Sphere>(Vector3(0, -0.2, 0.5), 0.1, BRDFR);
              ^
+scene/sceneSamples.hpp:361:16: style: Variable 'BRDFL' is assigned a value that is never used. [unreadVariable]
+    auto BRDFL = make_shared<SimpleBRDF>(RGB(0.6, 0.75, 0.8));
+               ^
+scene/sceneSamples.hpp:362:16: style: Variable 'BRDFR' is assigned a value that is never used. [unreadVariable]
+    auto BRDFR = make_shared<SimpleBRDF>(RGB(0.6, 0.7, 0.2));
+               ^
 photonmapper/photonmapping.cpp:78:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
         luminanceTotal += l->power.getLuminance();
                        ^
@@ -240,6 +246,9 @@ procedural/noise.cpp:10:5: warning: Class 'SimpleNoise' does not have a copy con
     ^
 procedural/noise.cpp:10:5: warning: Class 'SimpleNoise' does not have a operator= which is recommended since it has dynamic memory/resource allocation(s). [noOperatorEq]
     pointGrid = new double[gs * gs];
+    ^
+procedural/noise.hpp:51:5: style: Class 'TurbulentNoise' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    TurbulentNoise(const shared_ptr<Noise>& n)
     ^
 procedural/noise.cpp:55:11: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
         r += (double)(*o)(u, v);
