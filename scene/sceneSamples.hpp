@@ -363,17 +363,22 @@ Scene cornellNoise(const SceneProps& props) {
     auto gray = make_shared<SimpleBRDF>(RGB(0.7, 0.7, 0.7));
     
     auto noise = make_shared<FractalNoise>(16, 5, 1, 1);
-    auto tex = make_shared<NoiseTexture>(noise, RGB(0,0,0), RGB(0,1,1));
+    auto tNoise = make_shared<TurbulentNoise>(noise);
+    auto tex = make_shared<NoiseTexture>(tNoise, RGB(0,0,0), RGB(1,1,1));
     auto texture = make_shared<TextureBRDF>(tex, 1);
+
+    auto wNoise = make_shared<WoodyNoise>(noise, 5);
+    auto tex2 = make_shared<NoiseTexture>(wNoise, RGB(0.29,0.12,0.01), RGB(0.93,0.67,0.05));
+    auto texture2 = make_shared<TextureBRDF>(tex2, 1);
 
     auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), BRDFPL);
     auto pR = make_shared<Plane> (1, Vector3(-1, 0, 0), BRDFPR);
     auto pF = make_shared<Plane> (1, Vector3(0, 1, 0), gray);
     auto pC = make_shared<Plane> (1, Vector3(0, -1, 0), gray);
-    auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), texture);
+    auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), texture2);
 
-    auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, BRDFL);
-    auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, -0.25), 0.3, BRDFR);
+    auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, texture);
+    auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, -0.25), 0.3, texture2);
     auto light  = make_shared<PointLight>(Vector3(0.0, 0.5, 0), RGB(1,1,1));
 
     sc.addPrimitive(pL);
