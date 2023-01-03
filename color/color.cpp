@@ -23,6 +23,10 @@ RGB gammaCorrection(const RGB& c, double k, double gamma){
     return RGB(r, g, b);
 }
 
+RGB gammaClamp(const RGB& c, double k, double gamma) {
+    return clamp(gammaCorrection(c, k, gamma), 1);
+}
+
 RGB extendedReinhard(const RGB& col, double maxWhite) {
     RGB num = col * ( col / (maxWhite * maxWhite) + 1 );
     RGB den = col + 1;

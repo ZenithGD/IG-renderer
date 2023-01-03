@@ -86,14 +86,14 @@ int main(int argc, char **argv)
 
     // Default properties
     SceneProps props{
-        .viewportWidth = 256,
+        .viewportWidth = 512,
         .viewportHeight = 256,
         .antialiasingFactor = 64,
         .threads = thread::hardware_concurrency(),
-        .bounces = 100
+        .bounces = 10
     };
 
-    Scene sc = cornellNoise(props);
+    Scene sc = cornellEnvMap(props);
 
     Image img(sc.getProps().viewportWidth, sc.getProps().viewportHeight);
 
@@ -112,7 +112,7 @@ int main(int argc, char **argv)
 
     cout << "Tonemapping image..." << flush;
 
-    Image tmImg = tonemapping::gamma(img, 2.2);
+    Image tmImg = tonemapping::gamma(img, 3);
 
     cout << "Writing image... " << flush;
 

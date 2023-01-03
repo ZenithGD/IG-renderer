@@ -114,7 +114,7 @@ RGB pathTraceRay(const Scene& sc, const Ray& r, unsigned int n) {
                 
             if ( n < sc.getProps().bounces ) {
                 contrib = contrib + li * pathTraceRay(sc, out, n + 1);
-            }
+            }   
         }
     } else {
         return sc.environment(r.direction);

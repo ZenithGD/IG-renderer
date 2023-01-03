@@ -59,14 +59,14 @@ namespace tonemapping {
 
     }
 
-    Image gammaClamp(const Image& image, double v, double gamma) {
+    Image gammaClamp(const Image& image, double gamma) {
 
         Image result = image;
         result.maxNumber = 1;
         for ( unsigned int i = 0; i < image.height; i++ ) {
             for ( unsigned int j = 0; j < image.width; j++ ) {
                 RGB color = image.imageData[i][j];
-                result.imageData[i][j] = gammaCorrection(color, v, 1 / gamma);
+                result.imageData[i][j] = gammaClamp(color, image.maxNumber, 1 / gamma);
             }
         }
         return result;

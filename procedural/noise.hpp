@@ -26,6 +26,8 @@ public:
 
     double operator()(const double u, const double v) const override;
 
+    double maxVal;
+
 private:
     double* pointGrid;
     unsigned int* permutationTable;
@@ -36,6 +38,7 @@ private:
 
 class FractalNoise : public Noise {
 public:
+    double maxVal;
 
     FractalNoise(unsigned int gs, unsigned int oct, double w, double h);
 

@@ -3,6 +3,7 @@
 #include <geometry/sphere.hpp>
 #include <geometry/triangle.hpp>
 #include <geometry/triangleMesh.hpp>
+#include <geometry/rectangle.hpp>
 #include <scene/scene.hpp>
 #include <pathtracer/pathtracing.hpp>
 #include <core/core.hpp>
@@ -167,6 +168,51 @@ Scene cornellMatVariations(const SceneProps& props) {
     sc.addLight(light);
     //sc.addLight(light2);
     //sc.addPrimitive(sTri);
+
+    return sc;
+}
+
+Scene cornellEmission(const SceneProps& props) {
+
+    Camera cam(
+        Vector3(-1,0,0), Vector3(0, 1, 0), Vector3(0, 0, 3), Vector3(0, 0, -3.5), 
+        props.viewportWidth, props.viewportHeight
+    );
+
+    Scene sc(props, cam);
+
+    auto BRDFPL = make_shared<SimpleBRDF>(RGB(1, 0, 0));
+    auto BRDFPR = make_shared<SimpleBRDF>(RGB(0, 1, 0));
+    auto BRDFL = make_shared<FresnelBRDF>(RGB(1, 1, 1), RGB(1, 1, 1), 1.5);
+    auto BRDFR = make_shared<FresnelBRDF>(RGB(1, 1, 1), RGB(1, 1, 1), 1.5);
+    auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
+    auto gray = make_shared<SimpleBRDF>(RGB(0.7, 0.7, 0.7));
+    auto emission = make_shared<Emitter>(RGB(1, 1, 1));
+
+    auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), BRDFPL);
+    auto pR = make_shared<Plane> (1, Vector3(-1, 0, 0), BRDFPR);
+    auto pF = make_shared<Plane> (1, Vector3(0, 1, 0), gray);
+    auto pC = make_shared<Plane> (1, Vector3(0, -1, 0), gray);
+    auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), gray);
+    auto pLight = make_shared<Rectangle>(1, 1, Vector3(0, 0.999, 0), emission);
+
+    auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, BRDFL);
+    auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, -0.25), 0.3, BRDFR);
+    auto sR4 = make_shared<Sphere>(Vector3( 0.3, 0, 0.6), 0.3, BRDFR);
+    
+    auto light  = make_shared<PointLight>(Vector3(0.0, 0.5, 0), RGB(1,1,1));
+    //auto sTri = make_shared<Triangle>(Vector3(-1, 0, 0.45), Vector3(1, 0, 0.45), Vector3(0, 0.25, 0.75), RGB(0.72, 0.57, 0.62));
+
+    sc.addPrimitive(pL);
+    sc.addPrimitive(pR);
+    sc.addPrimitive(pF);
+    sc.addPrimitive(pC);
+    sc.addPrimitive(pB);
+
+    sc.addPrimitive(sL);
+    sc.addPrimitive(sR);
+    sc.addPrimitive(pLight);
+    //sc.addLight(light);
 
     return sc;
 }

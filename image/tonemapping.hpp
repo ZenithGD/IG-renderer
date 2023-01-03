@@ -18,7 +18,7 @@ namespace tonemapping {
 
     Image equalizeClamp(const Image& image, double v);
 
-    Image gammaClamp(const Image& image, double v, double gamma);
+    Image gammaClamp(const Image& image, double gamma);
 
     Image simpleReinhard(const Image& image);
 

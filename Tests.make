@@ -72,6 +72,7 @@ OBJECTS := \
 	$(OBJDIR)/intersection.o \
 	$(OBJDIR)/plane.o \
 	$(OBJDIR)/ray.o \
+	$(OBJDIR)/rectangle.o \
 	$(OBJDIR)/sphere.o \
 	$(OBJDIR)/triangle.o \
 	$(OBJDIR)/triangleMesh.o \
@@ -180,6 +181,9 @@ $(OBJDIR)/plane.o: geometry/plane.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/ray.o: geometry/ray.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/rectangle.o: geometry/rectangle.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/sphere.o: geometry/sphere.cpp

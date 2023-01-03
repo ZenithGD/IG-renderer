@@ -5,12 +5,13 @@
 #include <math/interpolation.hpp>
 
 SimpleNoise::SimpleNoise(unsigned int gs, double w, double h) 
-    : gridSize(gs), width(w), height(h) {
+    : gridSize(gs), width(w), height(h), maxVal(-INFINITY) {
     // Raw pointer allocation is freed on the destructor
     pointGrid = new double[gs * gs];
     RandomGenerator gen(0, 1);
     for ( int i = 0; i < gs * gs; i++ ) {
         pointGrid[i] = gen();
+        maxVal = max(maxVal, pointGrid[i]);
     }
 }
 
@@ -44,7 +45,9 @@ double SimpleNoise::operator()(const double u, const double v) const {
 
 FractalNoise::FractalNoise(unsigned int gs, unsigned int oct, double w, double h) {
     for ( int i = 0; i < oct; i++ ) {
-        octaves.push_back(make_shared<SimpleNoise>(gs, w / int(1 << i), h / int(1 << i)));
+        auto noiseLayer = make_shared<SimpleNoise>(gs, w / int(1 << i), h / int(1 << i));
+        octaves.push_back(noiseLayer);
+        maxVal += noiseLayer->maxVal;
     }
 }
 
@@ -55,5 +58,5 @@ double FractalNoise::operator()(const double u, const double v) const {
         r += (double)(*o)(u, v);
     } 
 
-    return r / double(octaves.size());
+    return r / maxVal;
 }
