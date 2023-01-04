@@ -69,21 +69,7 @@ struct Image {
      * @return Image 
      */
     static Image readBMP(const string& path);
-
-    // EXR (HDR) read-write
-
-    /**
-     * @brief Write image to the EXR file specified by path. 
-     */
-    void writeToEXR(const string& path) const;
-
-    /**
-     * @brief Read EXR image.
-     * @param path 
-     * @return Image 
-     */
-    static Image readEXR(const string& path);
-
+    
     friend ostream& operator<<(ostream& os, const Image& image);
 
     vector<vector<RGB>> imageData;

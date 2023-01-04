@@ -22,7 +22,7 @@ RGB Scene::environment(const Vector3& direction) const {
     if ( !_envMap ) return RGB();
     
     double phi = atan2(direction.z, -direction.x) + M_PI;
-    double th  = acos(-direction.y);
+    double th  = acos(direction.y);
 
     return _envMap->sample(phi / (2 * M_PI), th / M_PI, Vector3());
 }

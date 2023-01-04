@@ -273,7 +273,7 @@ Scene cornellEnvMap(const SceneProps& props) {
         props.viewportWidth, props.viewportHeight
     );
 
-    auto img = Image::readPPM("assets/envmaps/belfast_sunset.ppm");
+    auto img = Image::readPPM("assets/envmaps/brown_photostudio.ppm");
     auto tex1 = make_shared<ImageTexture>(img);
     
     auto tex2 = make_shared<Checkerboard>(RGB(1, 0, 1) , RGB(1, 1, 1), 0.2, 0.2);
@@ -379,11 +379,6 @@ Scene pyramidScene(const SceneProps& props) {
     sc.addPrimitive(pF);
     sc.addPrimitive(pC);
     sc.addPrimitive(pB);
-    //sc.addPrimitive(pBack);
-    //sc.addPrimitive(sL);
-    //sc.addPrimitive(sR);
-    //sc.addPrimitive(sR4);
-    //sc.addPrimitive(sR2);
 
     sc.addLight(light);
     //sc.addLight(light2);

@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
         .bounces = 10
     };
 
-    Scene sc = cornellDiffuse(props);
+    Scene sc = cornellMatVariations(props);
 
     Image img(props.viewportWidth, props.viewportHeight);
     
@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
 
     cout << "Tonemapping image..." << flush;
 
-    Image tmImg = tonemapping::gamma(img, 2.2);
+    Image tmImg = tonemapping::gamma(img, 3);
 
     cout << "Writing image... " << flush;
 

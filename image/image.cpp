@@ -1,7 +1,5 @@
 #include "image.hpp"
 
-#include <tinyexr/tinyexr.h>
-
 #include <regex>
 #include <fstream>
 
@@ -283,13 +281,6 @@ Image Image::readBMP(const string& path) {
     free(dataPtr);
 
     return img;
-}
-
-void Image::writeToEXR(const string& path) const {
-
-}
-Image Image::readEXR(const string& path) {
-
 }
 
 ostream& operator<<(ostream& os, const Image& image){
