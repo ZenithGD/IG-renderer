@@ -7,15 +7,6 @@ geometry/rectangle.cpp:8:41: note: Member variable 'Rectangle::x1' is in the wro
 geometry/rectangle.hpp:23:16: note: Member variable 'Rectangle::x1' is in the wrong place in the initializer list.
     double x0, x1, z0, z1, k;
                ^
-image/image.hpp:78:10: performance:inconclusive: Technically the member function 'Image::writeToEXR' can be static (but you may consider moving to unnamed namespace). [functionStatic]
-    void writeToEXR(const string& path) const;
-         ^
-image/image.cpp:288:13: note: Technically the member function 'Image::writeToEXR' can be static (but you may consider moving to unnamed namespace).
-void Image::writeToEXR(const string& path) const {
-            ^
-image/image.hpp:78:10: note: Technically the member function 'Image::writeToEXR' can be static (but you may consider moving to unnamed namespace).
-    void writeToEXR(const string& path) const;
-         ^
 image/image.hpp:31:63: performance: Function parameter 'data' should be passed by const reference. [passedByValue]
     Image(unsigned int w, unsigned int h, vector<vector<RGB>> data, double max)
                                                               ^
@@ -241,19 +232,22 @@ scene/sceneSamples.hpp:362:13: style: Variable 'sR' is assigned a value that is 
 scene/sceneSamples.hpp:363:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
     auto sR4 = make_shared<Sphere>(Vector3(0, -0.2, 0.5), 0.1, BRDFR);
              ^
-scene/sceneSamples.hpp:407:16: style: Variable 'BRDFL' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:402:16: style: Variable 'BRDFL' is assigned a value that is never used. [unreadVariable]
     auto BRDFL = make_shared<SimpleBRDF>(RGB(0.6, 0.75, 0.8));
                ^
-scene/sceneSamples.hpp:408:16: style: Variable 'BRDFR' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:403:16: style: Variable 'BRDFR' is assigned a value that is never used. [unreadVariable]
     auto BRDFR = make_shared<SimpleBRDF>(RGB(0.6, 0.7, 0.2));
                ^
-photonmapper/photonmapping.cpp:78:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+photonmapper/photonmapping.cpp:86:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
         luminanceTotal += l->power.getLuminance();
                        ^
-photonmapper/photonmapping.cpp:223:29: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
-                    contrib = contrib + traceRay(ray, sc, pmap);
+photonmapper/photonmapping.cpp:241:29: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+                    contrib = contrib + traceRay(ray, sc, pmap, cmap);
                             ^
-photonmapper/photonmapping.cpp:75:17: style: Variable 'lights' is assigned a value that is never used. [unreadVariable]
+photonmapper/photonmapping.cpp:288:26: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+            totalPhotons += t.light->count;
+                         ^
+photonmapper/photonmapping.cpp:83:17: style: Variable 'lights' is assigned a value that is never used. [unreadVariable]
     auto lights = sc.lights.size();
                 ^
 procedural/noise.cpp:7:14: warning: Member variable 'SimpleNoise::permutationTable' is not initialized in the constructor. [uninitMemberVar]
@@ -319,10 +313,7 @@ math/coordinate.cpp:100:0: style: The function 'inverseTransformation' is never 
 math/vector3.cpp:14:0: style: The function 'projection' is never used. [unusedFunction]
 
 ^
-image/image.cpp:188:0: style: The function 'readBMP' is never used. [unusedFunction]
-
-^
-image/image.cpp:291:0: style: The function 'readEXR' is never used. [unusedFunction]
+image/image.cpp:186:0: style: The function 'readBMP' is never used. [unusedFunction]
 
 ^
 math/coordinate.cpp:21:0: style: The function 'rotationX' is never used. [unusedFunction]
@@ -334,16 +325,13 @@ math/coordinate.cpp:36:0: style: The function 'rotationY' is never used. [unused
 math/coordinate.cpp:51:0: style: The function 'rotationZ' is never used. [unusedFunction]
 
 ^
-photonmapper/photonmapping.cpp:158:0: style: The function 'tracePhotonMapRay' is never used. [unusedFunction]
+photonmapper/photonmapping.cpp:176:0: style: The function 'tracePhotonMapRay' is never used. [unusedFunction]
 
 ^
 math/coordinate.cpp:10:0: style: The function 'translation' is never used. [unusedFunction]
 
 ^
 math/mat4.cpp:92:0: style: The function 'transpose' is never used. [unusedFunction]
-
-^
-image/image.cpp:288:0: style: The function 'writeToEXR' is never used. [unusedFunction]
 
 ^
 nofile:0:0: information: Cppcheck cannot find all the include files (use --check-config for details) [missingIncludeSystem]
