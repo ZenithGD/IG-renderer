@@ -88,8 +88,18 @@ tuple<string, SceneProps> getSceneProps(int argc, char **argv)
 
 int main(int argc, char **argv)
 {
-
     auto [ outFile, props ] = getSceneProps(argc, argv);
+
+    string ext = outFile.substr(outFile.find_last_of(".") + 1);
+    if ( outFile.find_last_of(".") == string::npos ) {
+        cout << "Specify the extension !" << endl;
+        return 1;
+    }
+    
+    if ( ext != "ppm" && ext != "bmp" ) {
+        cout << "Unknown output format ! (" << ext << ")" << endl;
+        return 1;
+    }
 
     Scene sc = cornellDiffuse(props);
 
@@ -109,16 +119,16 @@ int main(int argc, char **argv)
     cout << "done (" << (double)s / 1000.0 << " s)." << endl;
 
     cout << "Tonemapping image..." << flush;
-
-    Image tmImg = tonemapping::gamma(img, 3);
+    
+    img.maxNumber = img.getMaxNumber();
+    Image tmImg = tonemapping::gamma(img, 2.2);
 
     cout << "Writing image... " << flush;
 
-    cout << outFile  << endl;
-    string name = outFile + ".ppm";
+    tmImg.maxNumber = tmImg.getMaxNumber();
 
-    auto msimg = measureTime<std::chrono::milliseconds>(
-        [&](){ tmImg.writeToPPM(name, tmImg.maxNumber, 255); });
+    if ( ext == "bmp" ) tmImg.writeToBMP(outFile);
+    else if ( ext == "ppm" ) tmImg.writeToPPM(outFile, 255);
 
-    cout << "done (" << msimg << " ms)." << endl;
+    cout << "done." << endl;
 }

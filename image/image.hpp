@@ -7,7 +7,8 @@
 
 using namespace std;
 
-struct Image {
+class Image {
+public:
 
     unsigned int width, height;
     double maxNumber;
@@ -40,7 +41,7 @@ struct Image {
      * @param max The max color value to store.
      * @param res The color resolution
      */
-    void writeToPPM(const string& path, double max, unsigned int res = 255) const;
+    void writeToPPM(const string& path, unsigned int res = 255) const;
 
     /**
      * @brief Read PPM image.
@@ -73,6 +74,8 @@ struct Image {
     friend ostream& operator<<(ostream& os, const Image& image);
 
     vector<vector<RGB>> imageData;
+
+    double getMaxNumber();
 };
 
 /**

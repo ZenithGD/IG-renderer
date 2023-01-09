@@ -3,6 +3,16 @@
 #include <regex>
 #include <fstream>
 
+double Image::getMaxNumber() {
+    double maxNumber = 0;
+    for ( unsigned int i = 0; i < height; i++ ) {
+        for ( unsigned int j = 0; j < width; j++ ) {
+            maxNumber = max(maxNumber, maxChannel(imageData[i][j]));
+        }
+    }
+    return maxNumber;
+}
+
 void readHeader(ifstream& f) {
     string header;
     
@@ -73,7 +83,7 @@ Image Image::readPPM(const string& path){
 }
 
 
-void Image::writeToPPM(const string& path, double max, unsigned int res) const {
+void Image::writeToPPM(const string& path, unsigned int res) const {
     ofstream out(path);
 
     if ( !out.is_open() ) {
@@ -81,16 +91,16 @@ void Image::writeToPPM(const string& path, double max, unsigned int res) const {
     }
 
     out << "P3" << endl;
-    out << "#MAX=" << max << endl;
+    out << "#MAX=" << maxNumber << endl;
     out << "# " << path << endl;
     out << width << " " << height << endl;
     out << res << endl;
     for ( unsigned int i = 0; i < height; i++ ) {
         for ( unsigned int j = 0; j < width; j++ ) {
 
-            int r = imageData[i][j].red * (double)res / max;
-            int g = imageData[i][j].green * (double)res / max;
-            int b = imageData[i][j].blue * (double)res / max;
+            int r = imageData[i][j].red * (double)res / maxNumber;
+            int g = imageData[i][j].green * (double)res / maxNumber;
+            int b = imageData[i][j].blue * (double)res / maxNumber;
             out << r << " " << g << " " << b << "  "; 
         }
         out << endl;
@@ -104,14 +114,17 @@ void Image::writeToBMP(const string& path) const {
         throw runtime_error("Can't write to '" + path + "'.");
     }
 
-    /* Write header: 15*/
-
     // write signature
     out.write("BM", 2);
 
     // write file size (should be 54 + 3 * width * height since its color depth
     // is 24 bits.
-    uint32_t fileSize = 54 + 3 * width * height;
+    
+    // Image size : 3 * (width + padding) * height
+    
+    unsigned int padding = (4 - (width * 3) % 4) % 4; 
+    uint32_t rasterSize = 3 * (width + padding) * height;
+    uint32_t fileSize = 54 + rasterSize;
     out.write((char *) &fileSize, sizeof(fileSize));
 
     uint32_t zero = 0;
@@ -126,8 +139,9 @@ void Image::writeToBMP(const string& path) const {
     out.write((char *) &infoHeaderSize, sizeof(infoHeaderSize));
 
     // Write width and height
-    out.write((char *) &width, sizeof(uint32_t));
-    out.write((char *) &height, sizeof(uint32_t));
+    uint32_t w = width, h = height;
+    out.write((char *) &w, sizeof(w));
+    out.write((char *) &h, sizeof(h));
 
     // Write default plane value
     uint16_t planes = 1;
@@ -140,11 +154,7 @@ void Image::writeToBMP(const string& path) const {
     uint32_t compression = 0;
     out.write((char *) &compression, sizeof(compression));
 
-    // Image size : 3 * (width + padding) * height
-    
-    unsigned int padding = (4 - (width * 3) % 4) % 4; 
-    uint32_t rasterSize = 3 * (width + padding) * height;
-    out.write((char *) &rasterSize, sizeof(rasterSize));
+    out.write((char *) &fileSize, sizeof(fileSize));
 
     // write zeros
     uint32_t additionalInfo[] = {70, 70, 1 << 24, 0};
