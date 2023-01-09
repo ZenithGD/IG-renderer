@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <tuple>
 #include <thread>
 
 #include <getopt.h>
@@ -7,34 +7,36 @@
 #include <image/tonemapping.hpp>
 using namespace std;
 
-SceneProps getSceneProps(int argc, char **argv)
+tuple<string, SceneProps> getSceneProps(int argc, char **argv)
 {
 
-    // Default properties
     SceneProps props{
         .viewportWidth = 256,
         .viewportHeight = 256,
-        .antialiasingFactor = 32,
+        .antialiasingFactor = 64,
         .threads = thread::hardware_concurrency(),
-        .bounces = 10};
+        .bounces = 10
+    };
 
     int c, digit_optind = 0;
     static struct option long_options[] = {
         {"width", required_argument, 0, 'w'},
         {"height", required_argument, 0, 't'},
-        {"antialiasing", optional_argument, 0, 0},
+        {"rays-per-pixel", required_argument, 0, 'r'},
         {"multithread", optional_argument, 0, 'm'},
         {"bounces", optional_argument, 0, 0},
         {"outfile", required_argument, 0, 'o'},
         {0, 0, 0, 0}
     };
 
+    string outFile = "test";
+
     for (;;)
     {
         int this_option_optind = optind ? optind : 1;
         int option_index = 0;
 
-        c = getopt_long(argc, argv, "w:t:o:m",
+        c = getopt_long(argc, argv, "w:t:o:m:r:",
                         long_options, &option_index);
         if (c == -1)
             break;
@@ -43,21 +45,27 @@ SceneProps getSceneProps(int argc, char **argv)
         {
 
         case 'w':
-            printf("option w with value '%s'\n", optarg);
-            props.viewportWidth = atoi(optarg);
+            printf("Setting image width to %s\n", optarg);
+            props.viewportWidth = strtol(optarg, nullptr, 10);
             break;
 
         case 't':
-            printf("option t with value '%s'\n", optarg);
-            props.viewportHeight = atoi(optarg);
+            printf("Setting image height to %s\n", optarg);
+            props.viewportHeight = strtol(optarg, nullptr, 10);
             break;
 
         case 'o': 
             printf("option o with value '%s'\n", optarg);
+            outFile = string(optarg);
             break;
 
         case 'm': 
             printf("option m with value '%s'\n", optarg);
+            break;
+
+        case 'r':
+            printf("Setting rays per pixel to %s\n", optarg);
+            props.antialiasingFactor = strtol(optarg, nullptr, 10);
             break;
 
         case 'h':
@@ -68,37 +76,27 @@ SceneProps getSceneProps(int argc, char **argv)
             cout << "-h | --width (required): Height of the image (in pixels)" << endl;
             cout << "-o | --output (required): Image name" << endl;
             cout << "-m | --multithread (optional): Specify the number of threads manually. All cores by default" << endl;
-            cout << "--antialiasing (optional): Number of rays per pixel" << endl;
+            cout << "--rays-per-pixel (required): Number of rays per pixel" << endl;
             cout << "--bounces (optional): Max number of bounces per ray" << endl;
             exit( 1 );
             break;
         }
-        break;
     }
 
-    return props;
+    return { outFile, props };
 }
 
 int main(int argc, char **argv)
 {
 
-    // auto props = getSceneProps(argc, argv);
+    auto [ outFile, props ] = getSceneProps(argc, argv);
 
-    // Default properties
-    SceneProps props{
-        .viewportWidth = 512,
-        .viewportHeight = 256,
-        .antialiasingFactor = 64,
-        .threads = thread::hardware_concurrency(),
-        .bounces = 10
-    };
-
-    Scene sc = cornellEnvMap(props);
+    Scene sc = cornellDiffuse(props);
 
     Image img(sc.getProps().viewportWidth, sc.getProps().viewportHeight);
 
     cout << "Rendering... " << flush;
-    auto ms = measureTime<std::chrono::seconds>(
+    auto s = measureTime<std::chrono::milliseconds>(
         [&]()
         {
             img = sc.drawScene(
@@ -108,7 +106,7 @@ int main(int argc, char **argv)
                 });
         });
 
-    cout << "done (" << ms << " ms)." << endl;
+    cout << "done (" << (double)s / 1000.0 << " s)." << endl;
 
     cout << "Tonemapping image..." << flush;
 
@@ -116,8 +114,11 @@ int main(int argc, char **argv)
 
     cout << "Writing image... " << flush;
 
-    auto msimg = measureTime<std::chrono::milliseconds>(
-        [&](){ tmImg.writeToBMP("test.bmp"); });
+    cout << outFile  << endl;
+    string name = outFile + ".ppm";
 
-    cout << "done (" << msimg << " s)." << endl;
+    auto msimg = measureTime<std::chrono::milliseconds>(
+        [&](){ tmImg.writeToPPM(name, tmImg.maxNumber, 255); });
+
+    cout << "done (" << msimg << " ms)." << endl;
 }

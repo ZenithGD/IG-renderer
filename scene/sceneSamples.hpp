@@ -194,7 +194,7 @@ Scene cornellEmission(const SceneProps& props) {
     auto pF = make_shared<Plane> (1, Vector3(0, 1, 0), gray);
     auto pC = make_shared<Plane> (1, Vector3(0, -1, 0), gray);
     auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), gray);
-    auto pLight = make_shared<Rectangle>(1, 1, Vector3(0, 0.999, 0), emission);
+    auto pLight = make_shared<Rectangle>(0.5, 0.5, Vector3(0, 0.999, 0), emission);
 
     auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, BRDFL);
     auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, -0.25), 0.3, BRDFR);

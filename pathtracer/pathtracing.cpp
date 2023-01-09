@@ -54,7 +54,7 @@ RGB nextEventEstimation(const Scene& sc, const Vector3 origin,
         {
             double geometryContrib = abs(dot(it.closestNormal(), normalize(directRayDir)));
 
-            RGB materialContrib = it.brdf->eval(r(it.closest()), obsDirection, r.direction, it) / M_PI;
+            RGB materialContrib = it.brdf->eval(r(it.closest()), directRayDir, r.direction, it) / M_PI;
 
             RGB lightContrib = l->power / dot(directRayDir, directRayDir) * materialContrib * geometryContrib;
             totalContrib = totalContrib + lightContrib;
