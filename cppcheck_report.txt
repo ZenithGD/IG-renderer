@@ -7,7 +7,7 @@ geometry/rectangle.cpp:8:41: note: Member variable 'Rectangle::x1' is in the wro
 geometry/rectangle.hpp:23:16: note: Member variable 'Rectangle::x1' is in the wrong place in the initializer list.
     double x0, x1, z0, z1, k;
                ^
-image/image.hpp:31:63: performance: Function parameter 'data' should be passed by const reference. [passedByValue]
+image/image.hpp:32:63: performance: Function parameter 'data' should be passed by const reference. [passedByValue]
     Image(unsigned int w, unsigned int h, vector<vector<RGB>> data, double max)
                                                               ^
 image/tonemapping.cpp:165:24: style: The scope of the variable 'v' can be reduced. [variableScope]
@@ -319,7 +319,7 @@ math/coordinate.cpp:100:0: style: The function 'inverseTransformation' is never 
 math/vector3.cpp:14:0: style: The function 'projection' is never used. [unusedFunction]
 
 ^
-image/image.cpp:186:0: style: The function 'readBMP' is never used. [unusedFunction]
+image/image.cpp:196:0: style: The function 'readBMP' is never used. [unusedFunction]
 
 ^
 math/coordinate.cpp:21:0: style: The function 'rotationX' is never used. [unusedFunction]
