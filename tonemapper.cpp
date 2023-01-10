@@ -20,8 +20,8 @@ void ppm(const string path) {
     cout << " done." << endl;
     
     cout << "saving image to '" << path << "reduced.ppm" << "'... ";
-    im.writeToPPM(path + "raw.ppm", im.maxNumber, 65535);
-    imclamp.writeToPPM(path + "reduced.ppm", imclamp.maxNumber, 65535);
+    im.writeToPPM(path + "raw.ppm", 65535);
+    imclamp.writeToPPM(path + "reduced.ppm", 65535);
     cout << "done." << endl;
 }
 

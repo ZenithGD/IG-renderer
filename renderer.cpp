@@ -101,7 +101,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    Scene sc = cornellDiffuse(props);
+    Scene sc = cornellCSGs(props);
 
     Image img(sc.getProps().viewportWidth, sc.getProps().viewportHeight);
 
@@ -121,14 +121,15 @@ int main(int argc, char **argv)
     cout << "Tonemapping image..." << flush;
     
     img.maxNumber = img.getMaxNumber();
+    //Image tmImg = tonemapping::extendedReinhard(img, 0.45, 0.001, 1);
+    //Image tmImg = tonemapping::simpleReinhard(img, 0.18, 0.001);
     Image tmImg = tonemapping::gamma(img, 2.2);
-
     cout << "Writing image... " << flush;
 
     tmImg.maxNumber = tmImg.getMaxNumber();
 
     if ( ext == "bmp" ) tmImg.writeToBMP(outFile);
-    else if ( ext == "ppm" ) tmImg.writeToPPM(outFile, 255);
+    else if ( ext == "ppm" ) tmImg.writeToPPM(outFile, 65535);
 
     cout << "done." << endl;
 }

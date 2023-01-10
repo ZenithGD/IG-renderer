@@ -20,9 +20,9 @@ namespace tonemapping {
 
     Image gammaClamp(const Image& image, double gamma);
 
-    Image simpleReinhard(const Image& image);
+    Image simpleReinhard(const Image& image, const double a, const double delta);
 
-    Image extendedReinhard(const Image& image, double maxWhite);
+    Image extendedReinhard(const Image& image, const double a, const double delta, const double lwhite);
 
     Image filmicUncharted(const Image& image);
 

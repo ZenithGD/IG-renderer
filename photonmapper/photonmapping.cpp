@@ -21,8 +21,8 @@ struct PixelResult
     RGB contribution;
 };
 
-void photonTraceRay(const Scene& sc, const Ray& r, LightPhotonInfo& t, const RGB& energy,
-    const unsigned int photons, const unsigned int total, const unsigned int bounces, bool isCaustic) {
+void photonTraceRay(const Scene& sc, const Ray& r, LightPhotonInfo& t, const RGB& energy, 
+    const unsigned int bounces, bool isCaustic, const PhotonConfig& pc) {
 
     if ( bounces >= sc.getProps().bounces ) return;
 
@@ -61,24 +61,23 @@ void photonTraceRay(const Scene& sc, const Ray& r, LightPhotonInfo& t, const RGB
                     outEnergy = energy * li;
 
                     // bounce > 0 if we take next event estimation into account
-                    //if ( bounces > 0 ) {
+                    if ( pc.nee || bounces > 0 ) {
                         // Add photons to light source
-                    if ( isCaustic ) {
-                        t.causticPhotons.push_back(p);
-                    } else {
-                        t.photons.push_back(p);
+                        if ( isCaustic ) {
+                            t.causticPhotons.push_back(p);
+                        } else {
+                            t.photons.push_back(p);
+                        }
+                        t.light->count++;
                     }
-                    t.light->count++;
-                    //}
                 }
-                photonTraceRay(sc, out, t, outEnergy, photons, total, bounces + 1, isDelta);
+                photonTraceRay(sc, out, t, outEnergy, bounces + 1, isDelta, pc);
             }
         }
     }
 }
 
-void photonTrace(const Scene& sc, vector<LightPhotonInfo>& lightPhotons,
-    const unsigned int photons, const unsigned int total) {
+void photonTrace(const Scene& sc, vector<LightPhotonInfo>& lightPhotons, const PhotonConfig& pc) {
 
     auto lights = sc.lights.size();
     double luminanceTotal = 0.0;
@@ -91,12 +90,12 @@ void photonTrace(const Scene& sc, vector<LightPhotonInfo>& lightPhotons,
         // Photon initial energy
         RGB energy = t.light->power * 4 * M_PI;
 
-        int times = photons * (t.light->power.getLuminance() / luminanceTotal); 
+        int times = pc.maxPhotons * (t.light->power.getLuminance() / luminanceTotal); 
     
         if ( t.light->count < times ) {
             Ray r = t.light->sample();
 
-            photonTraceRay(sc, r, t, energy, photons, total, 0, false);
+            photonTraceRay(sc, r, t, energy, 0, false, pc);
         }
     }
 }
@@ -120,7 +119,7 @@ RGB densityEstimation(const Vector3& x, const Vector3& inDir, const Intersection
     return color;
 }
 
-RGB traceRay(const Ray& r, const Scene& sc, const PhotonMap& pmap, const PhotonMap& cmap) {
+RGB traceRay(const Ray& r, const Scene& sc, const PhotonMap& pmap, const PhotonMap& cmap, const PhotonConfig& pc) {
     Intersection closest {
         .intersects = false,
     };
@@ -147,7 +146,7 @@ RGB traceRay(const Ray& r, const Scene& sc, const PhotonMap& pmap, const PhotonM
                 Ray outRay(r(closest.closest()), outDirection);
 
                 // Recursively trace ray
-                return traceRay(outRay, sc, pmap, cmap);
+                return traceRay(outRay, sc, pmap, cmap, pc);
             }
 
             // Non-delta interaction, density estimation on the intersection point
@@ -155,14 +154,16 @@ RGB traceRay(const Ray& r, const Scene& sc, const PhotonMap& pmap, const PhotonM
             // Non-delta interaction, density estimation on the intersection point
             auto causticPhotons = cmap.nearest_neighbors(r(closest.closest()), 50);
 
-            RGB contrib ; // nextEventEstimation(sc, r(closest.closest()), r.direction, closest)
+            RGB contrib = pc.nee 
+                ? nextEventEstimation(sc, r(closest.closest()), r.direction, closest)
+                : RGB();
         
             if ( !nearestPhotons.empty() ) {
-                contrib = contrib + densityEstimation(r(closest.closest()), r.direction, closest, nearestPhotons) * 0.5;
+                contrib = contrib + densityEstimation(r(closest.closest()), r.direction, closest, nearestPhotons) * pc.photonBoost;
             }
 
             if ( !causticPhotons.empty() ) {
-                contrib = contrib + densityEstimation(r(closest.closest()), r.direction, closest, causticPhotons) * 1;
+                contrib = contrib + densityEstimation(r(closest.closest()), r.direction, closest, causticPhotons) * pc.causticBoost;
             }
 
             return contrib;
@@ -217,7 +218,7 @@ RGB tracePhotonMapRay(const Ray& r, const Scene& sc, const PhotonMap& pmap) {
     return RGB();
 }
 
-Image render(const Scene& sc, const PhotonMap& pmap, const PhotonMap& cmap) {
+Image render(const Scene& sc, const PhotonMap& pmap, const PhotonMap& cmap, const PhotonConfig& pc) {
 
     // task function should have pixel position and rays as arguments
     using TaskFn = std::function<PixelResult(void)>;
@@ -238,7 +239,7 @@ Image render(const Scene& sc, const PhotonMap& pmap, const PhotonMap& cmap) {
 
                 for ( const Ray& ray : rays ) {
 
-                    contrib = contrib + traceRay(ray, sc, pmap, cmap);
+                    contrib = contrib + traceRay(ray, sc, pmap, cmap, pc);
                 }
                 return PixelResult{ .x = j, .y = i, .contribution = contrib / (double)rays.size() }; 
             });
@@ -269,7 +270,7 @@ Image render(const Scene& sc, const PhotonMap& pmap, const PhotonMap& cmap) {
     return img;
 }
 
-Image photonMapping(const Scene& sc, const unsigned int total, const unsigned int maxPhotons) {
+Image photonMapping(const Scene& sc, const PhotonConfig& pc) {
     
     auto lights = sc.lights.size();
     vector<LightPhotonInfo> lightPhotons(lights);
@@ -280,7 +281,7 @@ Image photonMapping(const Scene& sc, const unsigned int total, const unsigned in
     int nextPhotonNum = 0;
 
     while ( true ){
-        photonTrace(sc, lightPhotons, total, maxPhotons);
+        photonTrace(sc, lightPhotons, pc);
 
         
         int totalPhotons = 0;
@@ -293,7 +294,7 @@ Image photonMapping(const Scene& sc, const unsigned int total, const unsigned in
             nextPhotonNum += 2000;
         }
 
-        if ( totalPhotons >= maxPhotons ) {
+        if ( totalPhotons >= pc.maxPhotons ) {
             cout << "Photons : " << totalPhotons << endl;
             break;
         }
@@ -336,7 +337,7 @@ Image photonMapping(const Scene& sc, const unsigned int total, const unsigned in
     std::cout << "done." << std::endl;
 
     // Density estimation
-    auto L = render(sc, pmap, cmap);
+    auto L = render(sc, pmap, cmap, pc);
     // render photon map directly
     // return renderPhotonMap(sc, pmap);
 

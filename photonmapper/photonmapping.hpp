@@ -5,4 +5,10 @@
 
 using namespace std;
 
-Image photonMapping(const Scene& sc, const unsigned int total, const unsigned int maxPhotons);
+struct PhotonConfig {
+    unsigned int total, maxPhotons, bounces;
+    double photonBoost, causticBoost;
+    bool nee;
+};
+
+Image photonMapping(const Scene& sc, const PhotonConfig& pc);

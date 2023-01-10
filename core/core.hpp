@@ -1,3 +1,5 @@
+#pragma once
+
 #include <chrono>
 #include <functional>
 
@@ -5,7 +7,6 @@
  * Fine tune values 
  */
 const double INTERSECTION_TOLERANCE = 0.0001;
-
 
 /*
  * Core functions

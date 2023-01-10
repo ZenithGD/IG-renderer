@@ -150,6 +150,5 @@ inline RGB equalize(const RGB& c, double v) { return RGB(c.red / v, c.green / v,
 RGB equalizeClamp(const RGB& c, double v);
 RGB gammaCorrection(const RGB& c, double k, double gamma);
 RGB gammaClamp(const RGB& c, double k, double gamma);
-inline RGB simpleReinhard(const RGB& col) { return col / ( col + 1 ); }
 RGB extendedReinhard(const RGB& col, double maxWhite);
 RGB filmicUncharted(const RGB& v);

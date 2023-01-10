@@ -1,5 +1,5 @@
 #include "tonemapping.hpp"
-
+#include <core/core.hpp>
 #include <tuple>
 #include <algorithm>
 
@@ -72,25 +72,69 @@ namespace tonemapping {
         return result;
     }
 
-    Image simpleReinhard(const Image& image) {
+    Image simpleReinhard(const Image& image, const double a, const double delta) {
         Image result = image;
         result.maxNumber = 1;
+
+        double lw = 0;
+        unsigned int num = 0;
+
+        // compute Lw term
         for ( unsigned int i = 0; i < image.height; i++ ) {
             for ( unsigned int j = 0; j < image.width; j++ ) {
                 RGB color = image.imageData[i][j];
-                result.imageData[i][j] = simpleReinhard(color);
+                if ( color.getLuminance() > delta ) { 
+                    lw += log(color.getLuminance());
+                    num++;
+                }
+            }
+        }
+
+        lw = exp(lw / double(num));
+
+        for ( unsigned int i = 0; i < image.height; i++ ) {
+            for ( unsigned int j = 0; j < image.width; j++ ) {
+                RGB color = image.imageData[i][j];
+                double L = color.getLuminance() * a / lw;
+                if ( color.getLuminance() > 0 )
+                    result.imageData[i][j] = changeLuminance(color, L / ( 1.0 + L ));
             }
         }
         return result;
     }
 
-    Image extendedReinhard(const Image& image, double maxWhite) {
+    Image extendedReinhard(const Image& image, const double a, const double delta, const double lwhite) {
         Image result = image;
         result.maxNumber = 1;
+
+        double lw = 0;
+        unsigned int num = 0;
+
+        // compute Lw term
         for ( unsigned int i = 0; i < image.height; i++ ) {
             for ( unsigned int j = 0; j < image.width; j++ ) {
                 RGB color = image.imageData[i][j];
-                result.imageData[i][j] = extendedReinhard(color, maxWhite);
+                if ( color.getLuminance() > delta ) { 
+                    lw += log(color.getLuminance());
+                    num++;
+                }
+            }
+        }
+
+        lw = exp(lw / double(num));
+
+        #ifdef DEBUG
+            cout << "\e[0;33mWarning!\e[0;37m a = " << a << "is bigger than the log-avg luminance lw = " << lw << "!" << endl;
+        #endif
+
+        for ( unsigned int i = 0; i < image.height; i++ ) {
+            for ( unsigned int j = 0; j < image.width; j++ ) {
+                RGB color = image.imageData[i][j];
+                double L = color.getLuminance() * a / lw;
+                if ( color.getLuminance() > 0 ) {
+                    double newL = (L * ( 1 + L / (lwhite * lwhite))) / ( 1.0 + L );
+                    result.imageData[i][j] = changeLuminance(color, newL);
+                }
             }
         }
         return result;
