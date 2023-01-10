@@ -10,19 +10,19 @@ geometry/rectangle.hpp:23:16: note: Member variable 'Rectangle::x1' is in the wr
 image/image.hpp:32:63: performance: Function parameter 'data' should be passed by const reference. [passedByValue]
     Image(unsigned int w, unsigned int h, vector<vector<RGB>> data, double max)
                                                               ^
-image/tonemapping.cpp:165:24: style: The scope of the variable 'v' can be reduced. [variableScope]
+image/tonemapping.cpp:209:24: style: The scope of the variable 'v' can be reduced. [variableScope]
                 double v, v1, scale;
                        ^
-image/tonemapping.cpp:165:31: style: The scope of the variable 'scale' can be reduced. [variableScope]
+image/tonemapping.cpp:209:31: style: The scope of the variable 'scale' can be reduced. [variableScope]
                 double v, v1, scale;
                               ^
-image/tonemapping.cpp:183:67: error: Uninitialized variable: v1 [uninitvar]
+image/tonemapping.cpp:227:67: error: Uninitialized variable: v1 [uninitvar]
                 double newLuminance = clampHigh(prevLuminance / ( v1 + 1 ), 1);
                                                                   ^
-image/tonemapping.cpp:171:34: note: Assuming condition is false
+image/tonemapping.cpp:215:34: note: Assuming condition is false
                     if ( abs(vs) < threshold ) {
                                  ^
-image/tonemapping.cpp:183:67: note: Uninitialized variable: v1
+image/tonemapping.cpp:227:67: note: Uninitialized variable: v1
                 double newLuminance = clampHigh(prevLuminance / ( v1 + 1 ), 1);
                                                                   ^
 material/TextureBRDF.cpp:20:92: style:inconclusive: Function 'sampleDiffuse' argument 3 names different: declaration 'it' definition 'n'. [funcArgNamesDifferent]
@@ -172,6 +172,9 @@ double angle (Vector3 dir1, Vector3 n){
 pathtracer/pathtracing.cpp:153:29: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
                     contrib = contrib + pathTraceRay(sc, r, 0);
                             ^
+photonmapper.cpp:31:9: style: The scope of the variable 'c' can be reduced. [variableScope]
+    int c, digit_optind = 0;
+        ^
 scene/sceneSamples.hpp:43:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
     auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
                ^
@@ -217,19 +220,16 @@ scene/sceneSamples.hpp:284:13: style: Variable 'pB' is assigned a value that is 
 scene/sceneSamples.hpp:285:13: style: Variable 'pL' is assigned a value that is never used. [unreadVariable]
     auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), texture2);
             ^
-scene/sceneSamples.hpp:310:15: style: Variable 'BRDP' is assigned a value that is never used. [unreadVariable]
-    auto BRDP = make_shared<SimpleBRDF>(RGB(0, 0, 1));
-              ^
 scene/sceneSamples.hpp:319:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
     auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
                ^
-scene/sceneSamples.hpp:361:13: style: Variable 'sL' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:371:13: style: Variable 'sL' is assigned a value that is never used. [unreadVariable]
     auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, BRDFL);
             ^
-scene/sceneSamples.hpp:362:13: style: Variable 'sR' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:372:13: style: Variable 'sR' is assigned a value that is never used. [unreadVariable]
     auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, -0.25), 0.3, BRDFR);
             ^
-scene/sceneSamples.hpp:363:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:373:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
     auto sR4 = make_shared<Sphere>(Vector3(0, -0.2, 0.5), 0.1, BRDFR);
              ^
 scene/sceneSamples.hpp:402:16: style: Variable 'BRDFL' is assigned a value that is never used. [unreadVariable]
@@ -238,16 +238,25 @@ scene/sceneSamples.hpp:402:16: style: Variable 'BRDFL' is assigned a value that 
 scene/sceneSamples.hpp:403:16: style: Variable 'BRDFR' is assigned a value that is never used. [unreadVariable]
     auto BRDFR = make_shared<SimpleBRDF>(RGB(0.6, 0.7, 0.2));
                ^
-photonmapper/photonmapping.cpp:86:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+scene/sceneSamples.hpp:451:16: style: Variable 'BRDFP' is assigned a value that is never used. [unreadVariable]
+    auto BRDFP = make_shared<SimpleBRDF>(RGB(0, 0, 1));
+               ^
+scene/sceneSamples.hpp:473:13: style: Variable 'sL' is assigned a value that is never used. [unreadVariable]
+    auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, BRDFL);
+            ^
+scene/sceneSamples.hpp:474:13: style: Variable 'sR' is assigned a value that is never used. [unreadVariable]
+    auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, -0.25), 0.3, BRDFR);
+            ^
+photonmapper/photonmapping.cpp:85:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
         luminanceTotal += l->power.getLuminance();
                        ^
-photonmapper/photonmapping.cpp:241:29: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
-                    contrib = contrib + traceRay(ray, sc, pmap, cmap);
+photonmapper/photonmapping.cpp:242:29: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+                    contrib = contrib + traceRay(ray, sc, pmap, cmap, pc);
                             ^
-photonmapper/photonmapping.cpp:288:26: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+photonmapper/photonmapping.cpp:289:26: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
             totalPhotons += t.light->count;
                          ^
-photonmapper/photonmapping.cpp:83:17: style: Variable 'lights' is assigned a value that is never used. [unreadVariable]
+photonmapper/photonmapping.cpp:82:17: style: Variable 'lights' is assigned a value that is never used. [unreadVariable]
     auto lights = sc.lights.size();
                 ^
 procedural/noise.cpp:7:14: warning: Member variable 'SimpleNoise::permutationTable' is not initialized in the constructor. [uninitMemberVar]
@@ -313,6 +322,9 @@ photonmapper/kernel.cpp:7:0: style: The function 'coneKernel' is never used. [un
 photonmapper/kernel.cpp:12:0: style: The function 'epanechnikovKernel' is never used. [unusedFunction]
 
 ^
+color/color.cpp:30:0: style: The function 'extendedReinhard' is never used. [unusedFunction]
+
+^
 math/coordinate.cpp:100:0: style: The function 'inverseTransformation' is never used. [unusedFunction]
 
 ^
@@ -331,7 +343,10 @@ math/coordinate.cpp:36:0: style: The function 'rotationY' is never used. [unused
 math/coordinate.cpp:51:0: style: The function 'rotationZ' is never used. [unusedFunction]
 
 ^
-photonmapper/photonmapping.cpp:176:0: style: The function 'tracePhotonMapRay' is never used. [unusedFunction]
+image/tonemapping.cpp:75:0: style: The function 'simpleReinhard' is never used. [unusedFunction]
+
+^
+photonmapper/photonmapping.cpp:177:0: style: The function 'tracePhotonMapRay' is never used. [unusedFunction]
 
 ^
 math/coordinate.cpp:10:0: style: The function 'translation' is never used. [unusedFunction]
