@@ -72,10 +72,10 @@ tuple<string, SceneProps> getSceneProps(int argc, char **argv)
         case '?': // Unrecognized option
         default:
             cout << "Usage:" << endl;
-            cout << "-w | --width (required): Width of the image (in pixels)" << endl;
-            cout << "-h | --width (required): Height of the image (in pixels)" << endl;
-            cout << "-o | --output (required): Image name" << endl;
-            cout << "-m | --multithread (optional): Specify the number of threads manually. All cores by default" << endl;
+            cout << "--width (required): Width of the image (in pixels)" << endl;
+            cout << "--height (required): Height of the image (in pixels)" << endl;
+            cout << "--output (required): Image name" << endl;
+            cout << "--multithread (optional): Specify the number of threads manually. All cores by default" << endl;
             cout << "--rays-per-pixel (required): Number of rays per pixel" << endl;
             cout << "--bounces (optional): Max number of bounces per ray" << endl;
             exit( 1 );
