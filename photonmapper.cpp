@@ -112,6 +112,17 @@ int main(int argc, char** argv) {
     PhotonConfig photonConfig;
     std::tie(outFile, props, photonConfig) = [&]{ return getSceneProps(argc, argv); }();
 
+    string ext = outFile.substr(outFile.find_last_of(".") + 1);
+    if ( outFile.find_last_of(".") == string::npos ) {
+        cout << "Specify the extension !" << endl;
+        return 1;
+    }
+    
+    if ( ext != "ppm" && ext != "bmp" ) {
+        cout << "Unknown output format ! (" << ext << ")" << endl;
+        return 1;
+    }
+    
     Scene sc = cornellMatVariations(props);
 
     Image img(props.viewportWidth, props.viewportHeight);
@@ -135,7 +146,8 @@ int main(int argc, char** argv) {
 
     cout << "Writing image... " << flush;
 
-    auto msimg = measureTime<std::chrono::milliseconds>( [&](){ tmImg.writeToBMP("test.bmp"); } );
+    if ( ext == "bmp" ) tmImg.writeToBMP(outFile);
+    else if ( ext == "ppm" ) tmImg.writeToPPM(outFile, 65535);
 
-    cout << "done (" << msimg << " ms)." << endl;
+    cout << "done." << endl;
 }
