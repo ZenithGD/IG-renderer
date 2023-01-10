@@ -74,7 +74,7 @@ tuple<string, SceneProps> getSceneProps(int argc, char **argv)
             cout << "Usage:" << endl;
             cout << "--width (required): Width of the image (in pixels)" << endl;
             cout << "--height (required): Height of the image (in pixels)" << endl;
-            cout << "--output (required): Image name" << endl;
+            cout << "--outfile (required): Image name" << endl;
             cout << "--multithread (optional): Specify the number of threads manually. All cores by default" << endl;
             cout << "--rays-per-pixel (required): Number of rays per pixel" << endl;
             cout << "--bounces (optional): Max number of bounces per ray" << endl;
