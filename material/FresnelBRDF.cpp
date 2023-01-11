@@ -81,6 +81,8 @@ optional<BRDFInteraction> FresnelBRDF::sample(const Vector3& omega0, const Vecto
     // Russian roulette
     double r = rng();
     Vector3 sampleDir;
+
+    // by the law of reflection the specular angle is equal to the incident angle
     switch (russianRoulette(r, fresnelCoef(r0, r1, angle(ax, specDir), angle(ax, refDir))))
     {
     case SPECULAR:

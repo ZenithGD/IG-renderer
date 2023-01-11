@@ -23,7 +23,7 @@ tuple<string, SceneProps> getSceneProps(int argc, char **argv)
         {"width", required_argument, 0, 'w'},
         {"height", required_argument, 0, 't'},
         {"rays-per-pixel", required_argument, 0, 'r'},
-        {"multithread", optional_argument, 0, 'm'},
+        {"multithread", required_argument, 0, 'm'},
         {"bounces", optional_argument, 0, 0},
         {"outfile", required_argument, 0, 'o'},
         {0, 0, 0, 0}
@@ -55,12 +55,13 @@ tuple<string, SceneProps> getSceneProps(int argc, char **argv)
             break;
 
         case 'o': 
-            printf("option o with value '%s'\n", optarg);
+            printf("Setting outfile name to '%s'", optarg);
             outFile = string(optarg);
             break;
 
         case 'm': 
-            printf("option m with value '%s'\n", optarg);
+            printf("Using %s threads", optarg);
+            props.threads = strtol(optarg, nullptr, 10);
             break;
 
         case 'r':
@@ -101,7 +102,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    Scene sc = cornellCSGs(props);
+    Scene sc = cornellNoise(props);
 
     Image img(sc.getProps().viewportWidth, sc.getProps().viewportHeight);
 

@@ -23,9 +23,9 @@ tuple<string, SceneProps, PhotonConfig> getSceneProps(int argc, char **argv)
         .total = 50000,
         .maxPhotons = 50000,
         .bounces = 10,
-        .photonBoost = 0.8,
-        .causticBoost = 1.2,
-        .nee = false
+        .photonBoost = 1,
+        .causticBoost = 0.5,
+        .nee = true
     };
 
     int c, digit_optind = 0;
@@ -123,7 +123,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    Scene sc = cornellMatVariations(props);
+    Scene sc = cornellTextured(props);
 
     Image img(props.viewportWidth, props.viewportHeight);
 
@@ -141,7 +141,7 @@ int main(int argc, char** argv) {
 
     cout << "Tonemapping image..." << flush;
 
-    Image tmImg = tonemapping::gamma(img, 3);
+    Image tmImg = tonemapping::gamma(img, 2.2);
     tmImg.maxNumber = tmImg.getMaxNumber();
 
     cout << "Writing image... " << flush;

@@ -61,7 +61,7 @@ void photonTraceRay(const Scene& sc, const Ray& r, LightPhotonInfo& t, const RGB
                     outEnergy = energy * li;
 
                     // bounce > 0 if we take next event estimation into account
-                    if ( pc.nee || bounces > 0 ) {
+                    if ( !pc.nee || bounces > 0 ) {
                         // Add photons to light source
                         if ( isCaustic ) {
                             t.causticPhotons.push_back(p);

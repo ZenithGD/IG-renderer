@@ -141,7 +141,6 @@ Scene cornellMatVariations(const SceneProps& props) {
     auto BRDFL = make_shared<SimpleBRDF>(RGB(0.1, 0.4, 0.5), RGB(0.5,0.5,0.5), RGB());
     auto BRDFR = make_shared<FresnelBRDF>(RGB(1,1,1), RGB(1, 1, 1), 1.5);
     auto gray = make_shared<SimpleBRDF>(RGB(0.5, 0.5, 0.5));
-    auto emission = make_shared<Emitter>(RGB(1,1,1));
 
     auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), BRDFPL);
     auto pR = make_shared<Plane> (1, Vector3(-1, 0, 0), BRDFPR);
@@ -194,7 +193,7 @@ Scene cornellEmission(const SceneProps& props) {
     auto pF = make_shared<Plane> (1, Vector3(0, 1, 0), gray);
     auto pC = make_shared<Plane> (1, Vector3(0, -1, 0), gray);
     auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), gray);
-    auto pLight = make_shared<Rectangle>(0.5, 0.5, Vector3(0, 0.999, 0), emission);
+    auto pLight = make_shared<Rectangle>(1.5, 1.5, Vector3(0, 0.999, 0), emission);
 
     auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, BRDFL);
     auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, -0.25), 0.3, BRDFR);
@@ -409,16 +408,16 @@ Scene cornellNoise(const SceneProps& props) {
     auto texture = make_shared<TextureBRDF>(tex, 1);
 
     auto wNoise = make_shared<WoodyNoise>(noise, 5);
-    auto tex2 = make_shared<NoiseTexture>(wNoise, RGB(0.29,0.12,0.01), RGB(0.93,0.67,0.05));
+    auto tex2 = make_shared<NoiseTexture>(wNoise, RGB(0,0,0), RGB(1,1,1));
     auto texture2 = make_shared<TextureBRDF>(tex2, 1);
 
     auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), BRDFPL);
     auto pR = make_shared<Plane> (1, Vector3(-1, 0, 0), BRDFPR);
     auto pF = make_shared<Plane> (1, Vector3(0, 1, 0), gray);
     auto pC = make_shared<Plane> (1, Vector3(0, -1, 0), gray);
-    auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), texture2);
+    auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), texture);
 
-    auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, texture);
+    auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, texture2);
     auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, -0.25), 0.3, texture2);
     auto light  = make_shared<PointLight>(Vector3(0.0, 0.5, 0), RGB(1,1,1));
 
@@ -451,6 +450,7 @@ Scene cornellCSGs(const SceneProps& props) {
     auto BRDFP = make_shared<SimpleBRDF>(RGB(0, 0, 1));
 
     auto BRDFL = make_shared<SimpleBRDF>(RGB(0.6, 0.75, 0.8));
+    auto BRDFM = make_shared<SimpleBRDF>(RGB(0.8, 0.5, 0.3));
     auto BRDFR = make_shared<SimpleBRDF>(RGB(0.6, 0.7, 0.2));
     auto gray = make_shared<SimpleBRDF>(RGB(0.7, 0.7, 0.7));
     auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), BRDFPL);
@@ -467,7 +467,7 @@ Scene cornellCSGs(const SceneProps& props) {
     auto s6 = make_shared<Sphere>(Vector3(0.6, -0.4, 0.4), 0.25, gray);
 
     auto sCSG1 = make_shared<CSG>(s1, s2, CSGOperation::Union, BRDFL);
-    auto sCSG2 = make_shared<CSG>(s3, s4, CSGOperation::Intersection, BRDFR);
+    auto sCSG2 = make_shared<CSG>(s3, s4, CSGOperation::Intersection, BRDFM);
     auto sCSG3 = make_shared<CSG>(s6, s5, CSGOperation::Difference, BRDFR);
 
     auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, BRDFL);
