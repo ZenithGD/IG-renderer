@@ -190,55 +190,52 @@ scene/sceneSamples.hpp:114:13: style: Variable 'sR' is assigned a value that is 
 scene/sceneSamples.hpp:115:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
     auto sR4 = make_shared<Sphere>(Vector3(0, -0.2, 0.5), 0.1, BRDFR);
              ^
-scene/sceneSamples.hpp:144:19: style: Variable 'emission' is assigned a value that is never used. [unreadVariable]
-    auto emission = make_shared<Emitter>(RGB(1,1,1));
-                  ^
-scene/sceneSamples.hpp:151:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:150:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
     auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
                ^
-scene/sceneSamples.hpp:188:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:187:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
     auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
                      ^
-scene/sceneSamples.hpp:201:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:200:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
     auto sR4 = make_shared<Sphere>(Vector3( 0.3, 0, 0.6), 0.3, BRDFR);
              ^
-scene/sceneSamples.hpp:203:17: style: Variable 'light' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:202:17: style: Variable 'light' is assigned a value that is never used. [unreadVariable]
     auto light  = make_shared<PointLight>(Vector3(0.0, 0.5, 0), RGB(1,1,1));
                 ^
-scene/sceneSamples.hpp:233:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:232:22: style: Variable 'fullReflect' is assigned a value that is never used. [unreadVariable]
     auto fullReflect = make_shared<SimpleBRDF>(RGB(0.1, 0.1, 0.1), RGB(0.9, 0.9, 0.9));
                      ^
-scene/sceneSamples.hpp:243:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:242:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
     auto pBack = make_shared<Plane> (4, Vector3(0, 0, 1), texture);
                ^
-scene/sceneSamples.hpp:247:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:246:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
     auto sR4 = make_shared<Sphere>(Vector3( 0.3, 0, 0.6), 0.3, BRDFR);
              ^
-scene/sceneSamples.hpp:284:13: style: Variable 'pB' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:283:13: style: Variable 'pB' is assigned a value that is never used. [unreadVariable]
     auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), texture2);
             ^
-scene/sceneSamples.hpp:285:13: style: Variable 'pL' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:284:13: style: Variable 'pL' is assigned a value that is never used. [unreadVariable]
     auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), texture2);
             ^
-scene/sceneSamples.hpp:319:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:318:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
     auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
                ^
-scene/sceneSamples.hpp:371:13: style: Variable 'sL' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:370:13: style: Variable 'sL' is assigned a value that is never used. [unreadVariable]
     auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, BRDFL);
             ^
-scene/sceneSamples.hpp:372:13: style: Variable 'sR' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:371:13: style: Variable 'sR' is assigned a value that is never used. [unreadVariable]
     auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, -0.25), 0.3, BRDFR);
             ^
-scene/sceneSamples.hpp:373:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:372:14: style: Variable 'sR4' is assigned a value that is never used. [unreadVariable]
     auto sR4 = make_shared<Sphere>(Vector3(0, -0.2, 0.5), 0.1, BRDFR);
              ^
-scene/sceneSamples.hpp:402:16: style: Variable 'BRDFL' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:401:16: style: Variable 'BRDFL' is assigned a value that is never used. [unreadVariable]
     auto BRDFL = make_shared<SimpleBRDF>(RGB(0.6, 0.75, 0.8));
                ^
-scene/sceneSamples.hpp:403:16: style: Variable 'BRDFR' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:402:16: style: Variable 'BRDFR' is assigned a value that is never used. [unreadVariable]
     auto BRDFR = make_shared<SimpleBRDF>(RGB(0.6, 0.7, 0.2));
                ^
-scene/sceneSamples.hpp:451:16: style: Variable 'BRDFP' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:450:16: style: Variable 'BRDFP' is assigned a value that is never used. [unreadVariable]
     auto BRDFP = make_shared<SimpleBRDF>(RGB(0, 0, 1));
                ^
 scene/sceneSamples.hpp:473:13: style: Variable 'sL' is assigned a value that is never used. [unreadVariable]
