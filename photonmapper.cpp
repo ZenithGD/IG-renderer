@@ -24,7 +24,7 @@ tuple<string, SceneProps, PhotonConfig> getSceneProps(int argc, char **argv)
         .maxPhotons = 50000,
         .bounces = 10,
         .photonBoost = 1,
-        .causticBoost = 0.5,
+        .causticBoost = 1.2,
         .nee = true
     };
 

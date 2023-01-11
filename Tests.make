@@ -90,6 +90,7 @@ OBJECTS := \
 	$(OBJDIR)/vector2.o \
 	$(OBJDIR)/vector3.o \
 	$(OBJDIR)/pathtracing.o \
+	$(OBJDIR)/kernel.o \
 	$(OBJDIR)/photon.o \
 	$(OBJDIR)/photonmapping.o \
 	$(OBJDIR)/noise.o \
@@ -98,12 +99,6 @@ OBJECTS := \
 	$(OBJDIR)/scene.o \
 	$(OBJDIR)/testsuite.o \
 	$(OBJDIR)/tests.o \
-	$(OBJDIR)/Win32OpenGLWindow.o \
-	$(OBJDIR)/Win32Window.o \
-	$(OBJDIR)/X11OpenGLWindow.o \
-	$(OBJDIR)/nfd_win.o \
-	$(OBJDIR)/exrcat.o \
-	$(OBJDIR)/exrwritetest.o \
 
 RESOURCES := \
 
@@ -237,6 +232,9 @@ $(OBJDIR)/vector3.o: math/vector3.cpp
 $(OBJDIR)/pathtracing.o: pathtracer/pathtracing.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/kernel.o: photonmapper/kernel.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/photon.o: photonmapper/photon.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -259,24 +257,6 @@ $(OBJDIR)/testsuite.o: tests/testsuite.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/tests.o: tests.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/Win32OpenGLWindow.o: vendor/tinyexr/examples/exrview/OpenGLWindow/Win32OpenGLWindow.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/Win32Window.o: vendor/tinyexr/examples/exrview/OpenGLWindow/Win32Window.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/X11OpenGLWindow.o: vendor/tinyexr/examples/exrview/OpenGLWindow/X11OpenGLWindow.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/nfd_win.o: vendor/tinyexr/examples/exrview/ThirdPartyLibs/nativefiledialog/src/nfd_win.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/exrcat.o: vendor/tinyexr/test/exrcat/exrcat.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/exrwritetest.o: vendor/tinyexr/test/exrwrite/exrwritetest.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

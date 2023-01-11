@@ -90,6 +90,7 @@ OBJECTS := \
 	$(OBJDIR)/vector2.o \
 	$(OBJDIR)/vector3.o \
 	$(OBJDIR)/pathtracing.o \
+	$(OBJDIR)/kernel.o \
 	$(OBJDIR)/photon.o \
 	$(OBJDIR)/photonmapping.o \
 	$(OBJDIR)/photonmapper.o \
@@ -97,7 +98,6 @@ OBJECTS := \
 	$(OBJDIR)/camera.o \
 	$(OBJDIR)/light.o \
 	$(OBJDIR)/scene.o \
-	$(OBJDIR)/miniz.o \
 
 RESOURCES := \
 
@@ -231,6 +231,9 @@ $(OBJDIR)/vector3.o: math/vector3.cpp
 $(OBJDIR)/pathtracing.o: pathtracer/pathtracing.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/kernel.o: photonmapper/kernel.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/photon.o: photonmapper/photon.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -252,9 +255,6 @@ $(OBJDIR)/light.o: scene/light.cpp
 $(OBJDIR)/scene.o: scene/scene.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/miniz.o: vendor/tinyexr/deps/miniz/miniz.c
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 -include $(OBJECTS:%.o=%.d)
 ifneq (,$(PCH))

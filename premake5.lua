@@ -38,11 +38,6 @@ local rendererFiles = {
     "scene/**.hpp",         "scene/**.cpp",
     "material/**.hpp",      "material/**.cpp",
     "procedural/**.hpp",    "procedural/**.cpp",
-
-    "vendor/tinyexr/tinyexr.h",
-    "vendor/tinyexr/deps/miniz/miniz.c",
-    "vendor/tinyexr/deps/miniz/miniz.c",
-
     "pathtracer/**.hpp",    "pathtracer/**.cpp",
 }
 
@@ -56,11 +51,6 @@ local photonMapperFiles = {
     "scene/**.hpp",         "scene/**.cpp",
     "material/**.hpp",      "material/**.cpp",
     "procedural/**.hpp",    "procedural/**.cpp",
-    
-    "vendor/tinyexr/tinyexr.h",
-    "vendor/tinyexr/deps/miniz/miniz.c",
-    "vendor/tinyexr/deps/miniz/miniz.c",
-
     "pathtracer/**.hpp",    "pathtracer/**.cpp",
     "photonmapper/**.hpp",    "photonmapper/**.cpp",
 }

@@ -95,7 +95,6 @@ OBJECTS := \
 	$(OBJDIR)/camera.o \
 	$(OBJDIR)/light.o \
 	$(OBJDIR)/scene.o \
-	$(OBJDIR)/miniz.o \
 
 RESOURCES := \
 
@@ -244,9 +243,6 @@ $(OBJDIR)/light.o: scene/light.cpp
 $(OBJDIR)/scene.o: scene/scene.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/miniz.o: vendor/tinyexr/deps/miniz/miniz.c
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 -include $(OBJECTS:%.o=%.d)
 ifneq (,$(PCH))

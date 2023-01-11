@@ -1,3 +1,0 @@
-[submodule "vendor/tinyexr"]
-	path = vendor/tinyexr
-	url = https://github.com/syoyo/tinyexr.git
