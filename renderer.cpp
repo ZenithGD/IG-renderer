@@ -102,7 +102,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    Scene sc = cornellNoise(props);
+    Scene sc = cornellBoxOriginal2(props);
 
     Image img(sc.getProps().viewportWidth, sc.getProps().viewportHeight);
 

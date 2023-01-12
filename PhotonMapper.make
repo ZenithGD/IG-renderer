@@ -68,6 +68,7 @@ OBJECTS := \
 	$(OBJDIR)/color.o \
 	$(OBJDIR)/core.o \
 	$(OBJDIR)/CSG.o \
+	$(OBJDIR)/box.o \
 	$(OBJDIR)/cylinder.o \
 	$(OBJDIR)/intersection.o \
 	$(OBJDIR)/plane.o \
@@ -163,6 +164,9 @@ $(OBJDIR)/core.o: core/core.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/CSG.o: geometry/CSG.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/box.o: geometry/box.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/cylinder.o: geometry/cylinder.cpp

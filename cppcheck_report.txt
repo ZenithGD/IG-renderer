@@ -1,10 +1,10 @@
-geometry/rectangle.hpp:23:16: style:inconclusive: Member variable 'Rectangle::x1' is in the wrong place in the initializer list. [initializerList]
+geometry/rectangle.hpp:23:16: style:inconclusive: Member variable 'RectangleXZ::x1' is in the wrong place in the initializer list. [initializerList]
     double x0, x1, z0, z1, k;
                ^
-geometry/rectangle.cpp:8:41: note: Member variable 'Rectangle::x1' is in the wrong place in the initializer list.
+geometry/rectangle.cpp:8:41: note: Member variable 'RectangleXZ::x1' is in the wrong place in the initializer list.
       x0(o.x - w / 2), z0(o.z - h / 2), x1(o.x + w / 2), z1(o.z + h / 2), k(o.y)
                                         ^
-geometry/rectangle.hpp:23:16: note: Member variable 'Rectangle::x1' is in the wrong place in the initializer list.
+geometry/rectangle.hpp:23:16: note: Member variable 'RectangleXZ::x1' is in the wrong place in the initializer list.
     double x0, x1, z0, z1, k;
                ^
 image/image.hpp:32:63: performance: Function parameter 'data' should be passed by const reference. [passedByValue]

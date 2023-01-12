@@ -4,6 +4,7 @@
 #include <geometry/triangle.hpp>
 #include <geometry/triangleMesh.hpp>
 #include <geometry/rectangle.hpp>
+#include <geometry/box.hpp>
 #include <scene/scene.hpp>
 #include <pathtracer/pathtracing.hpp>
 #include <core/core.hpp>
@@ -193,7 +194,7 @@ Scene cornellEmission(const SceneProps& props) {
     auto pF = make_shared<Plane> (1, Vector3(0, 1, 0), gray);
     auto pC = make_shared<Plane> (1, Vector3(0, -1, 0), gray);
     auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), gray);
-    auto pLight = make_shared<Rectangle>(1.5, 1.5, Vector3(0, 0.999, 0), emission);
+    auto pLight = make_shared<RectangleXZ>(1.5, 1.5, Vector3(0, 0.999, 0), emission);
 
     auto sL = make_shared<Sphere>(Vector3(-0.5, -0.7, 0.25), 0.3, BRDFL);
     auto sR = make_shared<Sphere>(Vector3( 0.5, -0.7, -0.25), 0.3, BRDFR);
@@ -488,6 +489,84 @@ Scene cornellCSGs(const SceneProps& props) {
     sc.addPrimitive(sCSG3);
 
     sc.addLight(light);
+
+    return sc;
+}
+
+Scene cornellBoxOriginal(const SceneProps& props) {
+
+    Camera cam(
+        Vector3(-1,0,0), Vector3(0, 1, 0), Vector3(0, 0, 3), Vector3(0, 0, -3.5), 
+        props.viewportWidth, props.viewportHeight
+    );
+
+    Scene sc(props, cam);
+
+    auto BRDFPL = make_shared<SimpleBRDF>(RGB(1, 0, 0));
+    auto BRDFPR = make_shared<SimpleBRDF>(RGB(0, 1, 0));
+    auto BRDFL = make_shared<SimpleBRDF>(RGB(0.6, 0.75, 0.8));
+    auto BRDFR = make_shared<SimpleBRDF>(RGB(0.6, 0.7, 0.2));
+    auto gray = make_shared<SimpleBRDF>(RGB(0.7, 0.7, 0.7));
+    auto pL = make_shared<Plane> (1, Vector3(1, 0, 0), BRDFPL);
+    auto pR = make_shared<Plane> (1, Vector3(-1, 0, 0), BRDFPR);
+    auto pF = make_shared<Plane> (1, Vector3(0, 1, 0), gray);
+    auto pC = make_shared<Plane> (1, Vector3(0, -1, 0), gray);
+    auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), gray);
+    auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
+
+    auto rL = make_shared<Box>(Vector3(-0.7, -1, 0), Vector3(-0.3, 0.2, 0.4), BRDFL);
+    auto rR = make_shared<Box>(Vector3(0.3, -1, -0.4), Vector3(0.7, -0.3, 0), BRDFR);
+    auto light  = make_shared<PointLight>(Vector3(0.0, 0.5, 0), RGB(1,1,1));
+
+    sc.addPrimitive(pL);
+    sc.addPrimitive(pR);
+    sc.addPrimitive(pF);
+    sc.addPrimitive(pC);
+    sc.addPrimitive(pB);
+
+    sc.addPrimitive(rL);
+    sc.addPrimitive(rR);
+
+    sc.addLight(light);
+
+    return sc;
+}
+
+Scene cornellBoxOriginal2(const SceneProps& props) {
+
+    Camera cam(
+        Vector3(-1,0,0), Vector3(0, 1, 0), Vector3(0, 0, 3), Vector3(0, 0, -3.5), 
+        props.viewportWidth, props.viewportHeight
+    );
+
+    Scene sc(props, cam);
+
+    auto emissionPink = make_shared<Emitter>(RGB(1, 0, 1));
+    auto emissionCyan = make_shared<Emitter>(RGB(0, 1, 1));
+    auto BRDFL = make_shared<SimpleBRDF>(RGB(0.6, 0.75, 0.8));
+    auto BRDFR = make_shared<SimpleBRDF>(RGB(0.6, 0.7, 0.2));
+    auto gray = make_shared<SimpleBRDF>(RGB(0.7, 0.7, 0.7));
+    auto pL = make_shared<Plane> (2, Vector3(1, 0, 0), emissionPink);
+    auto pR = make_shared<Plane> (2, Vector3(-1, 0, 0), emissionCyan);
+    auto pF = make_shared<Plane> (1, Vector3(0, 1, 0), gray);
+    auto pC = make_shared<Plane> (1, Vector3(0, -1, 0), gray);
+    auto pB = make_shared<Plane> (1, Vector3(0, 0, -1), gray);
+    auto pBack = make_shared<Plane> (-4, Vector3(0, 0, 1), gray);
+
+    auto rL = make_shared<Box>(Vector3(-0.7, -1, 0), Vector3(-0.3, 0.2, 0.4), BRDFL);
+    auto rR = make_shared<Box>(Vector3(0.3, -1, -0.4), Vector3(0.7, -0.3, 0), BRDFR);
+    auto light  = make_shared<PointLight>(Vector3(0.0, 0.5, 0), RGB(1,1,1));
+
+    sc.addPrimitive(pL);
+    sc.addPrimitive(pR);
+    sc.addPrimitive(pF);
+    sc.addPrimitive(pC);
+    sc.addPrimitive(pB);
+
+    sc.addPrimitive(rL);
+    sc.addPrimitive(rR);
+
+    //sc.addLight(light);
 
     return sc;
 }

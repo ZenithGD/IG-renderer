@@ -33,4 +33,6 @@ public:
     friend ostream& operator<<(ostream& os, const Ray& r);
 };
 
+Vector3 setFaceNormal(const Vector3& rdir, const Vector3& n);
+
 ostream& operator<<(ostream& os, const Ray& r);
