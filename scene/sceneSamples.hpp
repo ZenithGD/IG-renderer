@@ -273,7 +273,7 @@ Scene cornellEnvMap(const SceneProps& props) {
         props.viewportWidth, props.viewportHeight
     );
 
-    auto img = Image::readPPM("assets/envmaps/brown_photostudio.ppm");
+    auto img = Image::readPPM("assets/envmaps/moonlit.ppm");
     auto tex1 = make_shared<ImageTexture>(img);
     
     auto tex2 = make_shared<Checkerboard>(RGB(1, 0, 1) , RGB(1, 1, 1), 0.2, 0.2);
@@ -565,6 +565,52 @@ Scene cornellBoxOriginal2(const SceneProps& props) {
 
     sc.addPrimitive(rL);
     sc.addPrimitive(rR);
+
+    //sc.addLight(light);
+
+    return sc;
+}
+
+Scene renderScene(const SceneProps& props) {
+
+    double scale = 100;
+    Camera cam(
+        Vector3(-scale,0,0), Vector3(0, scale * (double)props.viewportHeight / (double)props.viewportWidth , 0), Vector3(0, 0, 300), Vector3(0, 0, -1000), 
+        props.viewportWidth, props.viewportHeight
+    );
+
+    // env map
+    auto img = Image::readPPM("assets/envmaps/milkyway.ppm");
+    auto tex1 = make_shared<ImageTexture>(img);
+    Scene sc(props, cam, tex1);
+
+    auto emissionPink = make_shared<Emitter>(RGB(1, 0, 1));
+    auto emissionCyan = make_shared<Emitter>(RGB(0, 1, 1));
+    auto sunLight = make_shared<Emitter>(RGB(0.75, 1, 0));
+    auto backLight = make_shared<Emitter>(RGB(2, 2, 2));
+
+    auto BRDFL = make_shared<SimpleBRDF>(RGB(0.6, 0.75, 0.8));
+    auto BRDFR = make_shared<SimpleBRDF>(RGB(0.6, 0.7, 0.2));
+    auto gray = make_shared<SimpleBRDF>(RGB(0.7, 0.7, 0.7));
+    auto pL = make_shared<RectangleYZ>(-100, 100, -200, 200, -300, emissionPink);
+    auto pR = make_shared<RectangleYZ>(-100, 100, -200, 200, 300, emissionCyan);
+    auto pF = make_shared<Plane> (100, Vector3(0, 1, 0), gray);
+    auto pB = make_shared<Plane> (100, Vector3(0, 0, -1), gray);
+    auto pBack = make_shared<RectangleXY>(-200, 200, -100, 100, -1100, backLight);
+    auto sunSphere = make_shared<Sphere>(Vector3(0, 400, 2000), 350, sunLight);
+
+    auto rL = make_shared<Box>(Vector3(-70, -100, 0), Vector3(-30, 20, 40), BRDFL);
+    auto rR = make_shared<Box>(Vector3(30, -100, -40), Vector3(70, -30, 0), BRDFR);
+    auto light  = make_shared<PointLight>(Vector3(0, 50, 0), RGB(1,1,1));
+
+    sc.addPrimitive(pL);
+    sc.addPrimitive(pR);
+    sc.addPrimitive(pF);
+    sc.addPrimitive(pBack);
+
+    sc.addPrimitive(rL);
+    sc.addPrimitive(rR);
+    sc.addPrimitive(sunSphere);
 
     //sc.addLight(light);
 

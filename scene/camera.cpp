@@ -25,9 +25,9 @@ list<Ray> Camera::perPixel(unsigned int x, unsigned int y, unsigned int n) const
         Coordinate newRayDirection = camBasis(raydirection);
         Coordinate newRayOrigin = camBasis(origin);
 
-        Ray r(newRayOrigin.getPosition(), newRayDirection.getPosition());
+        Ray r(newRayOrigin.getPosition(), newRayDirection.getPosition().normalized());
         
-        listRay.emplace_back(newRayOrigin.getPosition(), newRayDirection.getPosition());
+        listRay.push_back(r);
         
         //listRay.emplace_back(origin, forwardNew);
     }

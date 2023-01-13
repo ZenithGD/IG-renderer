@@ -102,7 +102,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    Scene sc = cornellBoxOriginal2(props);
+    Scene sc = renderScene(props);
 
     Image img(sc.getProps().viewportWidth, sc.getProps().viewportHeight);
 
