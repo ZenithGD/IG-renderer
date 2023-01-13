@@ -271,6 +271,12 @@ scene/sceneSamples.hpp:554:16: style: Variable 'pBack' is assigned a value that 
 scene/sceneSamples.hpp:558:17: style: Variable 'light' is assigned a value that is never used. [unreadVariable]
     auto light  = make_shared<PointLight>(Vector3(0.0, 0.5, 0), RGB(1,1,1));
                 ^
+scene/sceneSamples.hpp:598:13: style: Variable 'pB' is assigned a value that is never used. [unreadVariable]
+    auto pB = make_shared<Plane> (100, Vector3(0, 0, -1), gray);
+            ^
+scene/sceneSamples.hpp:604:17: style: Variable 'light' is assigned a value that is never used. [unreadVariable]
+    auto light  = make_shared<PointLight>(Vector3(0, 50, 0), RGB(1,1,1));
+                ^
 photonmapper/photonmapping.cpp:85:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
         luminanceTotal += l->power.getLuminance();
                        ^
