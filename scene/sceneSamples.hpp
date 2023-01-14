@@ -571,46 +571,75 @@ Scene cornellBoxOriginal2(const SceneProps& props) {
     return sc;
 }
 
+list<shared_ptr<Primitive>> waterPlane(const Vector3& lb, const Vector3& hb, 
+    const double step, const double amp) 
+{
+    FractalNoise fn(32, 5, abs(hb.x - lb.x), abs(hb.z - lb.z));
+
+    list<shared_ptr<Primitive>> plane;
+    
+    auto gray = make_shared<SimpleBRDF>(RGB(1, 1, 1));
+    auto waterBRDF = make_shared<FresnelBRDF>(RGB(1, 1, 1), RGB(1, 1, 1), 1.5);
+
+    for ( double sx = lb.x; sx < hb.x; sx += step ) {
+        for ( double sz = lb.z; sz < hb.z; sz += step ) {
+            double height = fn(sx - lb.x, sz - lb.z) * amp;
+            plane.push_back(make_shared<Box>(Vector3(sx, -300, sz), Vector3(sx + step, lb.y + height, sz + step), gray));
+        }
+    }
+
+    return plane;
+}
+
 Scene renderScene(const SceneProps& props) {
 
     double scale = 100;
     Camera cam(
-        Vector3(-scale,0,0), Vector3(0, scale * (double)props.viewportHeight / (double)props.viewportWidth , 0), Vector3(0, 0, 300), Vector3(0, 0, -1000), 
+        Vector3(-scale,0,0), Vector3(0, scale * (double)props.viewportHeight / (double)props.viewportWidth , 0), Vector3(0, 0, 300), Vector3(0, 0, -700), 
         props.viewportWidth, props.viewportHeight
     );
 
     // env map
-    auto img = Image::readPPM("assets/envmaps/milkyway.ppm");
+    auto img = tonemapping::simpleReinhard(Image::readPPM("assets/envmaps/milkyway.ppm"), 0.04, 0.0001);
     auto tex1 = make_shared<ImageTexture>(img);
     Scene sc(props, cam, tex1);
 
-    auto emissionPink = make_shared<Emitter>(RGB(1, 0, 1));
-    auto emissionCyan = make_shared<Emitter>(RGB(0, 1, 1));
+    // some scene params
+    double shoreLineZ = -100;
+    double groundLevelY = -100;
+    double waterBaseLevel = groundLevelY - 100;
+
+    double lateralLightPower = 2;
+
+    auto crystal = make_shared<FresnelBRDF>(RGB(0, 1, 1), RGB(0.6, 1, 1), 1.5);
+    auto emissionPink = make_shared<Emitter>(RGB(1, 0, 1) * lateralLightPower);
+    auto emissionCyan = make_shared<Emitter>(RGB(0, 1, 1) * lateralLightPower);
     auto sunLight = make_shared<Emitter>(RGB(0.75, 1, 0));
-    auto backLight = make_shared<Emitter>(RGB(2, 2, 2));
 
     auto BRDFL = make_shared<SimpleBRDF>(RGB(0.6, 0.75, 0.8));
     auto BRDFR = make_shared<SimpleBRDF>(RGB(0.6, 0.7, 0.2));
-    auto gray = make_shared<SimpleBRDF>(RGB(0.7, 0.7, 0.7));
-    auto pL = make_shared<RectangleYZ>(-100, 100, -200, 200, -300, emissionPink);
-    auto pR = make_shared<RectangleYZ>(-100, 100, -200, 200, 300, emissionCyan);
-    auto pF = make_shared<Plane> (100, Vector3(0, 1, 0), gray);
-    auto pB = make_shared<Plane> (100, Vector3(0, 0, -1), gray);
-    auto pBack = make_shared<RectangleXY>(-200, 200, -100, 100, -1100, backLight);
+    auto gray = make_shared<SimpleBRDF>(RGB(1, 1, 1));
+    auto pL = make_shared<RectangleYZ>(-100, 100, -1000, 200, -350, emissionPink);
+    auto pR = make_shared<RectangleYZ>(-100, 100, -1000, 200, 350, emissionCyan);
+    
     auto sunSphere = make_shared<Sphere>(Vector3(0, 400, 2000), 350, sunLight);
 
+    auto ground = make_shared<Box>(Vector3(-1000, -400, shoreLineZ), Vector3(1000, groundLevelY, 1000), gray);
     auto rL = make_shared<Box>(Vector3(-70, -100, 0), Vector3(-30, 20, 40), BRDFL);
     auto rR = make_shared<Box>(Vector3(30, -100, -40), Vector3(70, -30, 0), BRDFR);
     auto light  = make_shared<PointLight>(Vector3(0, 50, 0), RGB(1,1,1));
-
+    
     sc.addPrimitive(pL);
     sc.addPrimitive(pR);
-    sc.addPrimitive(pF);
-    sc.addPrimitive(pBack);
-
+    
     sc.addPrimitive(rL);
     sc.addPrimitive(rR);
     sc.addPrimitive(sunSphere);
+    
+    sc.addPrimitive(ground);
+
+    for ( auto& p : waterPlane(Vector3(-400, waterBaseLevel, -400), Vector3(400, waterBaseLevel, shoreLineZ), 50, 160) )
+        sc.addPrimitive(p);
 
     //sc.addLight(light);
 
