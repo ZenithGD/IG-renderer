@@ -271,10 +271,13 @@ scene/sceneSamples.hpp:554:16: style: Variable 'pBack' is assigned a value that 
 scene/sceneSamples.hpp:558:17: style: Variable 'light' is assigned a value that is never used. [unreadVariable]
     auto light  = make_shared<PointLight>(Vector3(0.0, 0.5, 0), RGB(1,1,1));
                 ^
-scene/sceneSamples.hpp:598:13: style: Variable 'pB' is assigned a value that is never used. [unreadVariable]
-    auto pB = make_shared<Plane> (100, Vector3(0, 0, -1), gray);
-            ^
-scene/sceneSamples.hpp:604:17: style: Variable 'light' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:582:20: style: Variable 'waterBRDF' is assigned a value that is never used. [unreadVariable]
+    auto waterBRDF = make_shared<FresnelBRDF>(RGB(1, 1, 1), RGB(1, 1, 1), 1.5);
+                   ^
+scene/sceneSamples.hpp:614:18: style: Variable 'crystal' is assigned a value that is never used. [unreadVariable]
+    auto crystal = make_shared<FresnelBRDF>(RGB(0, 1, 1), RGB(0.6, 1, 1), 1.5);
+                 ^
+scene/sceneSamples.hpp:630:17: style: Variable 'light' is assigned a value that is never used. [unreadVariable]
     auto light  = make_shared<PointLight>(Vector3(0, 50, 0), RGB(1,1,1));
                 ^
 photonmapper/photonmapping.cpp:85:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
@@ -371,9 +374,6 @@ math/coordinate.cpp:36:0: style: The function 'rotationY' is never used. [unused
 
 ^
 math/coordinate.cpp:51:0: style: The function 'rotationZ' is never used. [unusedFunction]
-
-^
-image/tonemapping.cpp:75:0: style: The function 'simpleReinhard' is never used. [unusedFunction]
 
 ^
 photonmapper/photonmapping.cpp:177:0: style: The function 'tracePhotonMapRay' is never used. [unusedFunction]
