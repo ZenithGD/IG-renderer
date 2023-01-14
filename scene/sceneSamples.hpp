@@ -571,7 +571,7 @@ Scene cornellBoxOriginal2(const SceneProps& props) {
     return sc;
 }
 
-list<shared_ptr<Primitive>> waterPlane(const Vector3& lb, const Vector3& hb, 
+list<shared_ptr<Primitive>> seaBottom(const Vector3& lb, const Vector3& hb, 
     const double step, const double amp) 
 {
     FractalNoise fn(32, 5, abs(hb.x - lb.x), abs(hb.z - lb.z));
@@ -604,17 +604,28 @@ Scene renderScene(const SceneProps& props) {
     auto tex1 = make_shared<ImageTexture>(img);
     Scene sc(props, cam, tex1);
 
+    // texture moon
+    auto moonImg = Image::readPPM("assets/wmt.ppm");
+    auto textMoon = make_shared<ImageTexture>(moonImg, 100, 100);
     // some scene params
     double shoreLineZ = -100;
     double groundLevelY = -100;
-    double waterBaseLevel = groundLevelY - 100;
+    double waterBaseLevel = groundLevelY - 200;
 
     double lateralLightPower = 2;
+    double moonPower = 1.2;
 
-    auto crystal = make_shared<FresnelBRDF>(RGB(0, 1, 1), RGB(0.6, 1, 1), 1.5);
+    auto waterBRDF = make_shared<FresnelBRDF>(RGB(1, 1, 1), RGB(1, 1, 1), 1.333);
+    auto crystalBRDF = make_shared<FresnelBRDF>(RGB(1, 1, 1), RGB(1, 1, 1), 1.52);
     auto emissionPink = make_shared<Emitter>(RGB(1, 0, 1) * lateralLightPower);
     auto emissionCyan = make_shared<Emitter>(RGB(0, 1, 1) * lateralLightPower);
-    auto sunLight = make_shared<Emitter>(RGB(0.75, 1, 0));
+    //auto moonLight = make_shared<TextureEmitter>(textMoon, 300, 300);
+    auto moonLight = make_shared<Emitter>(RGB(0.92,0.95,0.96) * moonPower);
+
+    auto noise = make_shared<FractalNoise>(16, 5, 1, 1);
+    auto tNoise = make_shared<TurbulentNoise>(noise);
+    auto tex = make_shared<NoiseTexture>(tNoise, RGB(0,0,0), RGB(1,0,1));
+    auto noiseTexture = make_shared<TextureBRDF>(tex, 1);
 
     auto BRDFL = make_shared<SimpleBRDF>(RGB(0.6, 0.75, 0.8));
     auto BRDFR = make_shared<SimpleBRDF>(RGB(0.6, 0.7, 0.2));
@@ -622,26 +633,55 @@ Scene renderScene(const SceneProps& props) {
     auto pL = make_shared<RectangleYZ>(-100, 100, -1000, 200, -350, emissionPink);
     auto pR = make_shared<RectangleYZ>(-100, 100, -1000, 200, 350, emissionCyan);
     
-    auto sunSphere = make_shared<Sphere>(Vector3(0, 400, 2000), 350, sunLight);
+    auto moonSphere1 = make_shared<Sphere>(Vector3(0, 400, 2000), 350, moonLight);
+    auto moonSphere2 = make_shared<Sphere>(Vector3(-25, 375, 2000), 350, moonLight);
+    auto moonSphere = make_shared<CSG>(moonSphere1, moonSphere2, CSGOperation::Difference, moonLight);
 
     auto ground = make_shared<Box>(Vector3(-1000, -400, shoreLineZ), Vector3(1000, groundLevelY, 1000), gray);
     auto rL = make_shared<Box>(Vector3(-70, -100, 0), Vector3(-30, 20, 40), BRDFL);
     auto rR = make_shared<Box>(Vector3(30, -100, -40), Vector3(70, -30, 0), BRDFR);
-    auto light  = make_shared<PointLight>(Vector3(0, 50, 0), RGB(1,1,1));
+    auto water = make_shared<Plane>(105, Vector3(0, 1, 0), waterBRDF);
+    auto bottomLight = make_shared<Plane>(400, Vector3(0, 1, 0), emissionPink);
+    auto boxSphere = make_shared<Box>(Vector3(-200,-100,-20), Vector3(-100, 20, 20), gray);
+    auto sphereFresnel = make_shared<Sphere>(Vector3(-150,70,0), 50.0, crystalBRDF);
+    auto sphereDifference1 = make_shared<Sphere>(Vector3(-150,-50,-20), 30.0, gray);
+    auto sphereDifference2 = make_shared<Sphere>(Vector3(-150,-50,-30), 27.5, gray);
+    auto sphereMini = make_shared<Sphere>(Vector3(-150,-50,-30), 10.0, gray);
+    auto csgSphere = make_shared<CSG>(sphereDifference1, sphereDifference2, CSGOperation::Difference, gray);
+
+    auto csg1 = make_shared<CSG>(boxSphere, csgSphere, CSGOperation::Union, gray);
+    auto speaker = make_shared<CSG>(csg1, sphereMini, CSGOperation::Union, gray);
+    auto otherBox = make_shared<Box>(Vector3(-100,-100,0), Vector3(-50,-50,-30), BRDFL);
     
+    auto leftBox1 = make_shared<Box>(Vector3(40, groundLevelY, 50), Vector3(140, 60, 150), noiseTexture);
+    auto leftBox2 = make_shared<Box>(Vector3(100, groundLevelY, 150), Vector3(200, 100, 200), gray);
+
+    auto behindBox = make_shared<Box>(Vector3(30, groundLevelY, 200), Vector3(70, 70, 250), gray);
+    auto higherBox = make_shared<Box>(Vector3(-250, groundLevelY, 300), Vector3(-50, 200, 400), noiseTexture);
+    // left emission planes
     sc.addPrimitive(pL);
     sc.addPrimitive(pR);
     
-    sc.addPrimitive(rL);
-    sc.addPrimitive(rR);
-    sc.addPrimitive(sunSphere);
+    //sc.addPrimitive(rL);
+    //sc.addPrimitive(rR);
+    sc.addPrimitive(moonSphere1);
     
     sc.addPrimitive(ground);
+    //sc.addPrimitive(bottomLight);
 
-    for ( auto& p : waterPlane(Vector3(-400, waterBaseLevel, -400), Vector3(400, waterBaseLevel, shoreLineZ), 50, 160) )
+    for ( auto& p : seaBottom(Vector3(-400, waterBaseLevel, -400), Vector3(400, waterBaseLevel, shoreLineZ), 50, 160) )
         sc.addPrimitive(p);
 
     //sc.addLight(light);
+    sc.addPrimitive(water);
+    sc.addPrimitive(boxSphere);
+    sc.addPrimitive(sphereFresnel);
+    sc.addPrimitive(speaker);
+    sc.addPrimitive(otherBox);
+    sc.addPrimitive(leftBox1);
+    sc.addPrimitive(leftBox2);
+    sc.addPrimitive(behindBox);
+    sc.addPrimitive(higherBox);
 
     return sc;
 }
