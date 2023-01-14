@@ -21,6 +21,8 @@
 
 #include <image/tonemapping.hpp>
 
+#include <set>
+
 
 Scene cornellDiffuse(const SceneProps& props) {
 
@@ -591,11 +593,44 @@ list<shared_ptr<Primitive>> seaBottom(const Vector3& lb, const Vector3& hb,
     return plane;
 }
 
+list<shared_ptr<Primitive>> mengerSponge(const Vector3& lb, const Vector3& hb,
+    const unsigned int it, const shared_ptr<BRDF>& brdf) 
+{
+    list<shared_ptr<Primitive>> r;
+    if ( it > 0 ) {
+
+        unsigned int skip[7] = {4, 10, 12, 13, 14, 16, 22};
+        unsigned int skipPtr = 0;
+
+        double width = hb.x - lb.x, height = hb.y - lb.y, depth = hb.z - lb.z; 
+        for ( int i = 0; i < 3; i++ ) {
+            for ( int j = 0; j < 3; j++ ) {
+                for ( int k = 0; k < 3; k++ ) {
+                    if ( skipPtr < 7 && skip[skipPtr] == (9 * i + 3 * j + k) ) {
+                        skipPtr++;
+                    } else {
+                        Vector3 lbp = lb + Vector3(
+                            width * (double)i / 3.0,
+                            height * (double)j / 3.0,
+                            depth * (double)k / 3.0);
+                        Vector3 hbp = lbp + Vector3(width / 3.0, height / 3.0, depth / 3.0);
+                        for ( auto& p : mengerSponge(lbp, hbp, it - 1, brdf) ) 
+                            r.push_back(p);
+                    }
+                }
+            }
+        }
+    } else {
+        r.push_back(make_shared<Box>(lb, hb, brdf));
+    }
+    return r;
+}
+
 Scene renderScene(const SceneProps& props) {
 
     double scale = 100;
     Camera cam(
-        Vector3(-scale,0,0), Vector3(0, scale * (double)props.viewportHeight / (double)props.viewportWidth , 0), Vector3(0, 0, 300), Vector3(0, 0, -700), 
+        Vector3(-scale,0,0), Vector3(0, scale * (double)props.viewportHeight / (double)props.viewportWidth , 0), Vector3(0, 0, 300), Vector3(0, 0, -1000), 
         props.viewportWidth, props.viewportHeight
     );
 
@@ -608,9 +643,10 @@ Scene renderScene(const SceneProps& props) {
     auto moonImg = Image::readPPM("assets/wmt.ppm");
     auto textMoon = make_shared<ImageTexture>(moonImg, 100, 100);
     // some scene params
-    double shoreLineZ = -100;
+    double shoreLineZ = -50;
     double groundLevelY = -100;
     double waterBaseLevel = groundLevelY - 200;
+    double spongeSize = 150;
 
     double lateralLightPower = 2;
     double moonPower = 1.2;
@@ -622,9 +658,9 @@ Scene renderScene(const SceneProps& props) {
     //auto moonLight = make_shared<TextureEmitter>(textMoon, 300, 300);
     auto moonLight = make_shared<Emitter>(RGB(0.92,0.95,0.96) * moonPower);
 
-    auto noise = make_shared<FractalNoise>(16, 5, 1, 1);
-    auto tNoise = make_shared<TurbulentNoise>(noise);
-    auto tex = make_shared<NoiseTexture>(tNoise, RGB(0,0,0), RGB(1,0,1));
+    auto noise = make_shared<FractalNoise>(16, 4, 1, 1);
+    auto tNoise = make_shared<WoodyNoise>(noise, 5);
+    auto tex = make_shared<NoiseTexture>(tNoise, RGB(0,0,0), RGB(1,1,1));
     auto noiseTexture = make_shared<TextureBRDF>(tex, 1);
 
     auto BRDFL = make_shared<SimpleBRDF>(RGB(0.6, 0.75, 0.8));
@@ -642,22 +678,23 @@ Scene renderScene(const SceneProps& props) {
     auto rR = make_shared<Box>(Vector3(30, -100, -40), Vector3(70, -30, 0), BRDFR);
     auto water = make_shared<Plane>(105, Vector3(0, 1, 0), waterBRDF);
     auto bottomLight = make_shared<Plane>(400, Vector3(0, 1, 0), emissionPink);
-    auto boxSphere = make_shared<Box>(Vector3(-200,-100,-20), Vector3(-100, 20, 20), gray);
-    auto sphereFresnel = make_shared<Sphere>(Vector3(-150,70,0), 50.0, crystalBRDF);
-    auto sphereDifference1 = make_shared<Sphere>(Vector3(-150,-50,-20), 30.0, gray);
-    auto sphereDifference2 = make_shared<Sphere>(Vector3(-150,-50,-30), 27.5, gray);
-    auto sphereMini = make_shared<Sphere>(Vector3(-150,-50,-30), 10.0, gray);
+
+    auto boxSphere = make_shared<Box>(Vector3(-250,-100,-20), Vector3(-200, 20, 20), gray);
+    auto sphereFresnel = make_shared<Sphere>(Vector3(-200,70,0), 50.0, crystalBRDF);
+    auto sphereDifference1 = make_shared<Sphere>(Vector3(-200,-50,-20), 30.0, gray);
+    auto sphereDifference2 = make_shared<Sphere>(Vector3(-200,-50,-30), 27.5, gray);
+    auto sphereMini = make_shared<Sphere>(Vector3(-200,-50,-30), 10.0, gray);
     auto csgSphere = make_shared<CSG>(sphereDifference1, sphereDifference2, CSGOperation::Difference, gray);
 
     auto csg1 = make_shared<CSG>(boxSphere, csgSphere, CSGOperation::Union, gray);
     auto speaker = make_shared<CSG>(csg1, sphereMini, CSGOperation::Union, gray);
     auto otherBox = make_shared<Box>(Vector3(-100,-100,0), Vector3(-50,-50,-30), BRDFL);
     
-    auto leftBox1 = make_shared<Box>(Vector3(40, groundLevelY, 50), Vector3(140, 60, 150), noiseTexture);
+    auto leftBox1 = make_shared<Box>(Vector3(40, groundLevelY, 50), Vector3(140, 60, 200), noiseTexture);
     auto leftBox2 = make_shared<Box>(Vector3(100, groundLevelY, 150), Vector3(200, 100, 200), gray);
 
     auto behindBox = make_shared<Box>(Vector3(30, groundLevelY, 200), Vector3(70, 70, 250), gray);
-    auto higherBox = make_shared<Box>(Vector3(-250, groundLevelY, 300), Vector3(-50, 200, 400), noiseTexture);
+    auto higherBox = make_shared<Box>(Vector3(-250, groundLevelY, 300), Vector3(-150, 200, 400), noiseTexture);
     // left emission planes
     sc.addPrimitive(pL);
     sc.addPrimitive(pR);
@@ -669,7 +706,10 @@ Scene renderScene(const SceneProps& props) {
     sc.addPrimitive(ground);
     //sc.addPrimitive(bottomLight);
 
-    for ( auto& p : seaBottom(Vector3(-400, waterBaseLevel, -400), Vector3(400, waterBaseLevel, shoreLineZ), 50, 160) )
+    for ( auto& p : seaBottom(Vector3(-400, waterBaseLevel, -600), Vector3(400, waterBaseLevel, shoreLineZ), 50, 160) )
+        sc.addPrimitive(p);
+
+    for ( auto& p : mengerSponge(Vector3(100, groundLevelY, 0), Vector3(100 + spongeSize, groundLevelY + spongeSize, spongeSize), 2, gray) )
         sc.addPrimitive(p);
 
     //sc.addLight(light);
