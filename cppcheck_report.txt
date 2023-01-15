@@ -193,7 +193,7 @@ pathtracer/pathtracing.cpp:153:29: style: Consider using std::accumulate algorit
 photonmapper.cpp:31:9: style: The scope of the variable 'c' can be reduced. [variableScope]
     int c, digit_optind = 0;
         ^
-scene/sceneSamples.hpp:618:31: style: Consider using std::copy algorithm instead of a raw loop. [useStlAlgorithm]
+scene/sceneSamples.hpp:682:31: style: Consider using std::copy algorithm instead of a raw loop. [useStlAlgorithm]
                             r.push_back(p);
                               ^
 scene/sceneSamples.hpp:46:16: style: Variable 'pBack' is assigned a value that is never used. [unreadVariable]
@@ -274,22 +274,19 @@ scene/sceneSamples.hpp:556:16: style: Variable 'pBack' is assigned a value that 
 scene/sceneSamples.hpp:560:17: style: Variable 'light' is assigned a value that is never used. [unreadVariable]
     auto light  = make_shared<PointLight>(Vector3(0.0, 0.5, 0), RGB(1,1,1));
                 ^
-scene/sceneSamples.hpp:584:20: style: Variable 'waterBRDF' is assigned a value that is never used. [unreadVariable]
-    auto waterBRDF = make_shared<FresnelBRDF>(RGB(1, 1, 1), RGB(1, 1, 1), 1.5);
-                   ^
-scene/sceneSamples.hpp:644:19: style: Variable 'textMoon' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:712:19: style: Variable 'textMoon' is assigned a value that is never used. [unreadVariable]
     auto textMoon = make_shared<ImageTexture>(moonImg, 100, 100);
                   ^
-scene/sceneSamples.hpp:674:21: style: Variable 'moonSphere' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:752:21: style: Variable 'moonSphere' is assigned a value that is never used. [unreadVariable]
     auto moonSphere = make_shared<CSG>(moonSphere1, moonSphere2, CSGOperation::Difference, moonLight);
                     ^
-scene/sceneSamples.hpp:677:13: style: Variable 'rL' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:755:13: style: Variable 'rL' is assigned a value that is never used. [unreadVariable]
     auto rL = make_shared<Box>(Vector3(-70, -100, 0), Vector3(-30, 20, 40), BRDFL);
             ^
-scene/sceneSamples.hpp:678:13: style: Variable 'rR' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:756:13: style: Variable 'rR' is assigned a value that is never used. [unreadVariable]
     auto rR = make_shared<Box>(Vector3(30, -100, -40), Vector3(70, -30, 0), BRDFR);
             ^
-scene/sceneSamples.hpp:680:22: style: Variable 'bottomLight' is assigned a value that is never used. [unreadVariable]
+scene/sceneSamples.hpp:758:22: style: Variable 'bottomLight' is assigned a value that is never used. [unreadVariable]
     auto bottomLight = make_shared<Plane>(400, Vector3(0, 1, 0), emissionPink);
                      ^
 photonmapper/photonmapping.cpp:85:24: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
