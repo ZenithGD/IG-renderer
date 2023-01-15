@@ -573,20 +573,84 @@ Scene cornellBoxOriginal2(const SceneProps& props) {
     return sc;
 }
 
+shared_ptr<TriangleMesh> waterPlane(const Vector3& lb, const Vector3& hb,
+    const unsigned int nx, const unsigned int nz, const double amp, const shared_ptr<BRDF>& brdf)
+{
+    FractalNoise fn(32, 6, abs(hb.x - lb.x), abs(hb.z - lb.z));
+
+    vector<Vector3> points, normals;
+    vector<Vector2> uvs;
+    vector<unsigned int> indices;
+
+    double stepX = (hb.x - lb.x) / (double)nx;
+    double stepZ = (hb.z - lb.z) / (double)nz;
+
+    for ( auto i = 0; i <= nx; i++ ) {
+        for ( auto j = 0; j <= nz; j++ ) {
+
+            double height = fn(lb.x + i * stepX, lb.z + j * stepZ) * amp;
+            double hy = lb.y;
+            if ( i != 0 && i != nx && j != 0 && j != nz ) {
+                hy += height;
+            }
+            points.emplace_back(lb.x + i * stepX, hy, lb.z + j * stepZ);
+            
+            uvs.emplace_back(double(i) / double(nx), double(j) / double(nz));
+        }
+    } 
+
+    // add triangles
+    for ( auto i = 0; i < nx; i++ ) {
+        for ( auto j = 0; j < nz; j++ ) {
+
+            unsigned int i0 = (nz + 1) * i + j,
+                         i1 = (nz + 1) * i + j + 1,
+                         i2 = (nz + 1) * (i + 1) + j,
+                         i3 = (nz + 1) * (i + 1) + j + 1;
+
+            Vector3 p0 = points[i0],
+                    p1 = points[i1], 
+                    p2 = points[i2], 
+                    p3 = points[i3];
+
+            
+            Vector3 n0 = cross(p1 - p0, p2 - p0).normalized();
+            Vector3 n1 = cross(p2 - p3, p1 - p3).normalized();
+
+            // first tri
+            indices.push_back(i0);
+            normals.push_back(n0);
+            indices.push_back(i1);
+            normals.push_back(n0);
+            indices.push_back(i2);
+            normals.push_back(n0);
+
+            // second tri
+            indices.push_back(i1);
+            normals.push_back(n1);
+            indices.push_back(i2);
+            normals.push_back(n1);
+            indices.push_back(i3);
+            normals.push_back(n1);
+        }
+    }
+
+    return make_shared<TriangleMesh>(points, indices, normals, uvs, brdf);
+}
+
 list<shared_ptr<Primitive>> seaBottom(const Vector3& lb, const Vector3& hb, 
-    const double step, const double amp) 
+    const double step, const double amp, const double pad) 
 {
     FractalNoise fn(32, 5, abs(hb.x - lb.x), abs(hb.z - lb.z));
 
     list<shared_ptr<Primitive>> plane;
     
     auto gray = make_shared<SimpleBRDF>(RGB(1, 1, 1));
-    auto waterBRDF = make_shared<FresnelBRDF>(RGB(1, 1, 1), RGB(1, 1, 1), 1.5);
 
     for ( double sx = lb.x; sx < hb.x; sx += step ) {
         for ( double sz = lb.z; sz < hb.z; sz += step ) {
             double height = fn(sx - lb.x, sz - lb.z) * amp;
-            plane.push_back(make_shared<Box>(Vector3(sx, -300, sz), Vector3(sx + step, lb.y + height, sz + step), gray));
+            plane.push_back(make_shared<Box>(Vector3(sx + pad, -300, sz + pad), Vector3(sx + step - pad, lb.y + height, sz + step - pad), gray));
         }
     }
 
@@ -629,8 +693,12 @@ list<shared_ptr<Primitive>> mengerSponge(const Vector3& lb, const Vector3& hb,
 Scene renderScene(const SceneProps& props) {
 
     double scale = 100;
+    Vector3 forward(0, -35, 300);
     Camera cam(
-        Vector3(-scale,0,0), Vector3(0, scale * (double)props.viewportHeight / (double)props.viewportWidth , 0), Vector3(0, 0, 300), Vector3(0, 0, -1000), 
+        Vector3(-scale,0,0), 
+        cross(forward, Vector3(1, 0, 0)).normalized() * scale * (double)props.viewportHeight / (double)props.viewportWidth, 
+        forward,
+        Vector3(0, 100, -1000), 
         props.viewportWidth, props.viewportHeight
     );
 
@@ -642,15 +710,21 @@ Scene renderScene(const SceneProps& props) {
     // texture moon
     auto moonImg = Image::readPPM("assets/wmt.ppm");
     auto textMoon = make_shared<ImageTexture>(moonImg, 100, 100);
+
+    //texture cyber 
+    auto cyberImage = Image::readPPM("assets/tex/cyber.ppm");
+    auto textCyber = make_shared<ImageTexture>(cyberImage);
+
     // some scene params
     double shoreLineZ = -50;
     double groundLevelY = -100;
-    double waterBaseLevel = groundLevelY - 200;
+    double waterBaseLevel = groundLevelY - 300;
     double spongeSize = 150;
 
     double lateralLightPower = 2;
     double moonPower = 1.2;
 
+    auto reflection = make_shared<SimpleBRDF>(RGB(0.5,0.5,0.5), RGB(0.5, 0.5, 0.5));
     auto waterBRDF = make_shared<FresnelBRDF>(RGB(1, 1, 1), RGB(1, 1, 1), 1.333);
     auto crystalBRDF = make_shared<FresnelBRDF>(RGB(1, 1, 1), RGB(1, 1, 1), 1.52);
     auto emissionPink = make_shared<Emitter>(RGB(1, 0, 1) * lateralLightPower);
@@ -666,8 +740,12 @@ Scene renderScene(const SceneProps& props) {
     auto BRDFL = make_shared<SimpleBRDF>(RGB(0.6, 0.75, 0.8));
     auto BRDFR = make_shared<SimpleBRDF>(RGB(0.6, 0.7, 0.2));
     auto gray = make_shared<SimpleBRDF>(RGB(1, 1, 1));
-    auto pL = make_shared<RectangleYZ>(-100, 100, -1000, 200, -350, emissionPink);
-    auto pR = make_shared<RectangleYZ>(-100, 100, -1000, 200, 350, emissionCyan);
+    auto orange = make_shared<SimpleBRDF>(RGB(1,0.7,0.27));
+    auto green = make_shared<SimpleBRDF>(RGB(0.74,0.925,0.714));
+    auto blue = make_shared<SimpleBRDF>(RGB(0.502,0.8079,1));
+    auto pL = make_shared<RectangleYZ>(-100, 600, -1000, 200, -400, emissionPink);
+    auto pR = make_shared<RectangleYZ>(-100, 600, -1000, 200, 400, emissionCyan);
+    auto cyberBRDF = make_shared<TextureBRDF>(textCyber,1);
     
     auto moonSphere1 = make_shared<Sphere>(Vector3(0, 400, 2000), 350, moonLight);
     auto moonSphere2 = make_shared<Sphere>(Vector3(-25, 375, 2000), 350, moonLight);
@@ -676,10 +754,10 @@ Scene renderScene(const SceneProps& props) {
     auto ground = make_shared<Box>(Vector3(-1000, -400, shoreLineZ), Vector3(1000, groundLevelY, 1000), gray);
     auto rL = make_shared<Box>(Vector3(-70, -100, 0), Vector3(-30, 20, 40), BRDFL);
     auto rR = make_shared<Box>(Vector3(30, -100, -40), Vector3(70, -30, 0), BRDFR);
-    auto water = make_shared<Plane>(105, Vector3(0, 1, 0), waterBRDF);
+    //auto water = make_shared<Plane>(110, Vector3(0, 1, 0), waterBRDF);
     auto bottomLight = make_shared<Plane>(400, Vector3(0, 1, 0), emissionPink);
 
-    auto boxSphere = make_shared<Box>(Vector3(-250,-100,-20), Vector3(-200, 20, 20), gray);
+    auto boxSphere = make_shared<Box>(Vector3(-250,-100,-20), Vector3(-150, 20, 20), gray);
     auto sphereFresnel = make_shared<Sphere>(Vector3(-200,70,0), 50.0, crystalBRDF);
     auto sphereDifference1 = make_shared<Sphere>(Vector3(-200,-50,-20), 30.0, gray);
     auto sphereDifference2 = make_shared<Sphere>(Vector3(-200,-50,-30), 27.5, gray);
@@ -688,13 +766,13 @@ Scene renderScene(const SceneProps& props) {
 
     auto csg1 = make_shared<CSG>(boxSphere, csgSphere, CSGOperation::Union, gray);
     auto speaker = make_shared<CSG>(csg1, sphereMini, CSGOperation::Union, gray);
-    auto otherBox = make_shared<Box>(Vector3(-100,-100,0), Vector3(-50,-50,-30), BRDFL);
+    auto otherBox = make_shared<Box>(Vector3(-190,-100,40), Vector3(-80,0,70), orange);
     
-    auto leftBox1 = make_shared<Box>(Vector3(40, groundLevelY, 50), Vector3(140, 60, 200), noiseTexture);
-    auto leftBox2 = make_shared<Box>(Vector3(100, groundLevelY, 150), Vector3(200, 100, 200), gray);
+    auto leftBox1 = make_shared<Box>(Vector3(60, groundLevelY, 50), Vector3(160, 60, 200), noiseTexture);
+    auto leftBox2 = make_shared<Box>(Vector3(100, groundLevelY, 150), Vector3(200, 100, 200), green);
 
-    auto behindBox = make_shared<Box>(Vector3(30, groundLevelY, 200), Vector3(70, 70, 250), gray);
-    auto higherBox = make_shared<Box>(Vector3(-250, groundLevelY, 300), Vector3(-150, 200, 400), noiseTexture);
+    auto behindBox = make_shared<Box>(Vector3(30, groundLevelY, 200), Vector3(70, 70, 250), blue);
+    auto higherBox = make_shared<Box>(Vector3(-250, groundLevelY, 300), Vector3(-150, 200, 400), cyberBRDF);
     // left emission planes
     sc.addPrimitive(pL);
     sc.addPrimitive(pR);
@@ -706,14 +784,19 @@ Scene renderScene(const SceneProps& props) {
     sc.addPrimitive(ground);
     //sc.addPrimitive(bottomLight);
 
-    for ( auto& p : seaBottom(Vector3(-400, waterBaseLevel, -600), Vector3(400, waterBaseLevel, shoreLineZ), 50, 160) )
+    for ( auto& p : seaBottom(Vector3(-400, waterBaseLevel, shoreLineZ - 400), Vector3(400, waterBaseLevel, shoreLineZ), 200, 360, 1) )
         sc.addPrimitive(p);
 
-    for ( auto& p : mengerSponge(Vector3(100, groundLevelY, 0), Vector3(100 + spongeSize, groundLevelY + spongeSize, spongeSize), 2, gray) )
+    for ( auto& p : mengerSponge(Vector3(100, groundLevelY, 0), Vector3(100 + spongeSize, groundLevelY + spongeSize, spongeSize), 2, reflection) )
         sc.addPrimitive(p);
 
     //sc.addLight(light);
-    sc.addPrimitive(water);
+    //sc.addPrimitive(water);
+    // original 40 x 20 grid
+    sc.addPrimitive(waterPlane(Vector3(-400, groundLevelY - 50, -500), Vector3(400, groundLevelY - 50, shoreLineZ), 4, 3, 50, waterBRDF));
+    
+    sc.addPrimitive(waterPlane(Vector3(-1000, groundLevelY, 500), Vector3(1000, groundLevelY, 1000), 8, 3, 400, gray));
+    
     sc.addPrimitive(boxSphere);
     sc.addPrimitive(sphereFresnel);
     sc.addPrimitive(speaker);
